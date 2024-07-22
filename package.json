@@ -21,6 +21,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@nuxt/eslint": "^0.3.13",
+    "@nuxtjs/tailwindcss": "^6.12.1",
     "eslint": "^9.6.0",
     "eslint-config-unjs": "^0.3.2",
     "husky": "^9.0.11",
