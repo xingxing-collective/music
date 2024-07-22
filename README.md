@@ -1,0 +1,2 @@
+# nuxt-template
+Nuxt Template

@@ -1,0 +1,30 @@
+{
+  "name": "nuxt-template",
+  "description": "Nuxt Template",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.4.0",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "prepare": "nuxt prepare",
+    "lint": "eslint --cache . && biome check .",
+    "lint:fix": "eslint --cache --fix . && biome check . --write",
+    "typecheck": "nuxt typecheck",
+    "prepare:husky": "husky"
+  },
+  "dependencies": {
+    "vue": "^3.4.31",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@nuxt/eslint": "^0.3.13",
+    "eslint": "^9.6.0",
+    "eslint-config-unjs": "^0.3.2",
+    "husky": "^9.0.11",
+    "nuxt": "^3.12.2"
+  },
+  "license": "MIT"
+}
