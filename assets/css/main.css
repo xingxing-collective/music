@@ -1,0 +1,14 @@
+:root {
+  --color-gray-200: 229 231 235;
+  --color-gray-700: 55 65 81;
+  --color-gray-900: 17 24 39;
+  --color-white: 255 255 255;
+  --color-black: 0 0 0;
+  --color-black-200: 24 24 24;
+  --color-black-700: 21 21 21;
+  --color-red-700: 255 54 64;
+}
+
+body {
+  @apply antialiased font-sans text-foreground bg-background;
+}

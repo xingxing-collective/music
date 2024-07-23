@@ -15,12 +15,14 @@
     "prepare:husky": "husky"
   },
   "dependencies": {
+    "tailwind-merge": "^2.4.0",
     "vue": "^3.4.31",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@nuxt/eslint": "^0.3.13",
+    "@nuxtjs/color-mode": "^3.4.2",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "eslint": "^9.6.0",
     "eslint-config-unjs": "^0.3.2",
