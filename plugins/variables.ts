@@ -1,22 +1,22 @@
 export default defineNuxtPlugin(() => {
-  const appConfig = useAppConfig()
-  const nuxtApp = useNuxtApp()
+  const appConfig = useAppConfig();
+  const nuxtApp = useNuxtApp();
 
   const root = computed(() => {
     return `:root {
   --header-height: ${appConfig.ui.variables.header.height};
 
   ${Object.entries(appConfig.ui.variables.light)
-        .map(([key, value]) => `--ui-${key}: ${value};`)
-        .join('\n')}
+    .map(([key, value]) => `--ui-${key}: ${value};`)
+    .join('\n')}
 }
 
 .dark {
   ${Object.entries(appConfig.ui.variables.dark)
-        .map(([key, value]) => `--ui-${key}: ${value};`)
-        .join('\n')}
-}`
-  })
+    .map(([key, value]) => `--ui-${key}: ${value};`)
+    .join('\n')}
+}`;
+  });
 
   // Head
   const headData: any = {
@@ -50,5 +50,4 @@ export default defineNuxtPlugin(() => {
   }
 
   useHead(headData);
-
-})
+});

@@ -1,1 +1,1 @@
-export type Strategy = 'merge' | 'override'
+export type Strategy = 'merge' | 'override';

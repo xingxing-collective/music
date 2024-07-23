@@ -10,8 +10,8 @@ export default defineAppConfig({
         foreground: 'var(--color-white)',
       },
       header: {
-        height: '4rem'
-      }
-    }
-  }
-})
+        height: '4rem',
+      },
+    },
+  },
+});
