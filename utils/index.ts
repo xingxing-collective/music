@@ -1,5 +1,14 @@
 import type { Strategy } from "~/types"
+import { extendTailwindMerge } from 'tailwind-merge'
 import { defu, createDefu } from 'defu'
+
+const customTwMerge = extendTailwindMerge<string, string>({
+  extend: {
+    classGroups: {
+      icons: [(classPart: string) => /^i-/.test(classPart)]
+    }
+  }
+})
 
 const defuTwMerge = createDefu((obj, key, value, namespace) => {
   if (namespace === 'default' || namespace.startsWith('default.')) {
