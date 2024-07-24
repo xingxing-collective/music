@@ -1,7 +1,7 @@
 <template>
   <div ref="el" v-bind="{ ...attrs, ...$attrs }"
-    :class="[ui.wrapper, grow ? ui.grow : ui.border,'flex']"
-    :style="{ '--width': width && !grow ? `${width}px` : undefined }">
+  :class="[ui.wrapper, grow ? ui.grow : ui.border, collapsible ? 'hidden lg:flex' : 'flex']"
+  :style="{ '--width': width && !grow ? `${width}px` : undefined }">
     <slot />
   </div>
 </template>
@@ -17,6 +17,10 @@ defineOptions({
 })
 const props = defineProps({
   grow: {
+    type: Boolean,
+    default: false,
+  },
+  collapsible: {
     type: Boolean,
     default: false,
   },
