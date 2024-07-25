@@ -19,6 +19,29 @@ export interface Response<Body = APIBaseResponse> {
   cookie: string[];
 }
 
+export async function registerAnonimous(
+  params: RequestBaseConfig = {}
+): Promise<{ code: number; cookie: string; createTime: Date; userId: number }> {
+  return $fetch('/register/anonimous', { baseURL: API_URL, params });
+}
+
+export async function recommendResource(
+  params: RequestBaseConfig = {}
+): Promise<{
+  code: number;
+  featureFirst: boolean;
+  haveRcmdSongs: boolean;
+  recommend: Array<Record<string, any>>;
+}> {
+  return $fetch('/recommend/resource', { baseURL: API_URL, params });
+}
+
+export async function personalizedPrivatecontent(
+  params: RequestBaseConfig = {}
+): Promise<{ code: number; result: Array<Record<string, any>>; name: string }> {
+  return $fetch('/personalized/privatecontent', { baseURL: API_URL, params });
+}
+
 export enum BannerType {
   pc = 0,
   android = 1,
