@@ -12,6 +12,9 @@ export default defineAppConfig({
       header: {
         height: '4rem',
       },
+      player: {
+        height: '4rem',
+      },
     },
   },
 });
