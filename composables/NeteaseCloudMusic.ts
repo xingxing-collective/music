@@ -1,6 +1,6 @@
 const API_URL = import.meta.dev
   ? 'http://localhost:3001/'
-  : 'https://xingxing-music-api.vercel.app/';
+  : 'https://xingxing-music-proxy.vercel.app';
 
 export interface RequestBaseConfig {
   cookie?: string;
