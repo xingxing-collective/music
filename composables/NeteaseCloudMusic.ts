@@ -1,6 +1,8 @@
+import process from 'node:process';
+
 const API_URL = import.meta.dev
   ? 'http://localhost:3001/'
-  : 'https://xingxing-music-proxy.vercel.app';
+  : process.env.NETEASECLOUDMUSIC_API_URL;
 
 export interface RequestBaseConfig {
   cookie?: string;
