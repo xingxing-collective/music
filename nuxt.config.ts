@@ -9,7 +9,12 @@ export default defineNuxtConfig({
       '~/components',
     ],
   },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@nuxt/icon'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode',
+    '@nuxt/icon',
+    '@vueuse/nuxt',
+  ],
   css: ['~/assets/css/main.css'],
   colorMode: {
     preference: 'dark',

@@ -13,7 +13,7 @@
         <div class="dark:text-gray-200 text-sm font-bold">{{ '私人漫游' }}</div>
       </NuxtLink>
     </UPanel>
-    <UPage>
+    <UPage class="pb-[--player-height]">
       <UPanel grow>
         <UHeader>
           <div class=" grid grid-cols-12 w-full h-full">
@@ -38,6 +38,7 @@
         </UPanelContent>
       </UPanel>
     </UPage>
+    <MiniPlayer />
   </ULayout>
 </template>
 <script setup lang="ts">

@@ -31,7 +31,7 @@ const props = defineProps({
 })
 
 const { ui, attrs } = useUI(
-  'header',
+  'music.header',
   toRef(props, 'ui'),
   config,
   toRef(props, 'class'),

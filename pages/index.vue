@@ -22,22 +22,9 @@
           <Icon size="18" name="ri:arrow-right-s-line" />
         </div>
       </div>
-      <div class=" grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 pt-2">
-        <div class="flex flex-col w-full cursor-pointer">
-          <div
-            class="p-2 w-full aspect-square border-[0.5px] border-gray-500 dark:border-gray-800 flex justify-center items-center">
-            <div class=" text-[6rem] font-light text-red-600">{{ new Date().getDate() }}</div>
-          </div>
-          <div class="text-sm md:text-sm lg:text-xs pt-1 dark:text-gray-200 max-w-full overflow-hidden line-clamp-2">
-            每日歌曲推荐
-          </div>
-        </div>
-        <div v-for="r in recommend" class="flex flex-col w-full cursor-pointer" :key="r.id">
-          <img :src="r.picUrl" class="  w-full aspect-square  object-fill" :alt="r.name">
-          <div
-            class="text-sm md:text-sm lg:text-xs pt-1 px-2 dark:text-gray-200 max-w-full overflow-hidden line-clamp-2"
-            :title="r.name">{{ r.name }}</div>
-        </div>
+      <div class=" grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 pt-2">
+        <Card :content="new Date().getDate()" title="每日歌曲推荐" />
+        <Card v-for="r in recommend" :content="{ src: r.picUrl, alt: r.name }" :title="r.name" />
       </div>
     </div>
     <div>
@@ -50,12 +37,8 @@
         </div>
       </div>
       <div class=" grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pt-2">
-        <div v-for="r in result" class="flex flex-col w-full cursor-pointer" :key="r.id">
-          <img :src="r.sPicUrl" class=" aspect-video w-full  object-fill" :alt="r.name">
-          <div
-            class="text-sm md:text-sm lg:text-xs pt-1 px-2 dark:text-gray-200 max-w-full overflow-hidden line-clamp-2"
-            :title="r.name">{{ r.name }}</div>
-        </div>
+        <Card v-for="r in result" :content="{ src: r.sPicUrl, alt: r.name }" :ui="{ image: 'aspect-video' }"
+          :title="r.name" />
       </div>
     </div>
   </div>
@@ -73,7 +56,9 @@ const { cookie } = await registerAnonimous()
 const token = useCookie('token')
 token.value = cookie
 
-const { recommend } = await recommendResource()
+// production requires login  正式环境需要登录，先调用推荐歌单
+//const { recommend } = await recommendResource()
+const { result: recommend } = await personalized({ limit: 9 })
 
 //独家放送(入口列表)
 const { result } = await personalizedPrivatecontent()
