@@ -1,10 +1,8 @@
 <template>
-  <div class="flex  h-full items-center gap-4">
-    <Icon class="cursor-pointer" :name="!volumeState ? 'ri:volume-up-line' : 'ri:volume-mute-line'" size="24"
+  <div class="grid grid-cols-4 h-full items-center gap-2">
+    <Icon class=" col-span-1 cursor-pointer" :name="!volumeState ? 'ri:volume-up-line' : 'ri:volume-mute-line'" size="24"
       @click="volumeToggle()" />
-    <div class="flex-1">
-      <Progress @percentChange="onProgressChange" />
-    </div>
+    <Progress class="col-span-3 w-full" @percentChange="onProgressChange" />
   </div>
 </template>
 <script setup lang="ts">
