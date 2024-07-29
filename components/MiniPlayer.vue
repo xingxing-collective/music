@@ -1,8 +1,8 @@
 <template>
   <div
     class=" fixed bottom-0 w-full h-[--player-height] left-0 right-0 flex p-[0.5rem_1rem] pr-6 backdrop-blur-md shadow-md bg-inherit bg-opacity-50">
-    <div class="flex w-full justify-between items-center overflow-hidden">
-      <div class="flex w-52">
+    <div class="grid grid-cols-3 w-full justify-between items-center overflow-hidden">
+      <div class=" col-span-1 flex w-full">
         <template v-if="true">
           <div class="relative rounded-md overflow-hidden cursor-pointer w-14" @click="() => toggle()">
             <div class=" absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
@@ -29,24 +29,30 @@
           </div>
         </template>
       </div>
-      <div class="flex  justify-center flex-1  gap-6 items-center">
+      <div class="col-span-1 w-full flex  justify-center flex-1  gap-6 items-center">
         <Icon name="ic:round-skip-previous" size="36" class=" text-red-600 " />
         <div class=" bg-red-600 rounded-[50%] h-12 w-12 flex items-center justify-center" @click="() => pauseToggle()">
           <Icon :name="pause ? 'ic:baseline-pause' : 'ic:baseline-play-arrow'" size="28" class="text-white" />
         </div>
         <Icon name="ic:round-skip-next" size="36" class=" text-red-600" />
       </div>
-      <div class="flex items-center gap-8 px-4">
+      <div class="col-span-1 w-full flex items-center gap-6 lg:gap-8 px-4">
         <div class="flex-1"></div>
-        <Icon class="cursor-pointer text-gray-300" :name="like ? 'ic:round-favorite' : 'ic:round-favorite-border'"
-          :style="{ color: like ? 'red' : '' }" @click="() => likeToggle()" size="24" />
-        <Icon class="cursor-pointer text-gray-300" name="ri:download-cloud-line" size="24" />
-        <Icon class="cursor-pointer text-gray-300" :name="modeIcon" size="24"
-          @click="() => mode < 2 ? mode++ : mode = 0" />
-        <Icon class="cursor-pointer text-gray-300" name="ri:play-list-2-line" size="24" />
-        <div class="w-40">
-          <Volume :volume="volume" @volumeChange="onVolumeChange" />
+        <div class="flex  h-full items-center gap-4">
+          <Icon class="cursor-pointer text-gray-300" :name="like ? 'ic:round-favorite' : 'ic:round-favorite-border'"
+            :style="{ color: like ? 'red' : '' }" @click="() => likeToggle()" size="24" />
         </div>
+        <div class="flex  h-full items-center gap-4">
+          <Icon class="cursor-pointer text-gray-300" name="ri:download-cloud-line" size="24" />
+        </div>
+        <div class="flex  h-full items-center gap-4">
+          <Icon class="cursor-pointer text-gray-300" :name="modeIcon" size="24"
+            @click="() => mode < 2 ? mode++ : mode = 0" />
+        </div>
+        <div class="flex  h-full items-center gap-4">
+          <Icon class="cursor-pointer text-gray-300" name="ri:play-list-2-line" size="24" />
+        </div>
+        <Volume class="lg:w-40" :volume="volume" @volumeChange="onVolumeChange" />
       </div>
     </div>
   </div>
