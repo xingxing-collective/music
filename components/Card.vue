@@ -17,7 +17,7 @@ const config = {
   wrapper: 'flex flex-col w-full cursor-pointer',
   container: 'w-full aspect-square border-[0.5px] border-gray-500 dark:border-gray-800 flex justify-center items-center',
   box: 'text-[6rem] font-light text-red-600',
-  image: 'aspect-square w-full  object-fill',
+  image: 'aspect-square w-full object-cover',
   content: 'text-sm md:text-xs lg:text-xs pt-1 dark:text-gray-200 max-w-full overflow-hidden line-clamp-2'
 }
 
