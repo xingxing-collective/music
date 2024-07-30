@@ -92,3 +92,21 @@ export function banner(
 ): Promise<{ code: number; banners: Array<Record<string, any>> }> {
   return $fetch('/banner', { baseURL: API_URL, params });
 }
+
+export function songUrl(
+  params: { id: string | number; br?: string | number } & RequestBaseConfig
+): Promise<{ code: number; data: Array<Record<string, any>> }> {
+  return $fetch('/song/url', { baseURL: API_URL, params });
+}
+export enum SoundQualityType {
+  standard = 'standard',
+  exhigh = 'exhigh',
+  lossless = 'lossless',
+  hires = 'hires',
+}
+
+export function songUrlV1(
+  params: { id: string | number; level: SoundQualityType } & RequestBaseConfig
+): Promise<{ code: number; data: Array<Record<string, any>> }> {
+  return $fetch('/song/url/v1', { baseURL: API_URL, params });
+}
