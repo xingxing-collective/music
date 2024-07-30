@@ -2,11 +2,11 @@ import { PlayModeType } from '~/types/player';
 
 export const usePlayerStore = defineStore('player', () => {
   //mini player or player
-  const [playerMode, playerModeToggle] = useToggle();
+  const [playerModeState, playerModeStateToggle] = useToggle();
   // pause or play
-  const [pause, pauseToggle] = useToggle();
+  const [playState, playStateToggle] = useToggle();
   // like or dislike
-  const [like, likeToggle] = useToggle();
+  const [likeState, likeStateToggle] = useToggle();
 
   const playmode = ref<PlayModeType>(PlayModeType.Order);
   const playmodeIcon = computed(() => {
@@ -44,16 +44,16 @@ export const usePlayerStore = defineStore('player', () => {
   });
 
   return {
-    playerMode,
+    playState,
     playmode,
     playmodeIcon,
-    pause,
-    like,
+    playerModeState,
+    likeState,
     volume,
     volumeState,
-    playerModeToggle,
-    pauseToggle,
-    likeToggle,
+    playStateToggle,
+    playerModeStateToggle,
+    likeStateToggle,
     volumeToggle,
     $volumeReset,
   };
