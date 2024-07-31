@@ -17,13 +17,11 @@ export interface APIBaseResponse {
   [index: string]: unknown;
 }
 
-export interface Response<Body = APIBaseResponse> {
-  status: number; // The Http Response Code
-  body: Body; // API Response body
-  cookie: string[];
-}
+export type Response<T = null> = {
+  [P in keyof T]: T[P];
+} & APIBaseResponse;
 
-export function registerAnonimous(params: RequestBaseConfig = {}): Promise<{
+export function register_anonimous(params: RequestBaseConfig = {}): Promise<{
   code: number;
   cookie: string;
   createTime: Date;
@@ -43,7 +41,7 @@ export function personalized(
   return $fetch('/personalized', { baseURL: API_URL, params });
 }
 
-export function personalizedDjprogram(
+export function personalized_djprogram(
   params: RequestBaseConfig
 ): Promise<Response> {
   return $fetch('/personalized/djprogram', { baseURL: API_URL, params });
@@ -52,7 +50,7 @@ export function personalizedMv(params: RequestBaseConfig): Promise<Response> {
   return $fetch('/personalized/mv', { baseURL: API_URL, params });
 }
 
-export function personalizedNewsong(
+export function personalized_newsong(
   params: {
     area?: string | number;
     limit?: string | number;
@@ -61,17 +59,17 @@ export function personalizedNewsong(
   return $fetch('/personalized/newsong', { baseURL: API_URL, params });
 }
 
-export function personalizedPrivatecontent(
+export function personalized_privatecontent(
   params: RequestBaseConfig = {}
 ): Promise<{ code: number; result: Array<Record<string, any>>; name: string }> {
   return $fetch('/personalized/privatecontent', { baseURL: API_URL, params });
 }
-export function programRecommend(
+export function program_recommend(
   params: { type?: string } & MultiPageConfig & RequestBaseConfig
 ): Promise<Response> {
   return $fetch('/program/recommend', { baseURL: API_URL, params });
 }
-export function recommendResource(params: RequestBaseConfig = {}): Promise<{
+export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   code: number;
   featureFirst: boolean;
   haveRcmdSongs: boolean;
@@ -109,4 +107,93 @@ export function songUrlV1(
   params: { id: string | number; level: SoundQualityType } & RequestBaseConfig
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
   return $fetch('/song/url/v1', { baseURL: API_URL, params });
+}
+type SongDetail = {
+  name: string;
+  id: number;
+  pst: number;
+  t: number;
+  ar: SongDetailArtist[];
+  alia: string[];
+  pop: number;
+  st: number;
+  rt: string | null;
+  fee: SongDetailFee;
+  v: number;
+  crbt: string | null;
+  cf: string;
+  al: SongDetailAlbum;
+  dt: number;
+  h: SongDetailQuality | null;
+  m: SongDetailQuality | null;
+  l: SongDetailQuality | null;
+  sq: SongDetailQuality | null;
+  hr: SongDetailQuality | null;
+  a: unknown | null;
+  cd: string;
+  no: number;
+  rtUrl: unknown | null;
+  ftype: number;
+  rtUrls: unknown[];
+  djId: number;
+  copyright: SongDetailCopyright;
+  s_id: number;
+  mark: number;
+  originCoverType: SongDetailOriginCoverType;
+  originSongSimpleData: unknown | null;
+  tagPicList: unknown | null;
+  resourceState: boolean;
+  version: number;
+  songJumpInfo: unknown | null;
+  entertainmentTags: unknown | null;
+  awardTags: unknown | null;
+  single: number;
+  noCopyrightRcmd: unknown | null;
+  mv: number;
+  rtype: number;
+  rurl: unknown | null;
+  mst: number;
+  cp: number;
+  publishTime: number;
+};
+
+type SongDetailArtist = {
+  id: number;
+  name: string;
+  tns: unknown[];
+  alias: unknown[];
+};
+
+type SongDetailFee = 0 | 1 | 4 | 8;
+
+type SongDetailAlbum = {
+  id: number;
+  name: string;
+  picUrl: string;
+  tns: unknown[];
+  pic: number;
+};
+
+type SongDetailQuality = {
+  br: number;
+  fid: number;
+  size: number;
+  vd: number;
+  sr: number;
+};
+
+type SongDetailCopyright = 0 | 1 | 2;
+
+type SongDetailOriginCoverType = 0 | 1 | 2;
+
+export function song_detail(
+  params: { ids: string } & RequestBaseConfig
+): Promise<
+  Response<{
+    songs: SongDetail[];
+    privileges: unknown[];
+    code: number;
+  }>
+> {
+  return $fetch('/song/detail', { baseURL: API_URL, params });
 }

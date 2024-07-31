@@ -52,7 +52,7 @@ const { banners } = await banner({ type: 0 })
 
 //游客登录 
 //TODO: 登录
-const { cookie } = await registerAnonimous()
+const { cookie } = await register_anonimous()
 const token = useCookie('token')
 token.value = cookie
 
@@ -61,7 +61,7 @@ token.value = cookie
 const { result: recommend } = await personalized({ limit: 9 })
 
 //独家放送(入口列表)
-const { result } = await personalizedPrivatecontent()
+const { result } = await personalized_privatecontent()
 
 const container = ref<HTMLDivElement>()
 const width = ref(700)

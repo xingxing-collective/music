@@ -1,9 +1,9 @@
 <template>
   <div
     class="fixed bottom-0 w-full h-[--player-height] left-0 right-0 flex p-[0.5rem_1rem] pr-6 backdrop-blur-md shadow-md bg-inherit bg-opacity-50">
-    <div class="grid grid-cols-5 w-full justify-between items-center overflow-hidden">
+    <div class="hidden md:grid lg:grid grid-cols-5 w-full justify-between items-center overflow-hidden">
       <div class="col-span-2 flex w-full">
-        <template v-if="true">
+        <template v-if="currentSong">
           <div class="relative rounded-md overflow-hidden cursor-pointer w-14" @click="() => playerModeStateToggle()">
             <div class=" absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
             <img class="blur-sm w-full h-full" lazy="loaded"
@@ -54,23 +54,45 @@
         <div class="flex  h-full items-center gap-4">
           <Icon class="cursor-pointer text-gray-300" name="ri:play-list-2-line" size="24" />
         </div>
-        <Volume class="lg:w-40" />
+        <Volume class="lg:w-40 md:hidden" />
+      </div>
+      <div class="absolute w-full bottom-12">
+        <Progress :percent="percent" @percent-change="onPercentChange" />
       </div>
     </div>
-    <div class="absolute w-full bottom-12">
-      <Progress :percent="0.5" />
+
+    <div class="md:hidden lg:hidden">
+
     </div>
-    <audio ref="audio" :src="currentSong.url" />
+    <audio ref="audio" :src="currentSong.url" @timeupdate="updateTime" />
   </div>
 </template>
 <script setup lang="ts">
-const player = usePlayerStore()
-const { likeStateToggle, playStateToggle, playerModeStateToggle } = player
-const { playState, playerModeState, likeState, playmode, playmodeIcon } = storeToRefs(player)
+const playerStore = usePlayerStore()
+const volumeStore = useVolumeStore()
+const { likeStateToggle, playStateToggle, playerModeStateToggle } = playerStore
+const { playState, playerModeState, likeState, playmode, playmodeIcon, currentTime, currentSong } = storeToRefs(playerStore)
+const { volume } = storeToRefs(volumeStore)
 
-const { data: [currentSong] } = await songUrlV1({ id: 2018096932, level: SoundQualityType.exhigh })
+const { data } = await songUrlV1({ id: 2018096932, level: SoundQualityType.exhigh })
+currentSong.value = data[0]
 
 const audio = ref<HTMLAudioElement>()
+
+function onPercentChange(percent: number) {
+  audio.value!.currentTime = currentSong.value.time / 1000 * percent
+}
+function updateTime(e: Event) {
+  currentTime.value = (e.target as AudioContext).currentTime
+}
+
+watch(volume, (newValue) => {
+  audio.value!.volume = newValue
+})
+
+const percent = computed(() => {
+  return Math.min(currentTime.value / currentSong.value.time * 1000, 1) || 0
+})
 
 watch(playState, (newVal) => {
   if (newVal) {
@@ -78,9 +100,5 @@ watch(playState, (newVal) => {
   } else {
     audio.value?.pause()
   }
-})
-
-onMounted(() => {
-
 })
 </script>
