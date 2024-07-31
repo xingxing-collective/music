@@ -108,7 +108,7 @@ export function songUrlV1(
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
   return $fetch('/song/url/v1', { baseURL: API_URL, params });
 }
-type SongDetail = {
+export type SongDetail = {
   name: string;
   id: number;
   pst: number;
@@ -157,16 +157,16 @@ type SongDetail = {
   publishTime: number;
 };
 
-type SongDetailArtist = {
+export type SongDetailArtist = {
   id: number;
   name: string;
   tns: unknown[];
   alias: unknown[];
 };
 
-type SongDetailFee = 0 | 1 | 4 | 8;
+export type SongDetailFee = 0 | 1 | 4 | 8;
 
-type SongDetailAlbum = {
+export type SongDetailAlbum = {
   id: number;
   name: string;
   picUrl: string;
@@ -174,7 +174,7 @@ type SongDetailAlbum = {
   pic: number;
 };
 
-type SongDetailQuality = {
+export type SongDetailQuality = {
   br: number;
   fid: number;
   size: number;
@@ -182,9 +182,9 @@ type SongDetailQuality = {
   sr: number;
 };
 
-type SongDetailCopyright = 0 | 1 | 2;
+export type SongDetailCopyright = 0 | 1 | 2;
 
-type SongDetailOriginCoverType = 0 | 1 | 2;
+export type SongDetailOriginCoverType = 0 | 1 | 2;
 
 export function song_detail(
   params: { ids: string } & RequestBaseConfig

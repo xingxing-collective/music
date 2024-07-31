@@ -87,3 +87,18 @@ export function get(
 
   return result === undefined ? defaultValue : result;
 }
+
+export function generateRandom(min: number, max: number): number {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function shuffleArray<T>(array: T[]): T[] {
+  // Fisher-Yates 算法
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // 交换元素
+  }
+  return array;
+}

@@ -9,12 +9,14 @@ export default defineNuxtConfig({
       '~/components',
     ],
   },
+  devtools: { enabled: true },
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     '@nuxt/icon',
     '@vueuse/nuxt',
     '@pinia/nuxt',
+    'dayjs-nuxt',
   ],
   css: ['~/assets/css/main.css'],
   colorMode: {
