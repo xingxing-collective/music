@@ -8,6 +8,7 @@ export const usePlayerStore = defineStore('player', () => {
   // like or dislike
   const [likeState, likeStateToggle] = useToggle();
 
+  // play mode
   const playmode = ref<PlayModeType>(PlayModeType.Order);
   const playmodeIcon = computed(() => {
     switch (playmode.value) {
@@ -23,25 +24,9 @@ export const usePlayerStore = defineStore('player', () => {
     }
   });
 
-  // volume
-  const volume = ref(0.5);
-  const lastVolume = ref(0);
-  const [volumeState, volumeToggle] = useToggle(true);
-
-  function $volumeReset() {
-    volume.value =
-      volumeState.value && lastVolume.value !== 0 ? lastVolume.value : 0.5;
-  }
-
-  watch(volume, (newVal) => {
-    if (newVal > 0.05) {
-      lastVolume.value = volume.value;
-      volumeState.value = true;
-    } else {
-      volume.value = 0;
-      volumeState.value = false;
-    }
-  });
+  const currentSong = ref();
+  const currentTime = ref(0);
+  const playlist = shallowRef();
 
   return {
     playState,
@@ -49,12 +34,11 @@ export const usePlayerStore = defineStore('player', () => {
     playmodeIcon,
     playerModeState,
     likeState,
-    volume,
-    volumeState,
+    currentSong,
+    currentTime,
+    playlist,
     playStateToggle,
     playerModeStateToggle,
     likeStateToggle,
-    volumeToggle,
-    $volumeReset,
   };
 });
