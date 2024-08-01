@@ -30,10 +30,10 @@ export async function fetchNetease<T = unknown>(
   opts?: NitroFetchOptions
 ): Promise<T> {
   if (opts) {
-    const requestHeaders = useRequestHeaders(['x-forwarded-for', 'x-real-ip']);
+    const ip = await $fetch('https://api.ipify.org');
     opts.params = {
       ...opts.params,
-      realIP: requestHeaders['x-forwarded-for'] || requestHeaders['x-real-ip'],
+      realIP: ip,
     };
   }
   return $fetch(request, opts);
