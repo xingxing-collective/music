@@ -16,7 +16,7 @@
     <UPage class="pb-[--player-height]">
       <UPanel grow>
         <UHeader>
-          <div class=" grid grid-cols-12 w-full h-full">
+          <div class="grid grid-cols-12 w-full h-full">
             <div class=" hidden col-span-8 md:flex lg:flex items-center justify-end gap-6 ">
               <NuxtLink v-for="link in headLink" :to="link.to"
                 class="w-24 flex flex-col justify-center  h-full items-center">
@@ -26,7 +26,7 @@
                   v-if="route.path === link.to" />
               </NuxtLink>
             </div>
-            <div class=" col-span-12 md:col-span-4 lg:col-span-4 flex justify-center items-center">
+            <div class="col-span-12 md:col-span-4 lg:col-span-4 flex justify-center items-center">
               <div class="relative flex items-center  w-[70%]">
                 <input type="text" placeholder="搜索"
                   class="relative block w-full  focus:outline-none border-0 form-input rounded-lg placeholder-gray-400 dark:placeholder-gray-500 text-sm px-2.5 py-1.5 shadow-sm bg-white dark:bg-inherit text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-1  ps-9">
