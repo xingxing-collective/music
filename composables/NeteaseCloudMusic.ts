@@ -21,13 +21,27 @@ export type Response<T = null> = {
   [P in keyof T]: T[P];
 } & APIBaseResponse;
 
+type FetchParameters = Parameters<typeof $fetch>;
+type NitroFetchRequest = FetchParameters[0];
+type NitroFetchOptions = FetchParameters[1];
+
+export function fetchNetease<T = unknown>(
+  request: NitroFetchRequest,
+  opts?: NitroFetchOptions
+): Promise<T> {
+  if (opts) {
+    opts.params = { ...opts.params, realIP: '116.25.146.177' };
+  }
+  return $fetch(request, opts);
+}
+
 export function register_anonimous(params: RequestBaseConfig = {}): Promise<{
   code: number;
   cookie: string;
   createTime: Date;
   userId: number;
 }> {
-  return $fetch('/register/anonimous', { baseURL: API_URL, params });
+  return fetchNetease('/register/anonimous', { baseURL: API_URL, params });
 }
 
 export function personalized(
@@ -38,16 +52,16 @@ export function personalized(
   category: number;
   result: Array<Record<string, any>>;
 }> {
-  return $fetch('/personalized', { baseURL: API_URL, params });
+  return fetchNetease('/personalized', { baseURL: API_URL, params });
 }
 
 export function personalized_djprogram(
   params: RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/personalized/djprogram', { baseURL: API_URL, params });
+  return fetchNetease('/personalized/djprogram', { baseURL: API_URL, params });
 }
 export function personalizedMv(params: RequestBaseConfig): Promise<Response> {
-  return $fetch('/personalized/mv', { baseURL: API_URL, params });
+  return fetchNetease('/personalized/mv', { baseURL: API_URL, params });
 }
 
 export function personalized_newsong(
@@ -56,18 +70,21 @@ export function personalized_newsong(
     limit?: string | number;
   } & RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/personalized/newsong', { baseURL: API_URL, params });
+  return fetchNetease('/personalized/newsong', { baseURL: API_URL, params });
 }
 
 export function personalized_privatecontent(
   params: RequestBaseConfig = {}
 ): Promise<{ code: number; result: Array<Record<string, any>>; name: string }> {
-  return $fetch('/personalized/privatecontent', { baseURL: API_URL, params });
+  return fetchNetease('/personalized/privatecontent', {
+    baseURL: API_URL,
+    params,
+  });
 }
 export function program_recommend(
   params: { type?: string } & MultiPageConfig & RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/program/recommend', { baseURL: API_URL, params });
+  return fetchNetease('/program/recommend', { baseURL: API_URL, params });
 }
 export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   code: number;
@@ -76,7 +93,7 @@ export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   recommend: Array<Record<string, any>>;
   msg: string;
 }> {
-  return $fetch('/recommend/resource', { baseURL: API_URL, params });
+  return fetchNetease('/recommend/resource', { baseURL: API_URL, params });
 }
 export enum BannerType {
   pc = 0,
@@ -88,13 +105,13 @@ export enum BannerType {
 export function banner(
   params: { type?: BannerType } & RequestBaseConfig = {}
 ): Promise<{ code: number; banners: Array<Record<string, any>> }> {
-  return $fetch('/banner', { baseURL: API_URL, params });
+  return fetchNetease('/banner', { baseURL: API_URL, params });
 }
 
 export function songUrl(
   params: { id: string | number; br?: string | number } & RequestBaseConfig
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
-  return $fetch('/song/url', { baseURL: API_URL, params });
+  return fetchNetease('/song/url', { baseURL: API_URL, params });
 }
 export enum SoundQualityType {
   standard = 'standard',
@@ -106,7 +123,7 @@ export enum SoundQualityType {
 export function songUrlV1(
   params: { id: string | number; level: SoundQualityType } & RequestBaseConfig
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
-  return $fetch('/song/url/v1', { baseURL: API_URL, params });
+  return fetchNetease('/song/url/v1', { baseURL: API_URL, params });
 }
 export type SongDetail = {
   name: string;
@@ -195,5 +212,5 @@ export function song_detail(
     code: number;
   }>
 > {
-  return $fetch('/song/detail', { baseURL: API_URL, params });
+  return fetchNetease('/song/detail', { baseURL: API_URL, params });
 }
