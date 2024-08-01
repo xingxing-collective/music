@@ -27,7 +27,11 @@ export function register_anonimous(params: RequestBaseConfig = {}): Promise<{
   createTime: Date;
   userId: number;
 }> {
-  return $fetch('/register/anonimous', { baseURL: API_URL, params });
+  return $fetch('/register/anonimous', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 
 export function personalized(
@@ -38,16 +42,28 @@ export function personalized(
   category: number;
   result: Array<Record<string, any>>;
 }> {
-  return $fetch('/personalized', { baseURL: API_URL, params });
+  return $fetch('/personalized', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 
 export function personalized_djprogram(
   params: RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/personalized/djprogram', { baseURL: API_URL, params });
+  return $fetch('/personalized/djprogram', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 export function personalizedMv(params: RequestBaseConfig): Promise<Response> {
-  return $fetch('/personalized/mv', { baseURL: API_URL, params });
+  return $fetch('/personalized/mv', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 
 export function personalized_newsong(
@@ -56,7 +72,11 @@ export function personalized_newsong(
     limit?: string | number;
   } & RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/personalized/newsong', { baseURL: API_URL, params });
+  return $fetch('/personalized/newsong', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 
 export function personalized_privatecontent(
@@ -65,12 +85,17 @@ export function personalized_privatecontent(
   return $fetch('/personalized/privatecontent', {
     baseURL: API_URL,
     params,
+    credentials: 'include',
   });
 }
 export function program_recommend(
   params: { type?: string } & MultiPageConfig & RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/program/recommend', { baseURL: API_URL, params });
+  return $fetch('/program/recommend', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   code: number;
@@ -79,7 +104,11 @@ export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   recommend: Array<Record<string, any>>;
   msg: string;
 }> {
-  return $fetch('/recommend/resource', { baseURL: API_URL, params });
+  return $fetch('/recommend/resource', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 export enum BannerType {
   pc = 0,
@@ -91,13 +120,21 @@ export enum BannerType {
 export function banner(
   params: { type?: BannerType } & RequestBaseConfig = {}
 ): Promise<{ code: number; banners: Array<Record<string, any>> }> {
-  return $fetch('/banner', { baseURL: API_URL, params });
+  return $fetch('/banner', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 
 export function songUrl(
   params: { id: string | number; br?: string | number } & RequestBaseConfig
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
-  return $fetch('/song/url', { baseURL: API_URL, params });
+  return $fetch('/song/url', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 export enum SoundQualityType {
   standard = 'standard',
@@ -109,7 +146,11 @@ export enum SoundQualityType {
 export function songUrlV1(
   params: { id: string | number; level: SoundQualityType } & RequestBaseConfig
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
-  return $fetch('/song/url/v1', { baseURL: API_URL, params });
+  return $fetch('/song/url/v1', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
 export type SongDetail = {
   name: string;
@@ -198,5 +239,9 @@ export function song_detail(
     code: number;
   }>
 > {
-  return $fetch('/song/detail', { baseURL: API_URL, params });
+  return $fetch('/song/detail', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
 }
