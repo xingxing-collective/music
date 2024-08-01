@@ -64,22 +64,27 @@
     <div class="md:hidden lg:hidden">
 
     </div>
-    <audio ref="audio" :src="currentSongUrl?.url" @ended="ended" @timeupdate="timeupdate" />
+    <ClientOnly>
+      <audio :loop="playmode === PlayModeType.Single" autoplay ref="audio" :src="currentSongUrl?.url" @ended="control('next')"
+        @timeupdate="timeupdate" />
+    </ClientOnly>
   </div>
 </template>
 <script setup lang="ts">
 import { PlayModeType } from '~/types/player'
-import { generateRandom } from '~/utils'
 
 const playerStore = usePlayerStore()
 const volumeStore = useVolumeStore()
 const { likeStateToggle, playStateToggle, playerModeStateToggle } = playerStore
-const { playState, playerModeState, likeState, playmode, playmodeIcon, currentTime, currentSongUrl, currentSongDetail, playlist, randomPlaylist } = storeToRefs(playerStore)
+const { playState, playerModeState, likeState, playmode, playmodeIcon,
+  currentTime,
+  currentSongUrl, currentSongDetail, currentSongId,
+  nextSongId, nextSongDetail, nextSongUrl,
+  prevSongId, prevSongDetail, prevSongUrl,
+  playlist, randomPlaylist } = storeToRefs(playerStore)
 const { volume } = storeToRefs(volumeStore)
 
 const audio = ref<HTMLAudioElement>()
-//下一首歌曲在playlist中的Index
-const nextIndex = ref(0)
 
 watch(volume, (newValue) => {
   audio.value!.volume = newValue
@@ -97,59 +102,78 @@ const percent = computed(() => {
 async function control(m: 'next' | 'prev', options: {
   autoplay?: boolean
 } = { autoplay: true }) {
+  
+  // 第一次加载时并没有获取上一首或者下一首歌曲信息
+  if (m === 'next' && nextSongId.value) {
+    currentSongId.value = nextSongId.value
+    currentSongUrl.value = nextSongUrl.value
+    currentSongDetail.value = nextSongDetail.value
+  } else if (m === 'prev' && prevSongId.value) {
+    currentSongId.value = prevSongId.value
+    currentSongUrl.value = prevSongUrl.value
+    currentSongDetail.value = prevSongDetail.value
+  } else {
+    currentSongId.value = await getNextSongId(m)
+    const { songUrl, songDetail } = await getSong(currentSongId.value)
+    currentSongUrl.value = songUrl
+    currentSongDetail.value = songDetail
+  }
+
+  if (options.autoplay) {
+    if (!playState.value) {
+      playState.value = true
+    } else {
+      await audio.value?.play()
+    }
+  }
+  // 预加载下一首要播放的歌曲
+  nextSongId.value = await getNextSongId('next')
+  const { songUrl: nextSongUrlData, songDetail: nextSongDetailData } = await getSong(nextSongId.value)
+  nextSongDetail.value = nextSongDetailData
+  nextSongUrl.value = nextSongUrlData
+  prevSongId.value = await getNextSongId('prev')
+  const { songUrl: prevSongUrlData, songDetail: prevSongDetailData } = await getSong(prevSongId.value)
+  prevSongDetail.value = prevSongDetailData
+  prevSongUrl.value = prevSongUrlData
+}
+
+/**
+ * get the song information
+ * @param id song id
+ */
+async function getSong(id: number) {
+  const { data } = await songUrlV1({ id: id, level: SoundQualityType.exhigh })
+  const { songs } = await song_detail({ ids: id.toString() })
+  return {
+    songUrl: data[0],
+    songDetail: songs[0]
+  }
+}
+
+function getNextSongId(m: 'next' | 'prev') {
+  let nextIndex = 0
   const currentPlaylist = playmode.value === PlayModeType.Random ? [...randomPlaylist.value] : [...playlist.value]
   const index = currentPlaylist.indexOf(currentSongUrl.value?.id)
   if (m === 'next') {
     if (index !== -1 && index === currentPlaylist.length - 1)
-      nextIndex.value = 0
+      nextIndex = 0
     else
-      nextIndex.value = index + 1
+      nextIndex = index + 1
   } else {
     if (index !== -1 && index === 0) {
-      nextIndex.value = currentPlaylist.length - 1
+      nextIndex = currentPlaylist.length - 1
     } else {
-      nextIndex.value = index - 1
+      nextIndex = index - 1
     }
   }
   if (currentPlaylist.length === 0) {
     throw new Error('暂无歌曲')
   }
-  if (options.autoplay) {
-    playState.value = true
-    await play(currentPlaylist[nextIndex.value])
-    await audio.value?.play()
-  } else {
-    await play(currentPlaylist[nextIndex.value])
-  }
-}
-
-async function play(id: number) {
-  console.log(id)
-  const { data: songsData } = await songUrlV1({ id: id, level: SoundQualityType.exhigh })
-  currentSongUrl.value = songsData[0]
-  const { songs } = await song_detail({ ids: id.toString() })
-  currentSongDetail.value = songs[0]
+  return currentPlaylist[nextIndex]
 }
 
 function onPercentChange(percent: number) {
   audio.value!.currentTime = currentSongUrl.value.time / 1000 * percent
-}
-
-/**
- * 播放结束
- */
-async function ended() {
-  switch (playmode.value) {
-    case PlayModeType.Order:
-      await control('next')
-      break
-    case PlayModeType.Random:
-      generateRandom(0, randomPlaylist.value?.length || 0)
-      break
-    case PlayModeType.Single:
-      await audio.value?.play()
-      break
-  }
 }
 
 function timeupdate(e: Event) {
@@ -157,18 +181,16 @@ function timeupdate(e: Event) {
 }
 
 
-watch(playState, (newVal) => {
+watch(playState, async (newVal) => {
   if (newVal) {
-    audio.value?.play()
+    await audio.value?.play()
   } else {
     audio.value?.pause()
   }
 })
 
 onMounted(async () => {
-  if (playlist.value.length > 0) {
-    await control('next', { autoplay: false })
-  }
+  await control('next', { autoplay: false })
 })
 
 </script>

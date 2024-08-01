@@ -11,7 +11,7 @@ export const usePlayerStore = defineStore('player', () => {
   const [likeState, likeStateToggle] = useToggle();
 
   // play mode
-  const playmode = ref<PlayModeType>(PlayModeType.Random);
+  const playmode = ref<PlayModeType>(PlayModeType.Order);
   const playmodeIcon = computed(() => {
     switch (playmode.value) {
       case PlayModeType.Order: {
@@ -26,15 +26,30 @@ export const usePlayerStore = defineStore('player', () => {
     }
   });
 
+  //当前播放歌曲
+  const currentSongId = ref<number>();
   const currentSongUrl = shallowRef();
   const currentSongDetail = shallowRef<SongDetail>();
   const currentTime = ref(0);
+  // 原始歌单
   const playlist = ref<Array<number>>([
     2_018_096_932, 1_330_348_068, 1_817_235_475, 1_393_138_949, 2_069_006_728,
     1_445_556_953, 1_456_890_009, 1_841_002_409,
   ]);
+  // 随机歌单
   const randomPlaylist = ref<Array<number>>([]);
+  // 心动歌单
   const intelligencePlaylist = ref<Array<number>>([]);
+
+  //下一首播放的歌曲
+  const nextSongId = ref<number>();
+  const nextSongUrl = shallowRef();
+  const nextSongDetail = shallowRef<SongDetail>();
+
+  //上一首播放的歌曲
+  const prevSongId = ref<number>();
+  const prevSongUrl = shallowRef();
+  const prevSongDetail = shallowRef<SongDetail>();
 
   watch(
     playmode,
@@ -54,9 +69,16 @@ export const usePlayerStore = defineStore('player', () => {
     playmodeIcon,
     playerModeState,
     likeState,
+    currentSongId,
     currentSongUrl,
     currentSongDetail,
     currentTime,
+    nextSongId,
+    nextSongUrl,
+    nextSongDetail,
+    prevSongId,
+    prevSongUrl,
+    prevSongDetail,
     playlist,
     randomPlaylist,
     intelligencePlaylist,

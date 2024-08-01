@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'dayjs-nuxt',
   ],
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
   colorMode: {
     preference: 'dark',
     classSuffix: '',
