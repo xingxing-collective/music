@@ -25,12 +25,13 @@ type FetchParameters = Parameters<typeof $fetch>;
 type NitroFetchRequest = FetchParameters[0];
 type NitroFetchOptions = FetchParameters[1];
 
-export function fetchNetease<T = unknown>(
+export async function fetchNetease<T = unknown>(
   request: NitroFetchRequest,
   opts?: NitroFetchOptions
 ): Promise<T> {
   if (opts) {
-    opts.params = { ...opts.params, realIP: '116.25.146.177' };
+    const ip = await $fetch('https://api.ipify.org/');
+    opts.params = { ...opts.params, realIP: ip };
   }
   return $fetch(request, opts);
 }
