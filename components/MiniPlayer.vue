@@ -65,8 +65,8 @@
 
     </div>
     <ClientOnly>
-      <audio :loop="playmode === PlayModeType.Single" autoplay ref="audio" :src="currentSongUrl?.url" @ended="control('next')"
-        @timeupdate="timeupdate" />
+      <audio :loop="playmode === PlayModeType.Single" autoplay ref="audio" :src="currentSongUrl?.url"
+        @ended="control('next')" @timeupdate="timeupdate" />
     </ClientOnly>
   </div>
 </template>
@@ -102,7 +102,7 @@ const percent = computed(() => {
 async function control(m: 'next' | 'prev', options: {
   autoplay?: boolean
 } = { autoplay: true }) {
-  
+
   // 第一次加载时并没有获取上一首或者下一首歌曲信息
   if (m === 'next' && nextSongId.value) {
     currentSongId.value = nextSongId.value
@@ -142,8 +142,8 @@ async function control(m: 'next' | 'prev', options: {
  * @param id song id
  */
 async function getSong(id: number) {
-  const { data } = await songUrlV1({ id: id, level: SoundQualityType.exhigh })
-  const { songs } = await song_detail({ ids: id.toString() })
+  const { data } = await songUrlV1({ id: id, level: SoundQualityType.exhigh, realIP: '116.25.146.177' })
+  const { songs } = await song_detail({ ids: id.toString(), realIP: '116.25.146.177' })
   return {
     songUrl: data[0],
     songDetail: songs[0]
