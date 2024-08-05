@@ -65,7 +65,7 @@
 
     </div>
     <ClientOnly>
-      <audio :loop="playmode === PlayModeType.Single" ref="audio" :src="currentSongUrl?.url.replace('http', 'https')"
+      <audio :loop="playmode === PlayModeType.Single" autoplay ref="audio" :src="currentSongUrl?.url.replace('http', 'https')"
         @ended="control('next')" @timeupdate="timeupdate" />
     </ClientOnly>
   </div>
