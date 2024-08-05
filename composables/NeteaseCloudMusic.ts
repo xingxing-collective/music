@@ -245,3 +245,13 @@ export function song_detail(
     credentials: 'include',
   });
 }
+
+export function lyric(
+  params: { id: string | number } & RequestBaseConfig
+): Promise<Response> {
+  return $fetch('/lyric', {
+    baseURL: API_URL,
+    params,
+    credentials: 'include',
+  });
+}

@@ -3,6 +3,8 @@ import { PlayModeType } from '~/types/player';
 import { shuffleArray } from '~/utils';
 
 export const usePlayerStore = defineStore('player', () => {
+  const audio = ref<HTMLAudioElement>();
+
   //mini player or player
   const [playerModeState, playerModeStateToggle] = useToggle();
   // pause or play
@@ -31,6 +33,7 @@ export const usePlayerStore = defineStore('player', () => {
   const currentSongUrl = shallowRef();
   const currentSongDetail = shallowRef<SongDetail>();
   const currentTime = ref(0);
+
   // 原始歌单
   const playlist = ref<Array<number>>([
     2_018_096_932, 1_330_348_068, 1_817_235_475, 1_393_138_949, 2_069_006_728,
@@ -51,6 +54,99 @@ export const usePlayerStore = defineStore('player', () => {
   const prevSongUrl = shallowRef();
   const prevSongDetail = shallowRef<SongDetail>();
 
+  /**
+   * get the song information
+   * @param id song id
+   */
+  async function getSong(id: number) {
+    const { data } = await songUrlV1({
+      id: id,
+      level: SoundQualityType.exhigh,
+      realIP: '116.25.146.177',
+    });
+    const { songs } = await song_detail({
+      ids: id.toString(),
+      realIP: '116.25.146.177',
+    });
+    return {
+      songUrl: data[0],
+      songDetail: songs[0],
+    };
+  }
+
+  /**
+   * 获取下一首或者上一首歌曲
+   * @param m 上一首或者下一首
+   * @returns song id
+   */
+  function getNextSongId(m: 'next' | 'prev') {
+    let nextIndex = 0;
+    const currentPlaylist =
+      playmode.value === PlayModeType.Random
+        ? [...randomPlaylist.value]
+        : [...playlist.value];
+    if (currentPlaylist.length === 0) {
+      throw new Error('暂无歌曲');
+    }
+    const index = currentPlaylist.indexOf(currentSongUrl.value?.id);
+    if (m === 'next') {
+      nextIndex =
+        index !== -1 && index === currentPlaylist.length - 1 ? 0 : index + 1;
+    } else {
+      nextIndex =
+        index !== -1 && index === 0 ? currentPlaylist.length - 1 : index - 1;
+    }
+    return currentPlaylist[nextIndex];
+  }
+
+  /**
+   * 切换歌曲
+   * @param m  上一首或者下一首
+   * @param options
+   */
+  async function control(
+    m: 'next' | 'prev',
+    options: {
+      autoplay?: boolean;
+    } = { autoplay: true }
+  ) {
+    // 第一次加载时并没有获取上一首或者下一首歌曲信息
+    if (m === 'next' && nextSongId.value) {
+      currentSongId.value = nextSongId.value;
+      currentSongUrl.value = nextSongUrl.value;
+      currentSongDetail.value = nextSongDetail.value;
+    } else if (m === 'prev' && prevSongId.value) {
+      currentSongId.value = prevSongId.value;
+      currentSongUrl.value = prevSongUrl.value;
+      currentSongDetail.value = prevSongDetail.value;
+    } else {
+      currentSongId.value = await getNextSongId(m);
+      const { songUrl, songDetail } = await getSong(currentSongId.value);
+      currentSongUrl.value = songUrl;
+      currentSongDetail.value = songDetail;
+    }
+
+    if (options.autoplay) {
+      if (playState.value) {
+        await audio.value?.play();
+      } else {
+        playState.value = true;
+      }
+    }
+
+    // 预加载下一首要播放的歌曲
+    nextSongId.value = await getNextSongId('next');
+    const { songUrl: nextSongUrlData, songDetail: nextSongDetailData } =
+      await getSong(nextSongId.value);
+    nextSongDetail.value = nextSongDetailData;
+    nextSongUrl.value = nextSongUrlData;
+    prevSongId.value = await getNextSongId('prev');
+    const { songUrl: prevSongUrlData, songDetail: prevSongDetailData } =
+      await getSong(prevSongId.value);
+    prevSongDetail.value = prevSongDetailData;
+    prevSongUrl.value = prevSongUrlData;
+  }
+
   watch(
     playmode,
     () => {
@@ -63,7 +159,21 @@ export const usePlayerStore = defineStore('player', () => {
     }
   );
 
+  watch(playState, async (newVal) => {
+    if (newVal) {
+      await audio.value?.play();
+    } else {
+      audio.value?.pause();
+    }
+  });
+
+  //首次渲染
+  onMounted(async () => {
+    await control('next', { autoplay: false });
+  });
+
   return {
+    audio,
     playState,
     playmode,
     playmodeIcon,
@@ -85,5 +195,8 @@ export const usePlayerStore = defineStore('player', () => {
     playStateToggle,
     playerModeStateToggle,
     likeStateToggle,
+    control,
+    getNextSongId,
+    getSong,
   };
 });

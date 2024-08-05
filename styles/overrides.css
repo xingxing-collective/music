@@ -1,0 +1,5 @@
+/* Better Scroll */
+.bscroll-indicator {
+  border: none !important;
+  background: var(--scrollbar-color) !important;
+}
