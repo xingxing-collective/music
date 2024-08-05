@@ -25,18 +25,20 @@
               <div class="text-sm text-gray-300">歌手：</div>
               <div class="text-sm text-[rgb(81,126,175)]">{{ currentSongDetail?.ar.map(x => x.name).join('/') }}</div>
             </div>
-            <Scroller ref="scrollerContainer" :data="lyricData" :class="[$style.scroller, 'w-[60%] h-96']"
-              :options="{ disableTouch: true }" @init="onScrollerInit">
-              <div>
-                <div
-                  :class="[activeLyricIndex === index ? 'text-sm dark:text-[rgb(220,221,228)] font-bold' : 'text-xs', 'mb-4 text-[rgb(177,177,177)]']"
-                  ref="lyricContainer" :key="index" v-for="(l, index) in  lyricWithTranslation ">
-                  <p :key="contentIndex" class="lyric-text" v-for="( content, contentIndex ) in  l.contents ">{{
+            <div class="w-[70%] h-96">
+              <Scroller ref="scrollerContainer" :data="lyricData" :class="[$style.scroller]"
+                :options="{ disableTouch: true }" @init="onScrollerInit">
+                <div>
+                  <div
+                    :class="[activeLyricIndex === index ? 'text-sm dark:text-[rgb(220,221,228)] font-bold' : 'text-xs', 'mb-4 text-[rgb(177,177,177)]']"
+                    ref="lyricContainer" :key="index" v-for="(l, index) in  lyricWithTranslation ">
+                    <p :key="contentIndex" class="lyric-text" v-for="( content, contentIndex ) in  l.contents ">{{
       content }}
-                  </p>
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Scroller>
+              </Scroller>
+            </div>
           </div>
         </div>
       </div>
