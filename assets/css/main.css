@@ -9,6 +9,11 @@
   --color-black-700: 21 21 21;
   --color-red-700: 255 54 64;
   --progress-red-800: 35 35 35;
+  --scrollbar-color: 208 208 208;
+}
+
+.dark:root {
+  --scrollbar-color: 58 58 58;
 }
 
 body {

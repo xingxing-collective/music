@@ -6,3 +6,6 @@
     </NuxtLayout>
   </div>
 </template>
+<script setup lang="ts">
+import './styles/overrides.css'
+</script>

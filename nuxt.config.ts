@@ -9,7 +9,9 @@ export default defineNuxtConfig({
       '~/components',
     ],
   },
+
   devtools: { enabled: true },
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
@@ -17,10 +19,15 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     'dayjs-nuxt',
+    '@nuxt/image',
   ],
+
   css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
+
   colorMode: {
     preference: 'dark',
     classSuffix: '',
   },
+
+  compatibilityDate: '2024-08-02',
 });

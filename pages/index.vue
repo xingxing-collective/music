@@ -23,7 +23,9 @@
         </div>
       </div>
       <div class=" grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 pt-2">
-        <Card :content="new Date().getDate()" title="每日歌曲推荐" />
+        <Card title="每日歌曲推荐">
+          <div class="text-[5.25rem] font-light text-red-600">{{ new Date().getDate() }}</div>
+        </Card>
         <Card v-for="r in recommend" :content="{ src: r.picUrl, alt: r.name }" :title="r.name" />
       </div>
     </div>
