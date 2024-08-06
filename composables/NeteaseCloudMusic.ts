@@ -48,7 +48,6 @@ async function fetchNeteaseClouldMusic<T = unknown>(
         })
     );
   }
-  console.log(promiseCache);
   return promiseCache.get(hash)!;
 }
 
@@ -291,6 +290,29 @@ export function lyric(
   }>
 > {
   return fetchNeteaseClouldMusic('/lyric', {
+    params,
+  });
+}
+
+export function comment_new(
+  params: {
+    type?: number | string;
+    id: number | string;
+    pageNo?: number | string;
+    pageSize?: number | string;
+    sortType?: number | string;
+  } & RequestBaseConfig
+): Promise<
+  Response<{
+    code: number;
+    data: {
+      comments: Array<any>;
+      [key: string]: any;
+    };
+    message: string;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/comment/new', {
     params,
   });
 }

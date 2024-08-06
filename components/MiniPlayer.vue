@@ -1,10 +1,10 @@
 <template>
   <div
-    class="fixed bottom-0 z-50 w-full h-[--player-height] left-0 right-0 flex p-[0.5rem_1rem] pr-6 backdrop-blur-md shadow-md bg-inherit bg-opacity-50">
+    class="fixed bottom-0 z-20 w-full h-[--player-height] left-0 right-0 flex p-[0.5rem_1rem] pr-6 backdrop-blur-md shadow-md bg-inherit bg-opacity-50">
     <div class="hidden md:grid lg:grid grid-cols-5 w-full justify-between items-center overflow-hidden">
       <div class="col-span-2 flex w-full">
         <template v-if="currentSongUrl && currentSongDetail">
-          <div class="relative rounded-md overflow-hidden cursor-pointer w-14" @click="() => playerModeStateToggle()">
+          <div class="relative rounded-md overflow-hidden cursor-pointer w-14" @click="playerModeStateToggle()">
             <div class=" absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
             <img class="blur-sm w-full h-full" lazy="loaded" :src="`${currentSongDetail?.al.picUrl}?param=80y80`" />
             <div class="absolute w-full h-full top-0 flex flex-col items-center justify-center cursor-pointer">
@@ -56,16 +56,15 @@
         </div>
         <Volume class="lg:w-40 md:hidden" />
       </div>
-      <div class="absolute w-full bottom-12">
-        <Progress :percent="percent" @percent-change="onPercentChange" />
-      </div>
     </div>
-
+    <div class="fixed w-full bottom-12">
+      <Progress :percent="percent" @percent-change="onPercentChange" />
+    </div>
     <div class="md:hidden lg:hidden">
 
     </div>
     <ClientOnly>
-      <audio :loop="playmode === PlayModeType.Single" autoplay ref="audio"
+      <audio :loop="playmode === PlayModeType.Single"  ref="audio"
         :src="currentSongUrl?.url.replace('http', 'https')" @ended="control('next')" @timeupdate="timeupdate" />
     </ClientOnly>
   </div>
