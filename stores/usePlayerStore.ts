@@ -13,7 +13,7 @@ export const usePlayerStore = defineStore('player', () => {
   const [likeState, likeStateToggle] = useToggle();
 
   // play mode
-  const playmode = ref<PlayModeType>(PlayModeType.Order);
+  const playmode = ref<PlayModeType>(PlayModeType.Single);
   const playmodeIcon = computed(() => {
     switch (playmode.value) {
       case PlayModeType.Order: {
@@ -54,23 +54,32 @@ export const usePlayerStore = defineStore('player', () => {
   const prevSongUrl = shallowRef();
   const prevSongDetail = shallowRef<SongDetail>();
 
+  // 歌词
+  const currentLyric = shallowRef<Array<{ time: number; content: string }>>();
+  const nextLyric = shallowRef<Array<{ time: number; content: string }>>();
+  const prevLyric = shallowRef<Array<{ time: number; content: string }>>();
+
   /**
    * get the song information
    * @param id song id
    */
   async function getSong(id: number) {
-    const { data } = await songUrlV1({
-      id: id,
-      level: SoundQualityType.exhigh,
-      realIP: '116.25.146.177',
-    });
-    const { songs } = await song_detail({
-      ids: id.toString(),
-      realIP: '116.25.146.177',
-    });
+    const [url, detail, lrc] = await Promise.all([
+      songUrlV1({
+        id: id,
+        level: SoundQualityType.exhigh,
+        realIP: '116.25.146.177',
+      }),
+      song_detail({
+        ids: id.toString(),
+        realIP: '116.25.146.177',
+      }),
+      lyric({ id: id }),
+    ]);
     return {
-      songUrl: data[0],
-      songDetail: songs[0],
+      songUrl: url.data[0],
+      songDetail: detail.songs[0],
+      lrc: lrc.lrc,
     };
   }
 
@@ -115,15 +124,18 @@ export const usePlayerStore = defineStore('player', () => {
       currentSongId.value = nextSongId.value;
       currentSongUrl.value = nextSongUrl.value;
       currentSongDetail.value = nextSongDetail.value;
+      currentLyric.value = nextLyric.value;
     } else if (m === 'prev' && prevSongId.value) {
       currentSongId.value = prevSongId.value;
       currentSongUrl.value = prevSongUrl.value;
       currentSongDetail.value = prevSongDetail.value;
+      currentLyric.value = prevLyric.value;
     } else {
-      currentSongId.value = await getNextSongId(m);
-      const { songUrl, songDetail } = await getSong(currentSongId.value);
+      currentSongId.value = getNextSongId(m);
+      const { songUrl, songDetail, lrc } = await getSong(currentSongId.value);
       currentSongUrl.value = songUrl;
       currentSongDetail.value = songDetail;
+      currentLyric.value = parseLyric(lrc.lyric);
     }
 
     if (options.autoplay) {
@@ -135,16 +147,25 @@ export const usePlayerStore = defineStore('player', () => {
     }
 
     // 预加载下一首要播放的歌曲
-    nextSongId.value = await getNextSongId('next');
-    const { songUrl: nextSongUrlData, songDetail: nextSongDetailData } =
-      await getSong(nextSongId.value);
+    nextSongId.value = getNextSongId('next');
+    const {
+      songUrl: nextSongUrlData,
+      songDetail: nextSongDetailData,
+      lrc: nextLrc,
+    } = await getSong(nextSongId.value);
     nextSongDetail.value = nextSongDetailData;
     nextSongUrl.value = nextSongUrlData;
-    prevSongId.value = await getNextSongId('prev');
-    const { songUrl: prevSongUrlData, songDetail: prevSongDetailData } =
-      await getSong(prevSongId.value);
+    nextLyric.value = parseLyric(nextLrc.lyric);
+
+    prevSongId.value = getNextSongId('prev');
+    const {
+      songUrl: prevSongUrlData,
+      songDetail: prevSongDetailData,
+      lrc: prevLrc,
+    } = await getSong(prevSongId.value);
     prevSongDetail.value = prevSongDetailData;
     prevSongUrl.value = prevSongUrlData;
+    prevLyric.value = parseLyric(prevLrc.lyric);
   }
 
   watch(
@@ -189,6 +210,9 @@ export const usePlayerStore = defineStore('player', () => {
     prevSongId,
     prevSongUrl,
     prevSongDetail,
+    currentLyric,
+    nextLyric,
+    prevLyric,
     playlist,
     randomPlaylist,
     intelligencePlaylist,

@@ -103,16 +103,7 @@ export function shuffleArray<T>(array: T[]): T[] {
   return array;
 }
 
-export function lyricParser(lrc: Record<string, any>) {
-  return {
-    lyric: parseLyric(lrc.lrc.lyric || ''),
-    tlyric: parseLyric(lrc.tlyric.lyric || ''),
-    lyricuser: lrc.lyricUser,
-    transuser: lrc.transUser,
-  };
-}
-
-export function parseLyric(lrc: Record<string, any>) {
+export function parseLyric(lrc: string) {
   const lyrics = lrc.split('\n');
   const lrcObj = [];
   for (const lyric_ of lyrics) {

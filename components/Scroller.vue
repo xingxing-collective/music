@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import BetterScoll from "@better-scroll/core"
+import BetterScoll, { type Options } from "@better-scroll/core"
 import type { BScrollConstructor } from "@better-scroll/core/dist/types/BScroll"
 import MouseWheel from "@better-scroll/mouse-wheel"
 import ScrollBar from "@better-scroll/scroll-bar"
@@ -14,13 +14,13 @@ BetterScoll.use(MouseWheel)
 
 const props = withDefaults(defineProps<{
   data: Array<any>
-  options: Record<string, any>
+  options: Options
 }>(), {
   data: () => [],
   options: () => ({})
 })
 
-const defaultOptions = {
+const defaultOptions: Options = {
   mouseWheel: true,
   scrollY: true,
   scrollbar: true,
@@ -32,7 +32,7 @@ const container = ref<HTMLDivElement>()
 const scroller = ref<BScrollConstructor>()
 
 const emit = defineEmits<{
-  init: [scroller: BScrollConstructor]
+  init: [scroller: BScrollConstructor<Options>]
 }>()
 
 function getScroller() {
@@ -45,7 +45,7 @@ function refresh() {
 watch(dataRef, () => {
   nextTick(() => {
     if (!scroller.value) {
-      scroller.value = new BetterScoll(
+      scroller.value = new BetterScoll<Options>(
         container.value!,
         Object.assign({}, defaultOptions, props.options)
       )

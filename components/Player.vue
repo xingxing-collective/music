@@ -26,15 +26,13 @@
               <div class="text-sm text-[rgb(81,126,175)]">{{ currentSongDetail?.ar.map(x => x.name).join('/') }}</div>
             </div>
             <div class="w-[70%] h-96">
-              <Scroller ref="scrollerContainer" :data="lyricData" :class="[$style.scroller]"
-                :options="{ disableTouch: true }" @init="onScrollerInit">
+              <Scroller ref="scrollerContainer" :data="currentLyric" :class="[$style.scroller]"
+                :options="{ disableTouch: true }">
                 <div>
                   <div
-                    :class="[activeLyricIndex === index ? 'text-sm dark:text-[rgb(220,221,228)] font-bold' : 'text-xs', 'mb-4 text-[rgb(177,177,177)]']"
-                    ref="lyricContainer" :key="index" v-for="(l, index) in  lyricWithTranslation ">
-                    <p :key="contentIndex" class="lyric-text" v-for="( content, contentIndex ) in  l.contents ">{{
-      content }}
-                    </p>
+                    :class="[currentActiveLyricIndex === index ? 'text-sm dark:text-[rgb(220,221,228)] font-bold' : 'text-xs', 'mb-4 text-[rgb(177,177,177)]']"
+                    ref="lyricContainer" :key="index" v-for="(l, index) in  currentLyric ">
+                    {{ l.content }}
                   </div>
                 </div>
               </Scroller>
@@ -46,71 +44,22 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import type { BScrollConstructor } from '@better-scroll/core/dist/types/BScroll'
-
 const playerStore = usePlayerStore()
-const { playerModeState, playState, currentSongDetail } = storeToRefs(playerStore)
+const { playerModeState, playState, currentSongDetail, currentLyric } = storeToRefs(playerStore)
 const lyricStore = useLyricStore()
-const { lyricWithTranslation, activeLyricIndex, lyricData } = storeToRefs(lyricStore)
+const { currentActiveLyricIndex } = storeToRefs(lyricStore)
 
 const scrollerContainer = ref()
 const lyricContainer = ref()
 
-const WHEEL_TYPE = "wheel"
-const SCROLL_TYPE = "scroll"
-// 恢复自动滚动的定时器时间
-const AUTO_SCROLL_RECOVER_TIME = 1000
-
-const lyricScrolling = ref({
-  [WHEEL_TYPE]: false,
-  [SCROLL_TYPE]: false
-})
-const lyricTimer = ref<Record<typeof WHEEL_TYPE | typeof SCROLL_TYPE, NodeJS.Timeout | null>>({
-  [WHEEL_TYPE]: null,
-  [SCROLL_TYPE]: null
-})
-
-function scrollToActiveLyric() {
-  if (activeLyricIndex.value !== -1) {
-    if (lyricContainer.value?.[activeLyricIndex.value]) {
-      scrollerContainer.value
-        .getScroller()
-        .scrollToElement(lyricContainer.value[activeLyricIndex.value], 200, 0, true)
-    }
-  }
-}
-
-function clearTimer(type: typeof WHEEL_TYPE | typeof SCROLL_TYPE) {
-  lyricTimer.value[type] && clearTimeout(lyricTimer.value[type])
-}
-function onScrollerInit(scroller: BScrollConstructor) {
-  const onScrollStart = (type: typeof WHEEL_TYPE | typeof SCROLL_TYPE) => {
-    clearTimer(type)
-    lyricScrolling.value[type] = true
-  }
-  const onScrollEnd = (type: typeof WHEEL_TYPE | typeof SCROLL_TYPE) => {
-    // 滚动结束后两秒 歌词开始自动滚动
-    clearTimer(type)
-    lyricTimer.value[type] = setTimeout(() => {
-      lyricScrolling.value[type] = false
-    }, AUTO_SCROLL_RECOVER_TIME)
-  }
-  scroller.on("scrollStart", onScrollStart.bind(null, SCROLL_TYPE))
-  scroller.on("mousewheelStart", onScrollStart.bind(null, WHEEL_TYPE))
-
-  scroller.on("scrollEnd", onScrollEnd.bind(null, SCROLL_TYPE))
-  scroller.on("mousewheelEnd", onScrollEnd.bind(null, WHEEL_TYPE))
-}
-
-watch(activeLyricIndex, (newIndex, oldIndex) => {
+watch(currentActiveLyricIndex, (newIndex, oldIndex) => {
   if (
-    newIndex !== oldIndex &&
-    !lyricScrolling.value[WHEEL_TYPE] &&
-    !lyricScrolling.value[SCROLL_TYPE]
+    newIndex !== oldIndex && newIndex !== -1 && playerModeState.value
   ) {
-    scrollToActiveLyric()
+    scrollerContainer.value.getScroller().scrollToElement(lyricContainer.value[newIndex], 300, 0, true)
   }
 })
+
 
 </script>
 <style scoped module>

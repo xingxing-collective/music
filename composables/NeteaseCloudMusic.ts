@@ -246,9 +246,24 @@ export function song_detail(
   });
 }
 
+export type Lrc = {
+  version: number;
+  lyric: string;
+};
+
 export function lyric(
   params: { id: string | number } & RequestBaseConfig
-): Promise<Response> {
+): Promise<
+  Response<{
+    lrc: Lrc;
+    sgc: boolean;
+    sfy: boolean;
+    qfy: boolean;
+    klyric: Lrc;
+    romalrc: Lrc;
+    code: number;
+  }>
+> {
   return $fetch('/lyric', {
     baseURL: API_URL,
     params,
