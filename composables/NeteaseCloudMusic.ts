@@ -1,6 +1,56 @@
+import defu from 'defu';
+import { LRUCache } from 'lru-cache';
+import { hash as ohash } from 'ohash';
+
 const API_URL = import.meta.dev
   ? 'http://localhost:3001/'
   : 'https://xingxing-music-api.vercel.app/';
+
+const promiseCache = new LRUCache<string, any>({
+  max: 500,
+  ttl: 2000 * 60 * 60, // 2 hour
+});
+
+type FetchParameters = Parameters<typeof $fetch>;
+type NitroFetchRequest = FetchParameters[0];
+type NitroFetchOptions = FetchParameters[1];
+
+async function _fetchNeteaseClouldMusic(
+  request: NitroFetchRequest,
+  opts: NitroFetchOptions = {}
+) {
+  const defaultOptions: NitroFetchOptions = {
+    baseURL: API_URL,
+    credentials: 'include',
+  };
+  const options = defu(opts, defaultOptions);
+  return await $fetch(request, options);
+}
+
+async function fetchNeteaseClouldMusic<T = unknown>(
+  request: NitroFetchRequest,
+  opts: NitroFetchOptions = {}
+): Promise<T> {
+  const hash = ohash([request, opts.params]);
+  const state = useState<any>(hash, () => null);
+  if (state.value) return state.value;
+  if (!promiseCache.has(hash)) {
+    promiseCache.set(
+      hash,
+      _fetchNeteaseClouldMusic(request, opts)
+        .then((res) => {
+          state.value = res;
+          return res;
+        })
+        .catch((error_) => {
+          promiseCache.delete(hash);
+          throw error_;
+        })
+    );
+  }
+  console.log(promiseCache);
+  return promiseCache.get(hash)!;
+}
 
 export interface RequestBaseConfig {
   cookie?: string;
@@ -17,7 +67,7 @@ export interface APIBaseResponse {
   [index: string]: unknown;
 }
 
-export type Response<T = null> = {
+export type Response<T = unknown> = {
   [P in keyof T]: T[P];
 } & APIBaseResponse;
 
@@ -27,10 +77,8 @@ export function register_anonimous(params: RequestBaseConfig = {}): Promise<{
   createTime: Date;
   userId: number;
 }> {
-  return $fetch('/register/anonimous', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/register/anonimous', {
     params,
-    credentials: 'include',
   });
 }
 
@@ -42,27 +90,21 @@ export function personalized(
   category: number;
   result: Array<Record<string, any>>;
 }> {
-  return $fetch('/personalized', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/personalized', {
     params,
-    credentials: 'include',
   });
 }
 
 export function personalized_djprogram(
   params: RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/personalized/djprogram', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/personalized/djprogram', {
     params,
-    credentials: 'include',
   });
 }
 export function personalizedMv(params: RequestBaseConfig): Promise<Response> {
-  return $fetch('/personalized/mv', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/personalized/mv', {
     params,
-    credentials: 'include',
   });
 }
 
@@ -72,29 +114,23 @@ export function personalized_newsong(
     limit?: string | number;
   } & RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/personalized/newsong', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/personalized/newsong', {
     params,
-    credentials: 'include',
   });
 }
 
 export function personalized_privatecontent(
   params: RequestBaseConfig = {}
 ): Promise<{ code: number; result: Array<Record<string, any>>; name: string }> {
-  return $fetch('/personalized/privatecontent', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/personalized/privatecontent', {
     params,
-    credentials: 'include',
   });
 }
 export function program_recommend(
   params: { type?: string } & MultiPageConfig & RequestBaseConfig
 ): Promise<Response> {
-  return $fetch('/program/recommend', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/program/recommend', {
     params,
-    credentials: 'include',
   });
 }
 export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
@@ -104,10 +140,8 @@ export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   recommend: Array<Record<string, any>>;
   msg: string;
 }> {
-  return $fetch('/recommend/resource', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/recommend/resource', {
     params,
-    credentials: 'include',
   });
 }
 export enum BannerType {
@@ -120,20 +154,16 @@ export enum BannerType {
 export function banner(
   params: { type?: BannerType } & RequestBaseConfig = {}
 ): Promise<{ code: number; banners: Array<Record<string, any>> }> {
-  return $fetch('/banner', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/banner', {
     params,
-    credentials: 'include',
   });
 }
 
 export function songUrl(
   params: { id: string | number; br?: string | number } & RequestBaseConfig
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
-  return $fetch('/song/url', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/song/url', {
     params,
-    credentials: 'include',
   });
 }
 export enum SoundQualityType {
@@ -146,10 +176,8 @@ export enum SoundQualityType {
 export function songUrlV1(
   params: { id: string | number; level: SoundQualityType } & RequestBaseConfig
 ): Promise<{ code: number; data: Array<Record<string, any>> }> {
-  return $fetch('/song/url/v1', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/song/url/v1', {
     params,
-    credentials: 'include',
   });
 }
 export type SongDetail = {
@@ -239,19 +267,30 @@ export function song_detail(
     code: number;
   }>
 > {
-  return $fetch('/song/detail', {
-    baseURL: API_URL,
+  return fetchNeteaseClouldMusic('/song/detail', {
     params,
-    credentials: 'include',
   });
 }
 
+export type Lrc = {
+  version: number;
+  lyric: string;
+};
+
 export function lyric(
   params: { id: string | number } & RequestBaseConfig
-): Promise<Response> {
-  return $fetch('/lyric', {
-    baseURL: API_URL,
+): Promise<
+  Response<{
+    lrc: Lrc;
+    sgc: boolean;
+    sfy: boolean;
+    qfy: boolean;
+    klyric: Lrc;
+    romalrc: Lrc;
+    code: number;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/lyric', {
     params,
-    credentials: 'include',
   });
 }
