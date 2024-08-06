@@ -182,9 +182,9 @@ export const usePlayerStore = defineStore('player', () => {
 
   watch(playState, async (newVal) => {
     if (newVal) {
-      await audio.value?.play();
+      //await audio.value?.play();
     } else {
-      audio.value?.pause();
+      //audio.value?.pause();
     }
   });
 
