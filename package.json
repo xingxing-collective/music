@@ -25,7 +25,7 @@
     "defu": "^6.1.4",
     "pinia": "^2.2.0",
     "tailwind-merge": "^2.4.0",
-    "vue": "^3.4.31",
+    "vue": "^3.4.35",
     "vue-router": "^4.4.0",
     "vue3-carousel-3d": "^1.0.4"
   },

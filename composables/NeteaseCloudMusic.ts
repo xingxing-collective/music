@@ -48,7 +48,6 @@ async function fetchNeteaseClouldMusic<T = unknown>(
         })
     );
   }
-  console.log(promiseCache);
   return promiseCache.get(hash)!;
 }
 
