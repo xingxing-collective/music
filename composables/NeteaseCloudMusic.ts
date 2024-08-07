@@ -392,3 +392,76 @@ export function comment_new(
     params,
   });
 }
+
+export type Playlist = {
+  id: number;
+  name: string;
+  coverImgId: bigint;
+  coverImgUrl: string;
+  coverImgId_str: string;
+  adType: number;
+  userId: number;
+  createTime: number;
+  status: number;
+  opRecommend: boolean;
+  highQuality: boolean;
+  newImported: boolean;
+  updateTime: number;
+  trackCount: number;
+  specialType: number;
+  privacy: number;
+  trackUpdateTime: number;
+  commentThreadId: string;
+  playCount: number;
+  trackNumberUpdateTime: number;
+  subscribedCount: number;
+  cloudTrackCount: number;
+  ordered: boolean;
+  description: string;
+  tags: any[];
+  updateFrequency: string;
+  backgroundCoverId: number;
+  backgroundCoverUrl: string;
+  titleImage: number;
+  titleImageUrl: string;
+  detailPageTitle: string;
+  englishTitle: string;
+  officialPlaylistType: string;
+  copied: boolean;
+  relateResType: string;
+  coverStatus: number;
+  subscribers: Array<Record<string, any>>;
+  subscribed: boolean;
+  creator: Record<string, any>;
+  tracks: Array<Record<string, any>>;
+  videoIds: any;
+  videos: any;
+  trackIds: Array<Record<string, any>>;
+  bannedTrackIds: any;
+  mvResourceInfos: any;
+  shareCount: number;
+  commentCount: number;
+  remixVideo: any;
+  newDetailPageRemixVideo: any;
+  sharedUsers: any;
+  historySharedUsers: any;
+  gradeStatus: string;
+  score: any;
+  algTags: any;
+  distributeTags: Array<Record<string, any>>;
+  trialMode: number;
+  displayTags: any;
+  playlistType: string;
+};
+export function playlist_detail(
+  params: { id: string | number; s?: string | number } & RequestBaseConfig
+): Promise<
+  Response<{
+    code: number;
+    playlist: Playlist;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/playlist/detail', {
+    params,
+  });
+}
