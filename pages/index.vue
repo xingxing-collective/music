@@ -40,7 +40,7 @@
       </div>
       <div class=" grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pt-2">
         <Card v-for="r in personalizedPrivatecontent" :content="{ src: r.sPicUrl, alt: r.name }"
-          :ui="{ image: 'aspect-video' }" :title="r.name" />
+          :ui="{ image: 'aspect-video', container: 'border-none aspect-auto' }" :title="r.name" />
       </div>
     </div>
   </div>

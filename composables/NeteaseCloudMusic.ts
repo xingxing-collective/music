@@ -294,6 +294,82 @@ export function lyric(
   });
 }
 
+export type CommentReplied = {
+  beRepliedCommentId: number;
+  content: string;
+  expressionUrl: string;
+  ipLocation: Record<string, any>;
+  richContent: string;
+  status: number;
+  user: CommentUser;
+};
+
+export type CommentUser = {
+  anonym: number;
+  authStatus: number;
+  avatarDetail: unknown;
+  avatarUrl: string;
+  commonIdentity: unknown;
+  expertTags: unknown;
+  experts: unknown;
+  followed: boolean;
+  liveInfo: unknown;
+  locationInfo: unknown;
+  mutual: boolean;
+  nickname: string;
+  remarkName: unknown;
+  socialUserId: unknown;
+  target: unknown;
+  userId: number;
+  userType: number;
+  vipRights: unknown;
+  vipType: number;
+};
+
+export type Comment = {
+  beReplied: Array<CommentReplied>;
+  commentId: number;
+  commentLocationType: number;
+  content: string;
+  liked: boolean;
+  likedCount: number;
+  owner: false;
+  parentCommentId: number;
+  pendantData: Record<string, any>;
+  richContent: string;
+  showFloorComment: unknown;
+  status: number;
+  time: Date;
+  timeStr: string;
+  user: CommentUser;
+  userBizLevels: unknown;
+};
+
+export function comment_music(
+  params: {
+    id: string | number;
+    before?: string | number;
+  } & MultiPageConfig &
+    RequestBaseConfig
+): Promise<
+  Response<{
+    cnum: number;
+    code: number;
+    commentBanner: unknown;
+    comments: Array<Comment>;
+    hotComments: Array<Comment>;
+    isMusician: boolean;
+    more: boolean;
+    moreHot: boolean;
+    topComments: [];
+    userId: number;
+    total: number;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/comment/music', {
+    params,
+  });
+}
 export function comment_new(
   params: {
     type?: number | string;

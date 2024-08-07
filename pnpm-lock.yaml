@@ -57,12 +57,18 @@ importers:
       '@iconify-json/mage':
         specifier: ^1.1.0
         version: 1.1.0
+      '@iconify-json/material-symbols-light':
+        specifier: ^1.1.26
+        version: 1.1.26
       '@iconify-json/ph':
         specifier: ^1.1.13
         version: 1.1.13
       '@iconify-json/ri':
         specifier: ^1.1.21
         version: 1.1.21
+      '@iconify-json/uil':
+        specifier: ^1.1.9
+        version: 1.1.9
       '@nuxt/eslint':
         specifier: ^0.3.13
         version: 0.3.13(eslint@9.7.0)(magicast@0.3.4)(rollup@4.19.0)(typescript@5.5.4)(vite@5.3.4(@types/node@20.14.11)(terser@5.31.3))
@@ -902,11 +908,17 @@ packages:
   '@iconify-json/mage@1.1.0':
     resolution: {integrity: sha512-wXT8F49OpXgJu9MglzVx+D7ESJOVX4qerQj9QhCnWBVulcdmm7yv8wP0e3EEMrSEmW3tH4vLK4T3v9WbPTzpXw==}
 
+  '@iconify-json/material-symbols-light@1.1.26':
+    resolution: {integrity: sha512-HaiXzjDrWqol1uynZi6dkqYFhr6Cp+bUnGeB+WBlphvTMLK5rBo9pA31Ny5WhNIl3HSzSfOdfrCgFZ1m9OR3zQ==}
+
   '@iconify-json/ph@1.1.13':
     resolution: {integrity: sha512-xtM4JJ63HCKj09WRqrBswXiHrpliBlqboWSZH8odcmqYXbvIFceU9/Til4V+MQr6+MoUC+KB72cxhky2+A6r/g==}
 
   '@iconify-json/ri@1.1.21':
     resolution: {integrity: sha512-ssU2CRaB4T83Q3cncCZtITholhYkH6gEL5XLmdMII6Xzn8bTCpDCkt+HdX4URc24uUMD0PGIaNLJUIAgdfLMjQ==}
+
+  '@iconify-json/uil@1.1.9':
+    resolution: {integrity: sha512-NZkqwKfG2TsJClxzVjYi2a3Mam/3ZrNjzxHNniqqwrSiAQ6QYx9VlFmazQUXQF5xu9v1z1wIeQo3vYClvanrnw==}
 
   '@iconify/collections@1.0.442':
     resolution: {integrity: sha512-qcTbHRRcVCYgb3OY/K9ZsGR279MAHdpV6IMQp0QllRp+NYOG1PoGTt5ym/dwNaSTgKv0pZ6/cNloucbAOYI25A==}
@@ -5374,11 +5386,19 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
+  '@iconify-json/material-symbols-light@1.1.26':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/ph@1.1.13':
     dependencies:
       '@iconify/types': 2.0.0
 
   '@iconify-json/ri@1.1.21':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/uil@1.1.9':
     dependencies:
       '@iconify/types': 2.0.0
 

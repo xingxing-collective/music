@@ -1,6 +1,6 @@
 <template>
-  <div class="lg:block h-8 cursor-pointer group" ref="progressBar" @click="onProgress">
-    <div class="flex items-center bg-[rgb(35_35_35)] relative top-[43%] h-[2px] ">
+  <div class="lg:block h-8 cursor-pointer group " ref="progressBar" @click="onProgress">
+    <div class="flex items-center dark:bg-[rgb(35_35_35)] bg-[rgb(245,245,245)] relative top-[43%] h-[2px] ">
       <div ref="progress" class="h-full bg-red-600"></div>
       <div ref="progressBtn"
         :class="[alwaysShowButton ? 'block' : 'hidden group-hover:block', 'relative box-border w-3 h-3 rounded-[50%] bg-red-600']">

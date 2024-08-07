@@ -49,11 +49,27 @@
       </UPanel>
       <MiniPlayer />
       <Player />
+      <ClientOnly>
+        <audio :loop="playmode === PlayModeType.Single" ref="audio" autoplay :src="currentSongUrl?.url.replace('http', 'https')"
+          @ended="control('next')" @timeupdate="timeupdate" />
+      </ClientOnly>
     </UPage>
 
   </ULayout>
 </template>
 <script setup lang="ts">
+import { PlayModeType } from '~/types/player'
+
+const playerStore = usePlayerStore()
+const { control } = playerStore
+const { audio, playmode,
+  currentTime,
+  currentSongUrl } = storeToRefs(playerStore)
+
+function timeupdate(e: Event) {
+  currentTime.value = (e.target as AudioContext).currentTime
+}
+
 const route = useRoute()
 const mdlinks = computed(() => {
   return [{
@@ -133,4 +149,6 @@ const headLink = computed(() => {
     to: '/topsong'
   }]
 })
+
+
 </script>
