@@ -21,11 +21,11 @@
             </div>
 
           </div>
-          <div class="hidden w-1/2 md:flex lg:flex flex-col flex-1 gap-4">
-            <div class="dark:text-gray-200 w-[70%] text-center text-2xl font-semibold">{{ currentSongDetail?.name }}
+          <div class="hidden w-1/2 md:flex lg:flex flex-col flex-1 gap-4 text-[rgb(74,74,74)] dark:text-gray-200">
+            <div class="w-[70%] text-center text-2xl font-semibold">{{ currentSongDetail?.name }}
             </div>
             <div class="flex w-[70%] justify-center">
-              <div class="text-sm text-gray-300">歌手：</div>
+              <div class="text-sm">歌手：</div>
               <div class="text-sm text-[rgb(81,126,175)]">{{ currentSongDetail?.ar.map(x => x.name).join('/') }}</div>
             </div>
             <div class="w-[70%] md:h-[32rem] lg:h-96">
@@ -33,7 +33,7 @@
                 :options="{ disableTouch: true }">
                 <div>
                   <div
-                    :class="[currentActiveLyricIndex === index ? 'text-base dark:text-[rgb(220,221,228)] font-bold' : 'text-sm', 'mb-4 text-[rgb(177,177,177)] text-center']"
+                    :class="[currentActiveLyricIndex === index ? 'text-base dark:text-[rgb(220,221,228)] font-bold' : 'text-sm', 'mb-4 text-center']"
                     ref="lyricContainer" :key="index" v-for="(l, index) in  currentLyric ">
                     {{ l.content }}
                   </div>

@@ -1,20 +1,13 @@
 :root {
-  --primary-color: 211 58 49;
-  --color-gray-200: 229 231 235;
-  --color-gray-700: 55 65 81;
-  --color-gray-900: 17 24 39;
-  --color-white: 255 255 255;
-  --color-black: 0 0 0;
-  --color-black-200: 24 24 24;
-  --color-black-700: 21 21 21;
-  --color-red-700: 255 54 64;
-  --progress-red-800: 35 35 35;
+  --bg-color: 255 255 255;
+  --text-color: 74 74 74;
   --scrollbar-color: 208 208 208;
 }
 
 .dark:root {
+  --bg-color: 21 21 21;
+  --text-color: 177 177 177;
   --scrollbar-color: 58 58 58;
-  --text-primary-gray: 177 177 177;
 }
 
 body {

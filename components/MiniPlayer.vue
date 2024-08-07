@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed bottom-0 z-20 w-full h-[--player-height] left-0 right-0 flex p-[0.5rem_1rem] pr-6 backdrop-blur-md shadow-md bg-inherit bg-opacity-50">
+    class="fixed bottom-0 z-20 w-full h-[--player-height] left-0 right-0 flex p-[0.5rem_1rem] pr-6 backdrop-blur-md shadow-md md:bg-background dark:lg:bg-[rgb(37,37,37)] bg-opacity-50">
     <div class="hidden md:grid lg:grid grid-cols-5 w-full justify-between items-center overflow-hidden">
       <div class="col-span-2 flex w-full">
         <template v-if="currentSongUrl && currentSongDetail">
@@ -8,17 +8,17 @@
             <div class=" absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
             <img class="blur-sm w-full h-full" lazy="loaded" :src="`${currentSongDetail?.al.picUrl}?param=80y80`" />
             <div class="absolute w-full h-full top-0 flex flex-col items-center justify-center cursor-pointer">
-              <Icon class=" relative top-[1px]" :name="!playerModeState ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'"
+              <Icon class=" relative text-gray-100 top-[1px]" :name="!playerModeState ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'"
                 size="22" />
-              <Icon class=" relative bottom-[1px]"
+              <Icon class="relative bottom-[1px] text-gray-100"
                 :name="!playerModeState ? 'ri:arrow-down-s-line' : 'ri:arrow-up-s-line'" size="22" />
             </div>
           </div>
           <div class="flex flex-col w-full pl-2">
             <div class="flex h-1/2 items-center gap-[2px]">
               <div class="text-sm">{{ currentSongDetail?.name }}</div>
-              <div class="dark:text-gray-400">-</div>
-              <div class="text-[0.75rem] dark:text-gray-400">{{ currentSongDetail?.ar.map(x => x.name).join('/') }}
+              <div class="text-[--text-color]">-</div>
+              <div class="text-[0.75rem] text-[--text-color]">{{ currentSongDetail?.ar.map(x => x.name).join('/') }}
               </div>
             </div>
             <div class="h-1/2 flex items-center text-[11px] dark:text-gray-500">
@@ -40,19 +40,19 @@
       <div class="col-span-2 w-full flex items-center gap-6 lg:gap-8 px-4">
         <div class="flex-1"></div>
         <div class="flex  h-full items-center gap-4">
-          <Icon class="cursor-pointer text-gray-300"
+          <Icon class="cursor-pointer text-[--text-color]"
             :name="likeState ? 'ic:round-favorite' : 'ic:round-favorite-border'"
             :style="{ color: likeState ? 'red' : '' }" @click="likeStateToggle()" size="24" />
         </div>
         <div class="flex  h-full items-center gap-4">
-          <Icon class="cursor-pointer text-gray-300" name="ri:download-cloud-line" size="24" />
+          <Icon class="cursor-pointer text-[--text-color]" name="ri:download-cloud-line" size="24" />
         </div>
         <div class="flex  h-full items-center gap-4">
-          <Icon class="cursor-pointer text-gray-300" :name="playmodeIcon" size="24"
+          <Icon class="cursor-pointer text-[--text-color]" :name="playmodeIcon" size="24"
             @click="() => playmode < 2 ? playmode++ : playmode = 0" />
         </div>
         <div class="flex  h-full items-center gap-4">
-          <Icon class="cursor-pointer text-gray-300" name="ri:play-list-2-line" size="24" />
+          <Icon class="cursor-pointer text-[--text-color]" name="ri:play-list-2-line" size="24" />
         </div>
         <Volume class="lg:w-40 md:hidden" />
       </div>
@@ -64,7 +64,7 @@
 
     </div>
     <ClientOnly>
-      <audio :loop="playmode === PlayModeType.Single"  ref="audio"
+      <audio :loop="playmode === PlayModeType.Single" autoplay ref="audio"
         :src="currentSongUrl?.url.replace('http', 'https')" @ended="control('next')" @timeupdate="timeupdate" />
     </ClientOnly>
   </div>

@@ -2,12 +2,12 @@ export default defineAppConfig({
   ui: {
     variables: {
       light: {
-        background: 'var(--color-white)',
-        foreground: 'var(--color-black)',
+        background: 'var(--bg-color)',
+        foreground: 'var(--text-color)',
       },
       dark: {
-        background: 'var(--color-black-700)',
-        foreground: 'var(--color-white)',
+        background: 'var(--bg-color)',
+        foreground: 'var(--text-color)',
       },
       header: {
         height: '4rem',
