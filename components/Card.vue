@@ -17,8 +17,8 @@ import type { PropType } from 'vue'
 
 const config = {
   wrapper: 'flex flex-col w-full cursor-pointer',
-  container: 'w-full aspect-square border-[0.5px] border-gray-500 dark:border-gray-800 flex justify-center items-center',
-  image: 'aspect-square w-full object-cover',
+  container: 'w-full aspect-square dark:border-[0.5px] dark:border-gray-800 flex justify-center items-center',
+  image: 'aspect-square w-full object-cover rounded-md',
   content: 'text-sm md:text-xs lg:text-xs pt-1 dark:text-gray-200 max-w-full overflow-hidden line-clamp-2'
 }
 

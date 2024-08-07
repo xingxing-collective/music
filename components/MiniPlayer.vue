@@ -63,14 +63,9 @@
     <div class="md:hidden lg:hidden">
 
     </div>
-    <ClientOnly>
-      <audio :loop="playmode === PlayModeType.Single" autoplay ref="audio"
-        :src="currentSongUrl?.url.replace('http', 'https')" @ended="control('next')" @timeupdate="timeupdate" />
-    </ClientOnly>
   </div>
 </template>
 <script setup lang="ts">
-import { PlayModeType } from '~/types/player'
 
 const playerStore = usePlayerStore()
 const volumeStore = useVolumeStore()
@@ -90,10 +85,6 @@ const percent = computed(() => {
 
 function onPercentChange(percent: number) {
   audio.value!.currentTime = currentSongUrl.value.time / 1000 * percent
-}
-
-function timeupdate(e: Event) {
-  currentTime.value = (e.target as AudioContext).currentTime
 }
 
 </script>
