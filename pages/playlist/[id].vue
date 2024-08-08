@@ -3,11 +3,11 @@
     <div class="h-[--header-height]"></div>
     <div class="flex px-4">
       <div class="flex gap-4 px-4">
-        <NuxtImg :src="playlist?.coverImgUrl" class=" w-48 rounded-md" />
+        <img :alt="playlist?.name" :src="playlist?.coverImgUrl" class=" w-48 rounded-md" />
         <div class="flex flex-col gap-4">
           <div class="text-black dark:text-gray-200">{{ playlist?.name }}</div>
           <div class="flex gap-2 items-center">
-            <NuxtImg :src="playlist?.creator.avatarUrl" class="w-8 rounded-[50%] cursor-pointer" />
+            <img :src="playlist?.creator.avatarUrl" :alt="playlist?.creator.nickname" class="w-8 rounded-[50%] cursor-pointer" />
             <span class="text-sm font-bold text-[rgb(81,126,175)] cursor-pointer">{{ playlist?.creator.nickname
               }}</span>
             <span class="text-sm">{{ playlist?.createTime }} 创建</span>
