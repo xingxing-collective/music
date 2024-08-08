@@ -224,3 +224,7 @@ export const usePlayerStore = defineStore('player', () => {
     getSong,
   };
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(usePlayerStore, import.meta.hot))
+}
