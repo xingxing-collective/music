@@ -105,7 +105,9 @@ watch(currentActiveLyricIndex, (newIndex, oldIndex) => {
   if (
     newIndex !== oldIndex && newIndex !== -1 && playerModeState.value
   ) {
-    scrollerContainer.value.getScroller().scrollToElement(lyricContainer.value[newIndex], 300, 0, true)
+    nextTick(()=>{
+      scrollerContainer.value?.getScroller().scrollToElement(lyricContainer.value[newIndex], 300, 0, true)
+    })
   }
 })
 
