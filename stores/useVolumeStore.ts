@@ -27,5 +27,5 @@ export const useVolumeStore = defineStore('volume', () => {
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useVolumeStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useVolumeStore, import.meta.hot));
 }
