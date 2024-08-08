@@ -2,7 +2,7 @@
   <div :class="ui.wrapper" v-bind="attrs">
     <div :class="ui.container">
       <slot>
-        <NuxtImg :src="content?.src" :alt="content?.alt" :class="ui.image" />
+        <img :src="content?.src" :alt="content?.alt" :class="ui.image" />
       </slot>
 
       <template v-if="hover">

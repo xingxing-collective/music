@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:block h-8 cursor-pointer group " ref="progressBar" @click="onProgress">
+  <div class="lg:block hidden h-8 cursor-pointer group " ref="progressBar" @click="onProgress">
     <div class="flex items-center dark:bg-[rgb(35_35_35)] bg-[rgb(245,245,245)] relative top-[43%] h-[2px] ">
       <div ref="progress" class="h-full bg-red-600"></div>
       <div ref="progressBtn"

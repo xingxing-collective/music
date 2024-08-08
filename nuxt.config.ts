@@ -25,7 +25,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     'dayjs-nuxt',
-    '@nuxt/image',
   ],
 
   css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
