@@ -18,3 +18,7 @@ export const useLyricStore = defineStore('lyric', () => {
     currentActiveLyricIndex,
   };
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useLyricStore, import.meta.hot));
+}
