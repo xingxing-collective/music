@@ -71,14 +71,37 @@
             </div>
           </div>
         </div>
-        <div class="hidden lg:flex lg:px-24 lg:pb-20 w-full">
-          <Comments :id="currentSongId" />
+        <div class="hidden lg:grid grid-cols-4 gap-6 lg:px-8 lg:pb-20 w-full">
+          <Comments class="col-span-3" :id="currentSongId" />
+          <div class="col-span-1 flex flex-col gap-4">
+            <p class="text-base font-bold">包含这首歌的歌单</p>
+            <div class="flex flex-col gap-2">
+              <template v-for="playlist in simiPlaylists">
+                <Card direction="vertical" :hover="false"
+                  :image="{ src: `${playlist.coverImgUrl.replace('http://', 'https://')}`, alt: playlist.description }"
+                  :ui="{ image: 'w-12 h-12 max-w-none', container: 'border-none' }">
+                  <template #title>
+                    <div class="flex flex-col justify-center gap-2 w-full">
+                      <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm font-medium">{{ playlist.name }}
+                      </p>
+                      <div class=" flex">
+                        <Icon name="ic:baseline-play-arrow" size="16" />
+                        <span>{{ playlist.playCount }}</span>
+                      </div>
+                    </div>
+                  </template>
+                </Card>
+              </template>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </Transition>
 </template>
 <script setup lang="ts">
+import type { Playlist } from '~/types'
+
 const playerStore = usePlayerStore()
 const { playerModeStateToggle, likeStateToggle, control, playStateToggle } = playerStore
 const { playerModeState, playState, currentSongDetail, currentLyric, currentSongId, likeState, playmode, playmodeIcon, currentTime, audio, currentSongUrl } = storeToRefs(playerStore)
@@ -105,12 +128,20 @@ watch(currentActiveLyricIndex, (newIndex, oldIndex) => {
   if (
     newIndex !== oldIndex && newIndex !== -1 && playerModeState.value
   ) {
-    nextTick(()=>{
+    nextTick(() => {
       scrollerContainer.value?.getScroller().scrollToElement(lyricContainer.value[newIndex], 300, 0, true)
     })
   }
 })
 
+const simiPlaylists = shallowRef<Playlist[]>()
+
+watch(currentSongId, async (newVal) => {
+  if (newVal) {
+    const res = await simi_playlist({ id: newVal })
+    simiPlaylists.value = res.playlists
+  }
+})
 
 </script>
 <style scoped module>

@@ -1,8 +1,8 @@
 <template>
-  <div :class="ui.wrapper" v-bind="attrs">
+  <div :class="[ui.wrapper, direction === 'horizontal' ? 'flex-col' : 'gap-4']" v-bind="attrs">
     <div :class="ui.container">
       <slot>
-        <img :src="content?.src" :alt="content?.alt" :class="ui.image" />
+        <img :src="image?.src" :alt="image?.alt" :class="ui.image" />
       </slot>
 
       <template v-if="hover">
@@ -17,8 +17,8 @@
         </slot>
       </template>
     </div>
-    <div :class="ui.content">
-      <slot name="content">
+    <div :class="ui.title">
+      <slot name="title">
         {{ title }}
       </slot>
     </div>
@@ -28,26 +28,31 @@
 import type { PropType } from 'vue'
 
 const config = {
-  wrapper: 'flex flex-col w-full cursor-pointer',
-  container: 'group relative w-full aspect-square dark:border-[0.5px] dark:border-gray-800 flex justify-center items-center',
+  wrapper: 'flex  w-full cursor-pointer',
+  container: 'group relative dark:border-[0.5px] dark:border-gray-800 flex justify-center items-center',
   image: 'aspect-square w-full object-cover rounded-md',
-  content: 'text-sm md:text-xs lg:text-xs pt-1 dark:text-gray-200 max-w-full overflow-hidden line-clamp-2'
+  title: 'text-sm md:text-xs lg:text-xs pt-1 text-[text-color] max-w-full overflow-hidden line-clamp-2'
 }
 
 const props = defineProps({
+  direction: {
+    type: String as PropType<'horizontal' | 'vertical'>,
+    default: 'horizontal'
+  },
   hover: {
     type: Boolean,
     default: true
   },
   title: {
     type: String,
-    required: true
+    required: false
   },
-  content: {
+  image: {
     type: [Object] as PropType<{
       src: string
       alt: string
     }>,
+    required: false
   },
   class: {
     type: [String, Object, Array] as PropType<any>,

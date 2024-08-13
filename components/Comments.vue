@@ -1,7 +1,7 @@
 <template>
   <div class="py-4 w-full flex flex-col gap-4">
     <div>
-      <p class="text-base text-[--text-primary-gray] font-bold">精彩评论</p>
+      <p class="text-base font-bold">精彩评论</p>
       <CommentItem class="border-b dark:border-[rgb(63,63,63)] border-[rgb(242,242,242)]" v-for="c in hotComments"
         :comment="c" />
     </div>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div>
-      <p class="text-base text-[--text-primary-gray] font-bold">最新评论（{{ total }}）</p>
+      <p class="text-base font-bold">最新评论（{{ total }}）</p>
       <CommentItem
         :class="[index + 1 === comments?.length ? 'border-none' : 'border-b', 'dark:border-[rgb(63,63,63)] border-[rgb(242,242,242)]']"
         v-for="(c, index) in comments" :comment="c">

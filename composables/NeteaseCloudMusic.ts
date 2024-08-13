@@ -40,7 +40,7 @@ async function fetchNeteaseClouldMusic<T = unknown>(
   request: NitroFetchRequest,
   opts: NitroFetchOptions = {}
 ): Promise<T> {
-  const hash = ohash([request, opts.params]);
+  const hash = ohash([request, opts]);
   const state = useState<any>(hash, () => null);
   if (state.value) return state.value;
   if (!promiseCache.has(hash)) {
@@ -249,4 +249,23 @@ export function playlist_detail(
   return fetchNeteaseClouldMusic('/playlist/detail', {
     params,
   });
+}
+
+export function simi_playlist(
+  params: { id: string | number } & MultiPageConfig & RequestBaseConfig
+): Promise<
+  Response<{
+    code: number;
+    playlists: Array<Playlist>;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/simi/playlist', {
+    params,
+  });
+}
+
+export function simi_song(
+  params: { id: string | number } & MultiPageConfig & RequestBaseConfig
+): Promise<Response> {
+  return fetchNeteaseClouldMusic('/simi/song', { params });
 }
