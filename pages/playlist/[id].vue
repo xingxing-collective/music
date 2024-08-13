@@ -35,7 +35,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { Playlist } from '~/composables/NeteaseCloudMusic'
+import type { Playlist } from '~/types'
 
 const route = useRoute()
 const playlist = shallowRef<Playlist>()

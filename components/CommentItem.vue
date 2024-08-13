@@ -1,5 +1,5 @@
 <template>
-  <div class="flex py-4 w-full text-[--text-primary-gray]">
+  <div class="flex py-4 w-full">
     <div class="flex gap-4 w-full">
       <slot name="avatar">
         <img :src="`${comment.user.avatarUrl}?param=40y40`" class="rounded-[50%] w-10 aspect-square h-10 object-cover"

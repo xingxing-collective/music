@@ -26,7 +26,13 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'dayjs-nuxt',
   ],
-
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        allowImportingTsExtensions: true,
+      },
+    },
+  },
   css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
 
   colorMode: {
