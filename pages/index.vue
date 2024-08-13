@@ -26,7 +26,7 @@
         class=" hidden lg:block md:block" :perspective="0" :autoplay="true" :inverseScaling="inverseScaling"
         :width="width" :height="height" :border="0" :loop="true" :space="space" :display="3">
         <Slide v-for="(banner, i) in banners?.filter(x => !Boolean(x.adSource))" :key="banner.targetId" :index="i">
-          <img class="object-fill w-full h-full" :src="banner.imageUrl" :alt="banner.typeTitle" />
+          <img class="object-fill w-full h-full" :src="banner.imageUrl.replace('http://','https://')" :alt="banner.typeTitle" />
         </Slide>
       </Carousel3d>
       <div class=" w-full  items-center md:gap-4 lg:gap-6 justify-center font-black text-3xl hidden lg:flex md:flex">

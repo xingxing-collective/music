@@ -33,7 +33,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { Comment } from '~/composables/NeteaseCloudMusic'
+import type { Comment } from '~/types'
 
 
 const props = defineProps<{
