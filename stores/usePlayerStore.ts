@@ -1,4 +1,4 @@
-import type { SongDetail } from '~/composables/NeteaseCloudMusic';
+import { type SongDetail, SoundQualityType } from '~/types';
 import { PlayModeType } from '~/types/player';
 import { shuffleArray } from '~/utils';
 
