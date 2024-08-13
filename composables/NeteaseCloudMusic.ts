@@ -11,6 +11,7 @@ import type {
   Playlist,
   RequestBaseConfig,
   Response,
+  SiMiSongs,
   SongDetail,
   SoundQualityType,
 } from '~/types';
@@ -266,6 +267,10 @@ export function simi_playlist(
 
 export function simi_song(
   params: { id: string | number } & MultiPageConfig & RequestBaseConfig
-): Promise<Response> {
+): Promise<
+  Response<{
+    songs: SiMiSongs;
+  }>
+> {
   return fetchNeteaseClouldMusic('/simi/song', { params });
 }

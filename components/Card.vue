@@ -1,5 +1,5 @@
 <template>
-  <div :class="[ui.wrapper, direction === 'horizontal' ? 'flex-col' : 'gap-4']" v-bind="attrs">
+  <div :class="[ui.wrapper, direction === 'horizontal' ? 'flex-col' : '']" v-bind="attrs">
     <div :class="ui.container">
       <slot>
         <img :src="image?.src" :alt="image?.alt" :class="ui.image" />

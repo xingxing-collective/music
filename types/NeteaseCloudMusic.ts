@@ -229,3 +229,11 @@ export type Playlist = {
   displayTags: any;
   playlistType: string;
 };
+
+export type SiMiSongs = Array<{
+  artists: Array<{
+    name: string;
+  }>;
+  name: string;
+  album: Record<string, any>;
+}>;

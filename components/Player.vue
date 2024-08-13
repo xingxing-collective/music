@@ -74,19 +74,48 @@
         <div class="hidden lg:grid grid-cols-4 gap-6 lg:px-8 lg:pb-20 w-full">
           <Comments class="col-span-3" :id="currentSongId" />
           <div class="col-span-1 flex flex-col gap-4">
-            <p class="text-base font-bold">包含这首歌的歌单</p>
+            <p v-if="simiPlaylists?.length" class="text-base font-bold">包含这首歌的歌单</p>
             <div class="flex flex-col gap-2">
-              <template v-for="playlist in simiPlaylists">
+              <template v-for="simiPlaylist in simiPlaylists">
                 <Card direction="vertical" :hover="false"
-                  :image="{ src: `${playlist.coverImgUrl.replace('http://', 'https://')}`, alt: playlist.description }"
+                  class=" dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
+                  :image="{ src: `${simiPlaylist.coverImgUrl.replace('http://', 'https://')}`, alt: simiPlaylist.description }"
                   :ui="{ image: 'w-12 h-12 max-w-none', container: 'border-none' }">
                   <template #title>
-                    <div class="flex flex-col justify-center gap-2 w-full">
-                      <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm font-medium">{{ playlist.name }}
+                    <div class="flex pl-3 flex-col justify-center gap-1 w-full">
+                      <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm font-medium">{{
+      simiPlaylist.name }}
                       </p>
-                      <div class=" flex">
+                      <div class=" flex gap-1">
                         <Icon name="ic:baseline-play-arrow" size="16" />
-                        <span>{{ playlist.playCount }}</span>
+                        <span>{{ simiPlaylist.playCount }}</span>
+                      </div>
+                    </div>
+                  </template>
+                </Card>
+              </template>
+            </div>
+            <p v-if="simiSongs?.length" class="text-base font-bold">相似歌曲</p>
+            <div class=" flex flex-col gap-2">
+              <template v-for="simiSong in simiSongs">
+                <Card direction="vertical" class="group dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
+                  :image="{ src: `${simiSong.album.picUrl.replace('http://', 'https://')}`, alt: simiSong.name }"
+                  :ui="{ image: 'w-12 h-12 max-w-none', container: 'border-none' }">
+                  <template #title>
+                    <div class="flex pl-3 flex-col justify-center gap-1 w-full">
+                      <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm font-medium">{{ simiSong.name }}
+                      </p>
+                      <div class=" flex gap-1">
+                        <span class="whitespace-nowrap text-ellipsis overflow-hidden">{{
+      simiSong.artists.map(x => x.name).join('/') }}</span>
+                      </div>
+                    </div>
+                  </template>
+                  <template #hover>
+                    <div class="hidden group-hover:flex justify-center items-center absolute w-full">
+                      <div
+                        class="w-7 opacity-100 bg-[rgba(255,255,255,0.5)] rounded-[50%] aspect-square flex items-center justify-center">
+                        <Icon name="material-symbols-light:play-arrow" class=" text-red-600" size="28" />
                       </div>
                     </div>
                   </template>
@@ -100,7 +129,7 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import type { Playlist } from '~/types'
+import type { Playlist, SiMiSongs } from '~/types'
 
 const playerStore = usePlayerStore()
 const { playerModeStateToggle, likeStateToggle, control, playStateToggle } = playerStore
@@ -135,11 +164,14 @@ watch(currentActiveLyricIndex, (newIndex, oldIndex) => {
 })
 
 const simiPlaylists = shallowRef<Playlist[]>()
+const simiSongs = shallowRef<SiMiSongs>()
 
 watch(currentSongId, async (newVal) => {
   if (newVal) {
     const res = await simi_playlist({ id: newVal })
     simiPlaylists.value = res.playlists
+    const res2 = await simi_song({ id: newVal })
+    simiSongs.value = res2.songs
   }
 })
 
