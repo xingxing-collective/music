@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="flex pt-4 px-8 h-full w-full">
-      
+
     </div>
   </div>
 </template>
@@ -67,10 +67,26 @@ import type { Playlist } from '~/types'
 const route = useRoute()
 const playlist = shallowRef<Playlist>()
 
-onMounted(async () => {
+async function initialize() {
   const res = await playlist_detail({
     id: route.params.id as string
   })
   playlist.value = res.playlist
+  useHead({
+    title: playlist.value?.name,
+    meta: [
+      { name: 'description', content: playlist.value?.description },
+      { property: 'og:title', content: playlist.value?.name },
+      { property: 'og:description', content: playlist.value?.description },
+      { property: 'og:image', content: playlist.value?.coverImgUrl }
+    ],
+    link: [
+      { rel: 'icon', type: 'image/png', href: '/favicon.ico' }
+    ]
+  })
+}
+
+onMounted(async () => {
+  await initialize()
 })
 </script>
