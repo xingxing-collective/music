@@ -88,7 +88,7 @@
                       </p>
                       <div class=" flex gap-1">
                         <Icon name="ic:baseline-play-arrow" size="16" />
-                        <span>{{ simiPlaylist.playCount }}</span>
+                        <span>{{ formatNumber(simiPlaylist.playCount) }}</span>
                       </div>
                     </div>
                   </template>
