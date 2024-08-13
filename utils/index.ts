@@ -124,3 +124,12 @@ export function parseLyric(lrc: string) {
   }
   return lrcObj;
 }
+
+export function formatNumber(number: string | number | undefined | null) {
+  number = Number(number) || 0;
+  return number > 100_000_000
+    ? `${Math.round(number / 100_000_000)}亿`
+    : number > 100_000
+      ? `${Math.round(number / 10_000)}万`
+      : number;
+}

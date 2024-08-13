@@ -9,5 +9,6 @@ export default unjs({
     'unicorn/filename-case': 0,
     'unicorn/consistent-function-scoping': 0,
     'unicorn/no-object-as-default-parameter': 0,
+    'unicorn/no-nested-ternary': 0,
   },
 });
