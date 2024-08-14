@@ -45,12 +45,12 @@
         </div>
       </div>
       <div class=" grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 pt-2">
-        <Card title="每日歌曲推荐" :ui="{ container: 'w-full aspect-square' }">
+        <UCard title="每日歌曲推荐" :ui="{ container: 'w-full aspect-square' }">
           <div class="text-[5.25rem] font-light text-red-600">{{ new Date().getDate() }}</div>
-        </Card>
+        </UCard>
         <template v-for="r in recommend">
           <NuxtLink :to="`/playlist/${r.id}`">
-            <Card :image="{ src: r.picUrl, alt: r.name }" :title="r.name" />
+            <UCard :image="{ src: r.picUrl, alt: r.name }" :title="r.name" />
           </NuxtLink>
         </template>
       </div>
@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class=" grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pt-2">
-        <Card :hover="false" v-for="r in personalizedPrivatecontent" :image="{ src: r.sPicUrl, alt: r.name }"
+        <UCard :hover="false" v-for="r in personalizedPrivatecontent" :image="{ src: r.sPicUrl, alt: r.name }"
           :ui="{ image: 'aspect-video', container: 'border-none aspect-auto' }" :title="r.name" />
       </div>
     </div>
