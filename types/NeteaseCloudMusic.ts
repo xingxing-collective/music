@@ -177,7 +177,7 @@ export type Playlist = {
   coverImgId_str: string;
   adType: number;
   userId: number;
-  createTime: number;
+  createTime: Date;
   status: number;
   opRecommend: boolean;
   highQuality: boolean;

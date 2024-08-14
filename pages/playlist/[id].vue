@@ -25,15 +25,15 @@
                 <Icon name="material-symbols-light:add" size="28" />
               </div>
             </div>
-            <Button class="w-28" icon="fluent:collections-20-regular">
+            <UButton class="w-28" icon="fluent:collections-20-regular">
               <span>收藏({{ formatNumber(0) }})</span>
-            </Button>
-            <Button class="w-28" icon="fluent:share-20-regular">
+            </UButton>
+            <UButton class="w-28" icon="fluent:share-20-regular">
               <span>分享</span>
-            </Button>
-            <Button class="w-28" icon="ic:outline-file-download">
+            </UButton>
+            <UButton class="w-28" icon="ic:outline-file-download">
               <span>下载全部</span>
-            </Button>
+            </UButton>
             <div class="flex-1"></div>
           </div>
           <div class="text-sm">

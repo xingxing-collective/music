@@ -58,7 +58,7 @@
       </div>
     </div>
     <div class="fixed w-full bottom-12">
-      <Progress :percent="percent" @percent-change="onPercentChange" />
+      <UProgress :percent="percent" @percent-change="onPercentChange" />
     </div>
     <div class="md:hidden lg:hidden">
 
