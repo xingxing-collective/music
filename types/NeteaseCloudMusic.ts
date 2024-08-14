@@ -177,7 +177,7 @@ export type Playlist = {
   coverImgId_str: string;
   adType: number;
   userId: number;
-  createTime: number;
+  createTime: Date;
   status: number;
   opRecommend: boolean;
   highQuality: boolean;
@@ -209,7 +209,7 @@ export type Playlist = {
   subscribers: Array<Record<string, any>>;
   subscribed: boolean;
   creator: Record<string, any>;
-  tracks: Array<Record<string, any>>;
+  tracks: Array<SongDetail>;
   videoIds: any;
   videos: any;
   trackIds: Array<Record<string, any>>;

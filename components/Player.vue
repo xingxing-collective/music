@@ -32,7 +32,7 @@
               </div>
               <div class="flex items-center text-[11px] dark:text-gray-500 px-4 pt-4 gap-2">
                 <span>{{ $dayjs.unix(currentTime).format('mm:ss') }}</span>
-                <div class="flex-1"><Progress :percent="percent" @percent-change="onPercentChange" /></div>
+                <div class="flex-1"><UProgress :percent="percent" @percent-change="onPercentChange" /></div>
                 <span>{{ $dayjs.unix(currentSongUrl.time / 1000).format('mm:ss') }}</span>
               </div>
               <div class="grid grid-cols-5 justify-between items-center">
@@ -77,7 +77,7 @@
             <p v-if="simiPlaylists?.length" class="text-base font-bold">包含这首歌的歌单</p>
             <div class="flex flex-col gap-2">
               <template v-for="simiPlaylist in simiPlaylists">
-                <Card direction="vertical" :hover="false"
+                <UCard direction="vertical" :hover="false"
                   class=" dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
                   :image="{ src: `${simiPlaylist.coverImgUrl.replace('http://', 'https://')}`, alt: simiPlaylist.description }"
                   :ui="{ image: 'w-12 h-12 max-w-none', container: 'border-none' }">
@@ -92,13 +92,13 @@
                       </div>
                     </div>
                   </template>
-                </Card>
+                </UCard>
               </template>
             </div>
             <p v-if="simiSongs?.length" class="text-base font-bold">相似歌曲</p>
             <div class=" flex flex-col gap-2">
               <template v-for="simiSong in simiSongs">
-                <Card direction="vertical" class="group dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
+                <UCard direction="vertical" class="group dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
                   :image="{ src: `${simiSong.album.picUrl.replace('http://', 'https://')}`, alt: simiSong.name }"
                   :ui="{ image: 'w-12 h-12 max-w-none', container: 'border-none' }">
                   <template #title>
@@ -119,7 +119,7 @@
                       </div>
                     </div>
                   </template>
-                </Card>
+                </UCard>
               </template>
             </div>
           </div>

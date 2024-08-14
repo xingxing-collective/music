@@ -3,7 +3,7 @@
     <Icon class="col-span-1 cursor-pointer peer" :name="volumeState ? 'ri:volume-up-line' : 'ri:volume-mute-line'"
       size="24" @click="volumeToggle()" />
     <KeepAlive>
-      <Progress :percent="volume" :always-show-button="true" class="col-span-3 w-full hidden lg:block"
+      <UProgress :percent="volume" :always-show-button="true" class="col-span-3 w-full hidden lg:block"
         @percent-change="onPercentChange" />
     </KeepAlive>
   </div>

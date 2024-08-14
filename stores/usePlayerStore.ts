@@ -13,7 +13,7 @@ export const usePlayerStore = defineStore('player', () => {
   const [likeState, likeStateToggle] = useToggle();
 
   // play mode
-  const playmode = ref<PlayModeType>(PlayModeType.Single);
+  const playmode = ref<PlayModeType>(PlayModeType.Order);
   const playmodeIcon = computed(() => {
     switch (playmode.value) {
       case PlayModeType.Order: {
@@ -97,7 +97,7 @@ export const usePlayerStore = defineStore('player', () => {
     if (currentPlaylist.length === 0) {
       throw new Error('暂无歌曲');
     }
-    const index = currentPlaylist.indexOf(currentSongUrl.value?.id);
+    const index = currentPlaylist.indexOf(currentSongId.value!);
     if (m === 'next') {
       nextIndex =
         index !== -1 && index === currentPlaylist.length - 1 ? 0 : index + 1;
@@ -145,27 +145,6 @@ export const usePlayerStore = defineStore('player', () => {
         playState.value = true;
       }
     }
-
-    // 预加载下一首要播放的歌曲
-    nextSongId.value = getNextSongId('next');
-    const {
-      songUrl: nextSongUrlData,
-      songDetail: nextSongDetailData,
-      lrc: nextLrc,
-    } = await getSong(nextSongId.value);
-    nextSongDetail.value = nextSongDetailData;
-    nextSongUrl.value = nextSongUrlData;
-    nextLyric.value = parseLyric(nextLrc.lyric);
-
-    prevSongId.value = getNextSongId('prev');
-    const {
-      songUrl: prevSongUrlData,
-      songDetail: prevSongDetailData,
-      lrc: prevLrc,
-    } = await getSong(prevSongId.value);
-    prevSongDetail.value = prevSongDetailData;
-    prevSongUrl.value = prevSongUrlData;
-    prevLyric.value = parseLyric(prevLrc.lyric);
   }
 
   watch(
@@ -186,6 +165,29 @@ export const usePlayerStore = defineStore('player', () => {
     } else {
       audio.value?.pause();
     }
+  });
+
+  watch(currentSongId, async () => {
+    // 预加载下一首要播放的歌曲
+    nextSongId.value = getNextSongId('next');
+    const {
+      songUrl: nextSongUrlData,
+      songDetail: nextSongDetailData,
+      lrc: nextLrc,
+    } = await getSong(nextSongId.value);
+    nextSongDetail.value = nextSongDetailData;
+    nextSongUrl.value = nextSongUrlData;
+    nextLyric.value = parseLyric(nextLrc.lyric);
+
+    prevSongId.value = getNextSongId('prev');
+    const {
+      songUrl: prevSongUrlData,
+      songDetail: prevSongDetailData,
+      lrc: prevLrc,
+    } = await getSong(prevSongId.value);
+    prevSongDetail.value = prevSongDetailData;
+    prevSongUrl.value = prevSongUrlData;
+    prevLyric.value = parseLyric(prevLrc.lyric);
   });
 
   //首次渲染
