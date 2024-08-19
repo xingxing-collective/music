@@ -59,22 +59,22 @@ const mdlinks = computed(() => {
   }, {
     key: 'mv',
     name: 'MV',
-    to: '/mv',
+    //to: '/mv',
     icon: route.path.startsWith('/mv') ? 'ri:film-fill' : 'ri:film-line',
   }, {
     key: 'my',
     name: '我的',
-    to: '/my',
+    //to: '/my',
     icon: route.path.startsWith('/my') ? 'ph:music-notes-fill' : 'ph:music-notes-light',
   }, {
     key: 'friends',
     name: '朋友',
-    to: '/friends',
+    //to: '/friends',
     icon: route.path.startsWith('/friends') ? 'mage:users-fill' : 'mage:users',
   }, {
     key: 'account',
     name: '账号',
-    to: '/account',
+    //to: '/account',
     icon: route.path.startsWith('/account') ? 'ph:user-fill' : 'ph:user',
   }]
 })

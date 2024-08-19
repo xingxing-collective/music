@@ -33,7 +33,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { Comment } from '~/types'
+import type { Comment } from '~/composables/NeteaseCloudMusic.ts'
 
 const playerStore = usePlayerStore()
 const { currentSongId } = storeToRefs(playerStore)
@@ -43,7 +43,6 @@ const comments = shallowRef<Array<Comment>>()
 
 watch(currentSongId, async (newVal) => {
   if (newVal) {
-    console.log(newVal)
     const res = await comment_music({
       id: newVal
     })
