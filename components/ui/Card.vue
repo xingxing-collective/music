@@ -28,7 +28,7 @@
 import type { PropType } from 'vue'
 
 const config = {
-  wrapper: 'flex  w-full cursor-pointer',
+  wrapper: 'flex  w-full cursor-pointer select-none',
   container: 'group relative dark:border-[0.5px] dark:border-gray-800 flex justify-center items-center',
   image: 'aspect-square w-full object-cover rounded-md',
   title: 'text-sm md:text-xs lg:text-xs pt-1 text-[text-color] max-w-full overflow-hidden line-clamp-2'

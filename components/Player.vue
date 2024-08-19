@@ -129,7 +129,7 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import type { Playlist, SiMiSongs } from '~/types'
+import type { Playlist, SiMiSongs } from '~/composables/NeteaseCloudMusic.ts'
 
 const playerStore = usePlayerStore()
 const { playerModeStateToggle, likeStateToggle, control, playStateToggle } = playerStore

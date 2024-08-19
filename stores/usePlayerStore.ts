@@ -1,4 +1,7 @@
-import { type SongDetail, SoundQualityType } from '~/types';
+import {
+  type SongDetail,
+  SoundQualityType,
+} from '~/composables/NeteaseCloudMusic.ts';
 import { PlayModeType } from '~/types/player';
 import { shuffleArray } from '~/utils';
 
@@ -147,6 +150,31 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
+  /**
+   *
+   * @param songIds
+   */
+  function addSongs(songIds: number[]) {
+    playlist.value.push(...songIds);
+  }
+  /**
+   *
+   * @param songIds
+   */
+  async function replacePlaylist(songIds: number[]) {
+    playlist.value = songIds;
+    currentSongId.value = playlist.value[0];
+    const { songUrl, songDetail, lrc } = await getSong(currentSongId.value);
+    currentSongUrl.value = songUrl;
+    currentSongDetail.value = songDetail;
+    currentLyric.value = parseLyric(lrc.lyric);
+    playState.value = true;
+  }
+
+  async function removeSong(songId: number) {}
+
+  async function playSong(songId: number) {}
+
   watch(
     playmode,
     () => {
@@ -224,6 +252,8 @@ export const usePlayerStore = defineStore('player', () => {
     control,
     getNextSongId,
     getSong,
+    addSongs,
+    replacePlaylist,
   };
 });
 

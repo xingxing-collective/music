@@ -1,20 +1,6 @@
 import defu from 'defu';
 import { LRUCache } from 'lru-cache';
 import { hash as ohash } from 'ohash';
-import type {
-  BannerType,
-  Comment,
-  Lrc,
-  MultiPageConfig,
-  NitroFetchOptions,
-  NitroFetchRequest,
-  Playlist,
-  RequestBaseConfig,
-  Response,
-  SiMiSongs,
-  SongDetail,
-  SoundQualityType,
-} from '~/types';
 
 const API_URL = import.meta.dev
   ? 'http://localhost:3001/'
@@ -24,6 +10,10 @@ const promiseCache = new LRUCache<string, any>({
   max: 500,
   ttl: 2000 * 60 * 60, // 2 hour
 });
+
+type FetchParameters = Parameters<typeof $fetch>;
+export type NitroFetchRequest = FetchParameters[0];
+export type NitroFetchOptions = FetchParameters[1];
 
 async function _fetchNeteaseClouldMusic(
   request: NitroFetchRequest,
@@ -61,6 +51,242 @@ async function fetchNeteaseClouldMusic<T = unknown>(
   return promiseCache.get(hash)!;
 }
 
+export interface RequestBaseConfig {
+  cookie?: string;
+  realIP?: string; // IPv4/IPv6 filled in X-Real-IP
+  proxy?: string; // HTTP proxy
+}
+export interface MultiPageConfig {
+  limit?: string | number;
+  offset?: string | number;
+}
+export interface APIBaseResponse {
+  code: number;
+  cookie: string;
+  [index: string]: unknown;
+}
+
+export type Response<T = unknown> = {
+  [P in keyof T]: T[P];
+} & APIBaseResponse;
+
+export enum BannerType {
+  pc = 0,
+  android = 1,
+  iphone = 2,
+  ipad = 3,
+}
+
+export enum SoundQualityType {
+  standard = 'standard',
+  exhigh = 'exhigh',
+  lossless = 'lossless',
+  hires = 'hires',
+}
+
+export type SongDetail = {
+  name: string;
+  id: number;
+  pst: number;
+  t: number;
+  ar: SongDetailArtist[];
+  alia: string[];
+  pop: number;
+  st: number;
+  rt: string | null;
+  fee: SongDetailFee;
+  v: number;
+  crbt: string | null;
+  cf: string;
+  al: SongDetailAlbum;
+  dt: number;
+  h: SongDetailQuality | null;
+  m: SongDetailQuality | null;
+  l: SongDetailQuality | null;
+  sq: SongDetailQuality | null;
+  hr: SongDetailQuality | null;
+  a: unknown | null;
+  cd: string;
+  no: number;
+  rtUrl: unknown | null;
+  ftype: number;
+  rtUrls: unknown[];
+  djId: number;
+  copyright: SongDetailCopyright;
+  s_id: number;
+  mark: number;
+  originCoverType: SongDetailOriginCoverType;
+  originSongSimpleData: unknown | null;
+  tagPicList: unknown | null;
+  resourceState: boolean;
+  version: number;
+  songJumpInfo: unknown | null;
+  entertainmentTags: unknown | null;
+  awardTags: unknown | null;
+  single: number;
+  noCopyrightRcmd: unknown | null;
+  mv: number;
+  rtype: number;
+  rurl: unknown | null;
+  mst: number;
+  cp: number;
+  publishTime: number;
+};
+
+export type SongDetailArtist = {
+  id: number;
+  name: string;
+  tns: unknown[];
+  alias: unknown[];
+};
+
+export type SongDetailFee = 0 | 1 | 4 | 8;
+
+export type SongDetailAlbum = {
+  id: number;
+  name: string;
+  picUrl: string;
+  tns: unknown[];
+  pic: number;
+};
+
+export type SongDetailQuality = {
+  br: number;
+  fid: number;
+  size: number;
+  vd: number;
+  sr: number;
+};
+
+export type SongDetailCopyright = 0 | 1 | 2;
+
+export type SongDetailOriginCoverType = 0 | 1 | 2;
+
+export type Lrc = {
+  version: number;
+  lyric: string;
+};
+
+export type CommentReplied = {
+  beRepliedCommentId: number;
+  content: string;
+  expressionUrl: string;
+  ipLocation: Record<string, any>;
+  richContent: string;
+  status: number;
+  user: CommentUser;
+};
+
+export type CommentUser = {
+  anonym: number;
+  authStatus: number;
+  avatarDetail: unknown;
+  avatarUrl: string;
+  commonIdentity: unknown;
+  expertTags: unknown;
+  experts: unknown;
+  followed: boolean;
+  liveInfo: unknown;
+  locationInfo: unknown;
+  mutual: boolean;
+  nickname: string;
+  remarkName: unknown;
+  socialUserId: unknown;
+  target: unknown;
+  userId: number;
+  userType: number;
+  vipRights: unknown;
+  vipType: number;
+};
+
+export type Comment = {
+  beReplied: Array<CommentReplied>;
+  commentId: number;
+  commentLocationType: number;
+  content: string;
+  liked: boolean;
+  likedCount: number;
+  owner: false;
+  parentCommentId: number;
+  pendantData: Record<string, any>;
+  richContent: string;
+  showFloorComment: unknown;
+  status: number;
+  time: Date;
+  timeStr: string;
+  user: CommentUser;
+  userBizLevels: unknown;
+};
+
+export type Playlist = {
+  id: number;
+  name: string;
+  coverImgId: bigint;
+  coverImgUrl: string;
+  coverImgId_str: string;
+  adType: number;
+  userId: number;
+  createTime: Date;
+  status: number;
+  opRecommend: boolean;
+  highQuality: boolean;
+  newImported: boolean;
+  updateTime: number;
+  trackCount: number;
+  specialType: number;
+  privacy: number;
+  trackUpdateTime: number;
+  commentThreadId: string;
+  playCount: number;
+  trackNumberUpdateTime: number;
+  subscribedCount: number;
+  cloudTrackCount: number;
+  ordered: boolean;
+  description: string;
+  tags: any[];
+  updateFrequency: string;
+  backgroundCoverId: number;
+  backgroundCoverUrl: string;
+  titleImage: number;
+  titleImageUrl: string;
+  detailPageTitle: string;
+  englishTitle: string;
+  officialPlaylistType: string;
+  copied: boolean;
+  relateResType: string;
+  coverStatus: number;
+  subscribers: Array<Record<string, any>>;
+  subscribed: boolean;
+  creator: Record<string, any>;
+  tracks: Array<SongDetail>;
+  videoIds: any;
+  videos: any;
+  trackIds: Array<Record<string, any>>;
+  bannedTrackIds: any;
+  mvResourceInfos: any;
+  shareCount: number;
+  commentCount: number;
+  remixVideo: any;
+  newDetailPageRemixVideo: any;
+  sharedUsers: any;
+  historySharedUsers: any;
+  gradeStatus: string;
+  score: any;
+  algTags: any;
+  distributeTags: Array<Record<string, any>>;
+  trialMode: number;
+  displayTags: any;
+  playlistType: string;
+};
+
+export type SiMiSongs = Array<{
+  artists: Array<{
+    name: string;
+  }>;
+  name: string;
+  album: Record<string, any>;
+}>;
+
 export function register_anonimous(params: RequestBaseConfig = {}): Promise<{
   code: number;
   cookie: string;
@@ -71,6 +297,55 @@ export function register_anonimous(params: RequestBaseConfig = {}): Promise<{
     params,
   });
 }
+
+export interface Personalized<T = unknown> {
+  category: string;
+  result: Array<T>;
+}
+
+export type NewSong = {
+  alg: string;
+  canDislike: boolean;
+  copywriter: unknown;
+  id: number;
+  name: string;
+  picUrl: string;
+  song: {
+    name: string;
+    id: number;
+    album: {
+      picUrl: string;
+    };
+    artists: [
+      {
+        name: string;
+      },
+    ];
+    alias: Array<string>;
+    transName: string;
+  };
+  trackNumberUpdateTime: unknown;
+  type: number;
+};
+export type MV = {
+  id: number;
+  type: number;
+  name: string;
+  copywriter: string;
+  picUrl: string;
+  canDislike: boolean;
+  trackNumberUpdateTime: unknown;
+  duration: number;
+  playCount: number;
+  subed: boolean;
+  artists: Array<{
+    id: number;
+    name: string;
+  }>;
+  artistName: string;
+  artistId: number;
+  alg: string;
+};
 
 export function personalized(
   params: { limit?: string | number } & RequestBaseConfig = {}
@@ -92,7 +367,9 @@ export function personalized_djprogram(
     params,
   });
 }
-export function personalizedMv(params: RequestBaseConfig): Promise<Response> {
+export function personalized_mv(
+  params: RequestBaseConfig = {}
+): Promise<Response<Personalized<MV>>> {
   return fetchNeteaseClouldMusic('/personalized/mv', {
     params,
   });
@@ -102,8 +379,8 @@ export function personalized_newsong(
   params: {
     area?: string | number;
     limit?: string | number;
-  } & RequestBaseConfig
-): Promise<Response> {
+  } & RequestBaseConfig = {}
+): Promise<Response<Personalized<NewSong>>> {
   return fetchNeteaseClouldMusic('/personalized/newsong', {
     params,
   });
@@ -131,6 +408,14 @@ export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   msg: string;
 }> {
   return fetchNeteaseClouldMusic('/recommend/resource', {
+    params,
+  });
+}
+
+export function recommend_songs(
+  params: RequestBaseConfig = {}
+): Promise<Response> {
+  return fetchNeteaseClouldMusic('/recommend/songs', {
     params,
   });
 }

@@ -11,7 +11,7 @@ import type { PropType } from 'vue'
 
 const config = computed(() => ({
   wrapper:
-    'backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px sticky top-0',
+    'backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px top-0',
   container: 'flex items-center justify-between gap-3 h-[--header-height]'
 }))
 
