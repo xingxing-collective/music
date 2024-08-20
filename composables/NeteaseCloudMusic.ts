@@ -285,6 +285,7 @@ export type SiMiSongs = Array<{
   }>;
   name: string;
   album: Record<string, any>;
+  id: number;
 }>;
 
 export function register_anonimous(params: RequestBaseConfig = {}): Promise<{

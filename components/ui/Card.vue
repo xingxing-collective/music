@@ -2,7 +2,7 @@
   <div :class="[ui.wrapper, direction === 'horizontal' ? 'flex-col' : '']" v-bind="attrs">
     <div :class="ui.container">
       <slot>
-        <img :src="image?.src" :alt="image?.alt" :class="ui.image" />
+        <NuxtImg :src="image?.src" :alt="image?.alt" :class="ui.image" />
       </slot>
 
       <template v-if="hover">

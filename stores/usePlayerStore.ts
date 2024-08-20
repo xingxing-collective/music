@@ -125,20 +125,10 @@ export const usePlayerStore = defineStore('player', () => {
     // 第一次加载时并没有获取上一首或者下一首歌曲信息
     if (m === 'next' && nextSongId.value) {
       currentSongId.value = nextSongId.value;
-      currentSongUrl.value = nextSongUrl.value;
-      currentSongDetail.value = nextSongDetail.value;
-      currentLyric.value = nextLyric.value;
     } else if (m === 'prev' && prevSongId.value) {
       currentSongId.value = prevSongId.value;
-      currentSongUrl.value = prevSongUrl.value;
-      currentSongDetail.value = prevSongDetail.value;
-      currentLyric.value = prevLyric.value;
     } else {
       currentSongId.value = getNextSongId(m);
-      const { songUrl, songDetail, lrc } = await getSong(currentSongId.value);
-      currentSongUrl.value = songUrl;
-      currentSongDetail.value = songDetail;
-      currentLyric.value = parseLyric(lrc.lyric);
     }
 
     if (options.autoplay) {
@@ -164,16 +154,36 @@ export const usePlayerStore = defineStore('player', () => {
   async function replacePlaylist(songIds: number[]) {
     playlist.value = songIds;
     currentSongId.value = playlist.value[0];
-    const { songUrl, songDetail, lrc } = await getSong(currentSongId.value);
-    currentSongUrl.value = songUrl;
-    currentSongDetail.value = songDetail;
-    currentLyric.value = parseLyric(lrc.lyric);
     playState.value = true;
   }
 
   async function removeSong(songId: number) {}
 
-  async function playSong(songId: number) {}
+  /**
+   * 播放歌曲
+   * @param songId 播放的歌曲Id
+   */
+  async function playSong(songId: number) {
+    playState.value = true;
+    if (songId === currentSongId.value) {
+      await audio.value?.play();
+    } else {
+      if (playmode.value === PlayModeType.Random) {
+        randomPlaylist.value.splice(
+          randomPlaylist.value.indexOf(currentSongId.value!),
+          0,
+          songId
+        );
+      } else {
+        playlist.value.splice(
+          playlist.value.indexOf(currentSongId.value!),
+          0,
+          songId
+        );
+      }
+      currentSongId.value = songId;
+    }
+  }
 
   watch(
     playmode,
@@ -195,7 +205,25 @@ export const usePlayerStore = defineStore('player', () => {
     }
   });
 
-  watch(currentSongId, async () => {
+  watch(currentSongId, async (newVal) => {
+    if (!newVal) {
+      return;
+    }
+    if (newVal === nextSongId.value) {
+      currentSongUrl.value = nextSongUrl.value;
+      currentSongDetail.value = nextSongDetail.value;
+      currentLyric.value = nextLyric.value;
+    } else if (newVal === prevSongId.value) {
+      currentSongUrl.value = prevSongUrl.value;
+      currentSongDetail.value = prevSongDetail.value;
+      currentLyric.value = prevLyric.value;
+    } else {
+      const { songUrl, songDetail, lrc } = await getSong(newVal);
+      currentSongUrl.value = songUrl;
+      currentSongDetail.value = songDetail;
+      currentLyric.value = parseLyric(lrc.lyric);
+    }
+
     // 预加载下一首要播放的歌曲
     nextSongId.value = getNextSongId('next');
     const {
@@ -254,6 +282,7 @@ export const usePlayerStore = defineStore('player', () => {
     getSong,
     addSongs,
     replacePlaylist,
+    playSong,
   };
 });
 
