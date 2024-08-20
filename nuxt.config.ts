@@ -41,7 +41,12 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
   image: {
-    domains: ['p1.music.126.net', 'p2.music.126.net'],
+    domains: [
+      'p1.music.126.net',
+      'p2.music.126.net',
+      'p3.music.126.net',
+      'p4.music.126.net',
+    ],
   },
 
   compatibilityDate: '2024-08-02',
