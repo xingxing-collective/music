@@ -3,11 +3,11 @@
     <div class="h-[--header-height]"></div>
     <div class="flex px-4">
       <div class="flex gap-4 px-4 w-full">
-        <img :alt="playlistDetail?.name" :src="playlistDetail?.coverImgUrl" class="w-48 h-48 rounded-md" />
+        <NuxtImg :alt="playlistDetail?.name" :src="playlistDetail?.coverImgUrl" class="w-48 h-48 rounded-md" />
         <div class="flex flex-col gap-2 flex-1">
           <div class="text-black dark:text-gray-200">{{ playlistDetail?.name }}</div>
           <div class="flex gap-2 items-center">
-            <img :src="playlistDetail?.creator.avatarUrl" :alt="playlistDetail?.creator.nickname"
+            <NuxtImg :src="playlistDetail?.creator.avatarUrl" :alt="playlistDetail?.creator.nickname"
               class="w-8 rounded-[50%] cursor-pointer" />
             <span class="text-sm font-bold text-[rgb(81,126,175)] cursor-pointer">{{ playlistDetail?.creator.nickname
               }}</span>
@@ -59,36 +59,34 @@
     </div>
     <UTabs class=" flex-1 pt-4 px-8 w-full h-full" v-model="active" :panes="panes">
       <template #songs>
-        <div>
-          <div class="grid grid-cols-[repeat(24,1fr)] h-8 gap-2 items-center text-xs font-semibold">
-            <div class="col-span-3"></div>
-            <div class="col-span-7 h-full flex pl-1 items-center hover:bg-neutral-700"><span>音乐标题</span></div>
-            <div class="col-span-6 h-full flex pl-1 items-center hover:bg-neutral-700"><span>歌手</span></div>
-            <div class="col-span-5 h-full flex pl-1 items-center hover:bg-neutral-700"><span>专辑</span></div>
-            <div class="col-span-3 h-full flex pl-1 items-center hover:bg-neutral-700"><span>时长</span></div>
+        <div class="grid grid-cols-[repeat(24,1fr)] h-8 gap-2 items-center text-xs font-semibold">
+          <div class="hidden lg:block lg:col-span-3"></div>
+          <div class="col-span-7 h-full flex items-center hover:bg-neutral-700 pl-2"><span>音乐标题</span></div>
+          <div class="col-span-6 h-full flex pl-1 items-center hover:bg-neutral-700"><span>歌手</span></div>
+          <div class="col-span-5 h-full flex pl-1 items-center hover:bg-neutral-700"><span>专辑</span></div>
+          <div class="col-span-3 h-full flex pl-1 items-center hover:bg-neutral-700"><span>时长</span></div>
+        </div>
+        <div v-for="(track, index) in playlistDetail?.tracks" @dblclick="playSong(track.id)"
+          class="grid grid-cols-[repeat(24,1fr)] gap-2 even:bg-neutral-800 h-8 items-center text-sm  font-medium hover:bg-neutral-700 hover:cursor-pointer">
+          <div class="hidden lg:col-span-3 lg:flex justify-center items-center gap-4">
+            <div>{{ (index + 1).toString().padStart(2, '0') }}</div>
+            <div class=" flex gap-2">
+              <Icon class="cursor-pointer text-[--text-color]" :name="'ic:round-favorite-border'" size="20" />
+              <Icon class="cursor-pointer text-[--text-color]" name="ri:download-cloud-line" size="20" />
+            </div>
           </div>
-          <div v-for="(track, index) in playlistDetail?.tracks"
-            class="grid grid-cols-[repeat(24,1fr)] gap-2 even:bg-neutral-800 h-8 items-center text-sm  font-medium hover:bg-neutral-700">
-            <div class="col-span-3 flex justify-center items-center gap-4">
-              <div>{{ (index + 1).toString().padStart(2, '0') }}</div>
-              <div class=" flex gap-2">
-                <Icon class="cursor-pointer text-[--text-color]" :name="'ic:round-favorite-border'" size="20" />
-                <Icon class="cursor-pointer text-[--text-color]" name="ri:download-cloud-line" size="20" />
-              </div>
-            </div>
-            <div class="col-span-7 h-full flex pl-1 items-center ">
-              <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.name }}</span>
-            </div>
-            <div class="col-span-6 h-full flex pl-1 items-center w-full"><span
-                class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.ar.map(x => x.name).join('/')
-                }}</span>
-            </div>
-            <div class="col-span-5 h-full flex pl-1 items-center">
-              <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.al.name }}</span>
-            </div>
-            <div class="col-span-3 h-full flex pl-1 items-center">
-              <span>{{ $dayjs.unix(track.dt / 1000).format('mm:ss') }}</span>
-            </div>
+          <div class="col-span-7 h-full flex pl-2 items-center">
+            <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.name }}</span>
+          </div>
+          <div class="col-span-6 h-full flex pl-1 items-center w-full"><span
+              class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.ar.map(x => x.name).join('/')
+              }}</span>
+          </div>
+          <div class="col-span-5 h-full flex pl-1 items-center">
+            <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.al.name }}</span>
+          </div>
+          <div class="col-span-3 h-full flex pl-1 items-center">
+            <span>{{ $dayjs.unix(track.dt / 1000).format('mm:ss') }}</span>
           </div>
         </div>
       </template>
@@ -105,7 +103,7 @@
 import type { Playlist } from '~/composables/NeteaseCloudMusic.ts'
 
 const playerStore = usePlayerStore()
-const { replacePlaylist, addSongs } = playerStore
+const { replacePlaylist, addSongs, playSong } = playerStore
 const route = useRoute()
 const playlistDetail = shallowRef<Playlist>()
 

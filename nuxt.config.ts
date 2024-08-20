@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     'dayjs-nuxt',
+    '@nuxt/image',
   ],
   typescript: {
     tsConfig: {
@@ -38,6 +39,9 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'dark',
     classSuffix: '',
+  },
+  image: {
+    domains: ['p1.music.126.net', 'p2.music.126.net'],
   },
 
   compatibilityDate: '2024-08-02',

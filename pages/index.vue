@@ -27,7 +27,7 @@
           class=" hidden lg:block md:block" :perspective="0" :autoplay="true" :inverseScaling="inverseScaling"
           :width="width" :height="height" :border="0" :loop="true" :space="space" :display="3">
           <Slide v-for="(banner, i) in banners?.filter(x => !Boolean(x.adSource))" :key="banner.targetId" :index="i">
-            <img class="object-fill w-full h-full" :src="banner.imageUrl.replace('http://', 'https://')"
+            <NuxtImg class="object-fill w-full h-full" :src="banner.imageUrl.replace('http://', 'https://')"
               :alt="banner.typeTitle" />
           </Slide>
         </Carousel3d>
@@ -82,7 +82,8 @@
         </div>
         <div class=" grid grid-cols-2 grid-flow-col grid-rows-5 gap-4 pt-2">
           <template v-for="({ song }, index) in personalizedNewsong">
-            <UCard direction="vertical" class="col-span-1 dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
+            <UCard direction="vertical" @dblclick="playSong(song.id)"
+              class="col-span-1 dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
               :image="{ src: `${song.album.picUrl.replace('http://', 'https://')}`, alt: song.name }"
               :ui="{ image: 'w-16 h-16 max-w-none', container: 'border-none' }">
               <template #title>
@@ -104,7 +105,7 @@
               </template>
               <template #hover>
                 <div @click="" class="flex justify-center items-center absolute w-full">
-                  <div
+                  <div @click="playSong(song.id)"
                     class="w-7 opacity-100 bg-[rgba(255,255,255,0.5)] rounded-[50%] aspect-square flex items-center justify-center">
                     <Icon name="material-symbols-light:play-arrow" class=" text-red-600" size="28" />
                   </div>
@@ -134,6 +135,9 @@
 import { Carousel3d, Slide } from 'vue3-carousel-3d'
 import "vue3-carousel-3d/dist/index.css"
 import type { MV, NewSong } from '~/composables/NeteaseCloudMusic.ts'
+
+const playerStore = usePlayerStore()
+const { playSong } = playerStore
 
 //轮播图
 const { banners } = await banner({ type: 0 })

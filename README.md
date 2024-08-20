@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./.github/assets/md.png" style="object-fit:fill;"/>
+    <NuxtImg src="./.github/assets/md.png" style="object-fit:fill;"/>
 </div>
 
 ## License

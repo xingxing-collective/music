@@ -6,7 +6,7 @@
         <template v-if="currentSongUrl && currentSongDetail">
           <div class="relative rounded-md overflow-hidden cursor-pointer w-14" @click="playerModeStateToggle()">
             <div class=" absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
-            <img class="blur-sm w-full h-full" lazy="loaded" :src="`${currentSongDetail?.al.picUrl}?param=80y80`" />
+            <NuxtImg class="blur-sm w-full h-full" lazy="loaded" :src="`${currentSongDetail?.al.picUrl}?param=80y80`" />
             <div class="absolute w-full h-full top-0 flex flex-col items-center justify-center cursor-pointer">
               <Icon class=" relative text-gray-100 top-[1px]" :name="!playerModeState ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'"
                 size="22" />
