@@ -8,3 +8,15 @@
 .slide-fade-leave-to {
   transform: translateY(100%);
 }
+
+
+.slideover-enter-active,
+.slideover-leave-active {
+  transition: all 0.5s;
+  transform: none;
+}
+
+.slideover-enter-from,
+.slideover-leave-to {
+  transform: translateX(100%);
+}

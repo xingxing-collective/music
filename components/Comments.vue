@@ -50,7 +50,7 @@ watch(currentSongId, async (newVal) => {
     comments.value = res.comments
     total.value = res.total
   }
-},{
+}, {
   immediate: true
 })
 

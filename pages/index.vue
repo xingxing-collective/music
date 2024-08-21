@@ -46,7 +46,7 @@
           </div>
           <div class="flex-1"></div>
         </div>
-        <div class=" grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 pt-2">
+        <div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 pt-2">
           <NuxtLink>
             <UCard title="每日歌曲推荐" :ui="{ container: 'w-full aspect-square' }">
               <div class="text-[5.25rem] font-light text-red-600">{{ new Date().getDate() }}</div>
@@ -54,7 +54,17 @@
           </NuxtLink>
           <template v-for="r in recommendResource">
             <NuxtLink :to="`/playlist/${r.id}`">
-              <UCard :image="{ src: r.picUrl, alt: r.name }" :title="r.name" />
+              <UCard :image="{ src: r.picUrl, alt: r.name }" :title="r.name">
+                <template #hover>
+                  <div @click.prevent="playPlaylist(r.id)" class="hidden group-hover:flex absolute bottom-4 right-4">
+                    <div class="flex-1"></div>
+                    <div
+                      class="w-9 opacity-100 bg-[rgba(255,255,255,0.5)] rounded-[50%] aspect-square flex items-center justify-center">
+                      <Icon name="material-symbols-light:play-arrow" class=" text-red-600" size="32" />
+                    </div>
+                  </div>
+                </template>
+              </UCard>
             </NuxtLink>
           </template>
         </div>
@@ -137,7 +147,7 @@ import "vue3-carousel-3d/dist/index.css"
 import type { MV, NewSong } from '~/composables/NeteaseCloudMusic.ts'
 
 const playerStore = usePlayerStore()
-const { playSong } = playerStore
+const { playSong, replacePlaylist } = playerStore
 
 //轮播图
 const { banners } = await banner({ type: 0 })
@@ -180,6 +190,15 @@ const index = ref(1)
 
 function onBeforeSlideChange(slideIndex: number) {
   index.value = slideIndex + 1
+}
+
+async function playPlaylist(playlistId: number) {
+  const { playlist } = await playlist_detail({
+    id: playlistId,
+  })
+  if (playlist?.trackIds.length) {
+    replacePlaylist([...playlist.trackIds.map(x => x.id)])
+  }
 }
 
 async function initialize() {
