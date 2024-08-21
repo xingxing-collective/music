@@ -151,7 +151,6 @@ const { playSong, replacePlaylist } = playerStore
 
 //轮播图
 const { banners } = await banner({ type: 0 })
-const cookie = ref<string>()
 const recommendResource = shallowRef<Array<Record<string, any>>>()
 const personalizedPrivatecontent = shallowRef<Array<Record<string, any>>>()
 const personalizedNewsong = shallowRef<NewSong[]>()
@@ -202,10 +201,7 @@ async function playPlaylist(playlistId: number) {
 }
 
 async function initialize() {
-  const [anonimousRes, personalizedRes, privatecontentRes, personalizedNewSongRes, personalizedMvRes] = await Promise.all([
-
-    //游客登录
-    register_anonimous(),
+  const [personalizedRes, privatecontentRes, personalizedNewSongRes, personalizedMvRes] = await Promise.all([
     // production requires login  正式环境需要登录，先调用推荐歌单
     //recommendResource()
     personalized({ limit: 9 }),
@@ -215,9 +211,6 @@ async function initialize() {
     personalized_mv(),
 
   ])
-  cookie.value = anonimousRes.cookie
-  const token = useCookie('token')
-  token.value = cookie.value
   recommendResource.value = personalizedRes.result
   personalizedPrivatecontent.value = privatecontentRes.result
   personalizedNewsong.value = personalizedNewSongRes.result
