@@ -8,8 +8,8 @@
             <div class=" absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
             <NuxtImg class="blur-sm w-full h-full" lazy="loaded" :src="`${currentSongDetail?.al.picUrl}?param=80y80`" />
             <div class="absolute w-full h-full top-0 flex flex-col items-center justify-center cursor-pointer">
-              <Icon class=" relative text-gray-100 top-[1px]" :name="!playerModeState ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'"
-                size="22" />
+              <Icon class=" relative text-gray-100 top-[1px]"
+                :name="!playerModeState ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'" size="22" />
               <Icon class="relative bottom-[1px] text-gray-100"
                 :name="!playerModeState ? 'ri:arrow-down-s-line' : 'ri:arrow-up-s-line'" size="22" />
             </div>
@@ -51,7 +51,7 @@
           <Icon class="cursor-pointer text-[--text-color]" :name="playmodeIcon" size="24"
             @click="() => playmode < 2 ? playmode++ : playmode = 0" />
         </div>
-        <div class="flex  h-full items-center gap-4">
+        <div @click="isOpen = true" class="flex  h-full items-center gap-4">
           <Icon class="cursor-pointer text-[--text-color]" name="ri:play-list-2-line" size="24" />
         </div>
         <Volume class="lg:w-40 md:hidden" />
@@ -60,20 +60,19 @@
     <div class="fixed w-full bottom-12">
       <UProgress :percent="percent" @percent-change="onPercentChange" />
     </div>
-    <div class="md:hidden lg:hidden">
-
-    </div>
   </div>
 </template>
 <script setup lang="ts">
 
 const playerStore = usePlayerStore()
 const volumeStore = useVolumeStore()
+const slideoverStore = useSlideoverStore()
 const { likeStateToggle, playStateToggle, playerModeStateToggle, control } = playerStore
 const { audio, playState, playerModeState, likeState, playmode, playmodeIcon,
   currentTime,
   currentSongUrl, currentSongDetail } = storeToRefs(playerStore)
 const { volume } = storeToRefs(volumeStore)
+const { isOpen } = storeToRefs(slideoverStore)
 
 watch(volume, (newValue) => {
   audio.value!.volume = newValue

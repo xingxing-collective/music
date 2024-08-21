@@ -35,7 +35,6 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
-
   colorMode: {
     preference: 'dark',
     classSuffix: '',
@@ -48,6 +47,5 @@ export default defineNuxtConfig({
       'p4.music.126.net',
     ],
   },
-
   compatibilityDate: '2024-08-02',
 });

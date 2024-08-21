@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-[--player-height] flex flex-col top-0 py-4 overflow-x-hidden overflow-y-auto">
+  <div class="flex flex-col top-0 py-4 overflow-x-hidden overflow-y-auto w-full">
     <div class="h-[--header-height]"></div>
     <div class="flex px-4">
       <div class="flex gap-4 px-4 w-full">
@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-    <UTabs class=" flex-1 pt-4 px-8 w-full h-full" v-model="active" :panes="panes">
+    <UTabs class=" pt-4 px-8 w-full h-full" v-model="active" :panes="panes">
       <template #songs>
         <div class="grid grid-cols-[repeat(24,1fr)] h-8 gap-2 items-center text-xs font-semibold">
           <div class="hidden lg:block lg:col-span-3"></div>
