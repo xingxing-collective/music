@@ -51,7 +51,7 @@
           <Icon class="cursor-pointer text-[--text-color]" :name="playmodeIcon" size="24"
             @click="() => playmode < 2 ? playmode++ : playmode = 0" />
         </div>
-        <div @click="isOpen = true" class="flex  h-full items-center gap-4">
+        <div @click="isPlaylistOpen = !isPlaylistOpen" class="flex  h-full items-center gap-4">
           <Icon class="cursor-pointer text-[--text-color]" name="ri:play-list-2-line" size="24" />
         </div>
         <Volume class="lg:w-40 md:hidden" />
@@ -72,7 +72,7 @@ const { audio, playState, playerModeState, likeState, playmode, playmodeIcon,
   currentTime,
   currentSongUrl, currentSongDetail } = storeToRefs(playerStore)
 const { volume } = storeToRefs(volumeStore)
-const { isOpen } = storeToRefs(slideoverStore)
+const { isPlaylistOpen } = storeToRefs(slideoverStore)
 
 watch(volume, (newValue) => {
   audio.value!.volume = newValue
