@@ -1,6 +1,6 @@
 export const useSlideoverStore = defineStore('slideover', () => {
-  const isOpen = ref(false);
+  const isPlaylistOpen = ref(false);
   return {
-    isOpen,
+    isPlaylistOpen,
   };
 });

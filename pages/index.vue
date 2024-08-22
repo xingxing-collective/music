@@ -1,6 +1,6 @@
 <template>
   <div class="px-4 pb-4">
-    <UHeader>
+    <UHeader class="sticky z-20 backdrop-blur-3xl">
       <div class="grid grid-cols-12 w-full h-full">
         <div class=" hidden col-span-8 md:flex lg:flex items-center justify-end gap-6 ">
           <NuxtLink v-for="link in headLink" :to="link?.to"
@@ -160,7 +160,7 @@ const headLink = computed<Array<{ key: string, name: string, to?: string }>>(() 
   return [{
     key: 'recommend',
     name: '推荐',
-    //to: '/',
+    to: '/',
   }, {
     key: 'playlist',
     name: '歌单',

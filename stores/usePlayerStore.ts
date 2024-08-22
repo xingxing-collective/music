@@ -157,6 +157,11 @@ export const usePlayerStore = defineStore('player', () => {
     playState.value = true;
   }
 
+  function clearPlaylist() {
+    playlist.value = [];
+    randomPlaylist.value = [];
+  }
+
   async function removeSong(songId: number) {}
 
   /**
@@ -283,6 +288,7 @@ export const usePlayerStore = defineStore('player', () => {
     addSongs,
     replacePlaylist,
     playSong,
+    clearPlaylist,
   };
 });
 

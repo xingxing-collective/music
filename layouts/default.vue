@@ -26,11 +26,10 @@
           <slot />
         </UPanelContent>
       </UPanel>
-
     </UPage>
     <MiniPlayer />
     <Player />
-    <USlideover v-model="isOpen" />
+    <Playlist />
     <audio :loop="playmode === PlayModeType.Single" ref="audio" autoplay
       :src="currentSongUrl?.url.replace('http://', 'https://')" @ended="control('next')" @timeupdate="timeupdate" />
   </ULayout>
@@ -39,12 +38,10 @@
 import { PlayModeType } from '~/types/player'
 
 const playerStore = usePlayerStore()
-const slideoverStore = useSlideoverStore()
 const { control } = playerStore
 const { audio, playmode,
   currentTime,
   currentSongUrl } = storeToRefs(playerStore)
-const { isOpen } = storeToRefs(slideoverStore)
 
 function timeupdate(e: Event) {
   currentTime.value = (e.target as AudioContext).currentTime
