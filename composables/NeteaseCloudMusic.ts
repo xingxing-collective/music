@@ -477,6 +477,15 @@ export function lyric(
   });
 }
 
+export enum CommentType {
+  music = 0,
+  album = 1,
+  playlist = 2,
+  mv = 3,
+  dj = 4,
+  video = 5,
+}
+
 export function comment_music(
   params: {
     id: string | number;
@@ -499,6 +508,33 @@ export function comment_music(
   }>
 > {
   return fetchNeteaseClouldMusic('/comment/music', {
+    params,
+  });
+}
+
+export function comment_playlist(
+  params: {
+    id: string | number;
+
+    before?: string | number;
+  } & MultiPageConfig &
+    RequestBaseConfig
+): Promise<
+  Response<{
+    cnum: number;
+    code: number;
+    commentBanner: unknown;
+    comments: Array<Comment>;
+    hotComments: Array<Comment>;
+    isMusician: boolean;
+    more: boolean;
+    moreHot: boolean;
+    topComments: [];
+    userId: number;
+    total: number;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/comment/playlist', {
     params,
   });
 }
@@ -534,6 +570,54 @@ export function playlist_detail(
   }>
 > {
   return fetchNeteaseClouldMusic('/playlist/detail', {
+    params,
+  });
+}
+
+export type Subscriber = {
+  defaultAvatar: boolean;
+  province: number;
+  authStatus: number;
+  followed: boolean;
+  avatarUrl: string;
+  accountStatus: number;
+  gender: number;
+  city: number;
+  birthday: number;
+  userId: number;
+  userType: number;
+  nickname: string;
+  signature: string;
+  description: string;
+  detailDescription: string;
+  avatarImgId: number;
+  backgroundImgId: number;
+  backgroundUrl: string;
+  authority: number;
+  mutual: boolean;
+  expertTags?: any;
+  experts?: any;
+  djStatus: number;
+  vipType: number;
+  remarkName?: any;
+  subscribeTime: number;
+  backgroundImgIdStr: string;
+  avatarImgIdStr: string;
+  vipRights?: any;
+  avatarImgId_str: string;
+  avatarDetail?: any;
+};
+
+export function playlist_subscribers(
+  params: { id?: string | number } & MultiPageConfig & RequestBaseConfig
+): Promise<
+  Response<{
+    more: boolean;
+    subscribers: Array<Subscriber>;
+    total: number;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/playlist/subscribers', {
     params,
   });
 }

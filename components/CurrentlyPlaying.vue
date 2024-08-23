@@ -1,5 +1,5 @@
 <template>
-  <USlideover v-model="isPlaylistOpen">
+  <USlideover v-model="isCurrentlyPlayingOpen">
     <template #container>
       <div class="h-full md:w-1/2 lg:w-1/3 flex flex-col bg-neutral-900 p-4" @click.stop>
         <div class="flex flex-col gap-2 h-full">
@@ -37,7 +37,7 @@ import { PlayModeType } from '~/types'
 
 const slideoverStore = useSlideoverStore()
 const playerStore = usePlayerStore()
-const { isPlaylistOpen } = storeToRefs(slideoverStore)
+const { isCurrentlyPlayingOpen } = storeToRefs(slideoverStore)
 const { clearPlaylist } = playerStore
 const { playlist, playmode, playState, randomPlaylist, currentSongId } = storeToRefs(playerStore)
 
@@ -59,7 +59,7 @@ function playSong(id: number) {
 
 function handleEsc(event: KeyboardEvent) {
   if (event.key === 'Escape') {
-    isPlaylistOpen.value = false
+    isCurrentlyPlayingOpen.value = false
   }
 }
 

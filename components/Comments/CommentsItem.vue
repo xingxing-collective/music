@@ -2,7 +2,7 @@
   <div class="flex py-4 w-full">
     <div class="flex gap-4 w-full">
       <slot name="avatar">
-        <NuxtImg :src="`${comment.user.avatarUrl}?param=40y40`" class="rounded-[50%] w-10 aspect-square h-10 object-cover"
+        <NuxtImg :placeholder="(comment.user.avatarUrl) ? false : $config.public.image.placeholder" :src="`${comment.user.avatarUrl}?param=40y40`" class="rounded-[50%] w-10 aspect-square h-10 object-cover"
           :alt="`${comment.user.avatarUrl}?param=40y40`" />
       </slot>
       <div class="text-xs font-bold flex flex-col gap-2 justify-between w-full">
@@ -11,7 +11,7 @@
             <p>
               <span class="inline-flex gap-1">
                 <span class="text-[rgb(81,126,175)] whitespace-nowrap ">{{ comment.user.nickname }}</span>
-                <NuxtImg v-if="vipBadge" class="h-4 object-fill"
+                <NuxtImg :placeholder="(vipBadge) ? false : $config.public.image.placeholder"  v-if="vipBadge" class="h-4 object-fill"
                   :src="vipBadge" :alt="vipBadge" />
                 <span class="text-[rgb(81,126,175)]">:</span>
               </span>

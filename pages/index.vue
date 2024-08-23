@@ -1,6 +1,6 @@
 <template>
   <div class="px-4 pb-4">
-    <UHeader class="sticky z-20 backdrop-blur-3xl">
+    <UHeader>
       <div class="grid grid-cols-12 w-full h-full">
         <div class=" hidden col-span-8 md:flex lg:flex items-center justify-end gap-6 ">
           <NuxtLink v-for="link in headLink" :to="link?.to"
@@ -27,7 +27,7 @@
           class=" hidden lg:block md:block" :perspective="0" :autoplay="true" :inverseScaling="inverseScaling"
           :width="width" :height="height" :border="0" :loop="true" :space="space" :display="3">
           <Slide v-for="(banner, i) in banners?.filter(x => !Boolean(x.adSource))" :key="banner.targetId" :index="i">
-            <NuxtImg class="object-fill w-full h-full" :src="banner.imageUrl.replace('http://', 'https://')"
+            <NuxtImg  class="object-fill w-full h-full" :src="banner.imageUrl.replace('http://', 'https://')"
               :alt="banner.typeTitle" />
           </Slide>
         </Carousel3d>

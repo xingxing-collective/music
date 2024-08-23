@@ -15,7 +15,7 @@
             <div
               class=" w-72 md:w-[20rem] lg:w-[22rem] flex justify-center items-center rounded-[50%] bg-[rgb(42,42,42)] aspect-square relative bottom-[5.25rem]">
               <div :class="$style.outer" :style="{ animationPlayState: !playState ? 'paused' : 'inherit' }">
-                <NuxtImg class="rounded-[50%] w-[75%] h-[75%]" :src="`${currentSongDetail?.al.picUrl}?param=400y400`"
+                <NuxtImg :placeholder="(currentSongDetail?.al.picUrl) ? false : $config.public.image.placeholder" class="rounded-[50%] w-[75%] h-[75%]" :src="`${currentSongDetail?.al.picUrl}?param=400y400`"
                   lazy="loaded" />
               </div>
             </div>
@@ -32,7 +32,9 @@
               </div>
               <div class="flex items-center text-[11px] dark:text-gray-500 px-4 pt-4 gap-2">
                 <span>{{ $dayjs.unix(currentTime).format('mm:ss') }}</span>
-                <div class="flex-1"><UProgress :percent="percent" @percent-change="onPercentChange" /></div>
+                <div class="flex-1">
+                  <UProgress :percent="percent" @percent-change="onPercentChange" />
+                </div>
                 <span>{{ $dayjs.unix(currentSongUrl.time / 1000).format('mm:ss') }}</span>
               </div>
               <div class="grid grid-cols-5 justify-between items-center">
@@ -46,7 +48,7 @@
                 <Icon class="col-span-1 w-full cursor-pointer text-[--text-color]" name="mage:next" size="24"
                   @click="control('next')" />
                 <Icon class="col-span-1 w-full cursor-pointer text-[--text-color]" name="ri:play-list-2-line"
-                  size="24" />
+                  @click="isCurrentlyPlayingOpen = !isCurrentlyPlayingOpen" size="24" />
               </div>
             </div>
           </div>
@@ -98,7 +100,8 @@
             <p v-if="simiSongs?.length" class="text-base font-bold">相似歌曲</p>
             <div class=" flex flex-col gap-2">
               <template v-for="simiSong in simiSongs">
-                <UCard direction="vertical" @dblclick="playSong(simiSong.id)" class="group dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
+                <UCard direction="vertical" @dblclick="playSong(simiSong.id)"
+                  class="group dark:hover:bg-[rgb(46,46,46)] hover:bg-[rgb(245,245,245)]"
                   :image="{ src: `${simiSong.album.picUrl.replace('http://', 'https://')}`, alt: simiSong.name }"
                   :ui="{ image: 'w-12 h-12 max-w-none', container: 'border-none' }">
                   <template #title>
@@ -132,7 +135,7 @@
 import type { Playlist, SiMiSongs } from '~/composables/NeteaseCloudMusic.ts'
 
 const playerStore = usePlayerStore()
-const { playerModeStateToggle, likeStateToggle, control, playStateToggle,playSong } = playerStore
+const { playerModeStateToggle, likeStateToggle, control, playStateToggle, playSong } = playerStore
 const { playerModeState, playState, currentSongDetail, currentLyric, currentSongId, likeState, playmode, playmodeIcon, currentTime, audio, currentSongUrl } = storeToRefs(playerStore)
 
 const volumeStore = useVolumeStore()
@@ -141,6 +144,9 @@ const { volumeState } = storeToRefs(volumeStore)
 
 const lyricStore = useLyricStore()
 const { currentActiveLyricIndex } = storeToRefs(lyricStore)
+
+const slideoverStore = useSlideoverStore()
+const { isCurrentlyPlayingOpen } = storeToRefs(slideoverStore)
 
 const scrollerContainer = ref()
 const lyricContainer = ref()
