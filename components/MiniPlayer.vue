@@ -6,7 +6,7 @@
         <template v-if="currentSongUrl && currentSongDetail">
           <div class="relative rounded-md overflow-hidden cursor-pointer w-14" @click="playerModeStateToggle()">
             <div class=" absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
-            <NuxtImg class="blur-sm w-full h-full" lazy="loaded" :src="`${currentSongDetail?.al.picUrl}?param=80y80`" />
+            <NuxtImg :placeholder="(currentSongDetail?.al.picUrl) ? false : $config.public.image.placeholder" class="blur-sm w-full h-full" lazy="loaded" :src="`${currentSongDetail?.al.picUrl}?param=80y80`" />
             <div class="absolute w-full h-full top-0 flex flex-col items-center justify-center cursor-pointer">
               <Icon class=" relative text-gray-100 top-[1px]"
                 :name="!playerModeState ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'" size="22" />
@@ -51,7 +51,7 @@
           <Icon class="cursor-pointer text-[--text-color]" :name="playmodeIcon" size="24"
             @click="() => playmode < 2 ? playmode++ : playmode = 0" />
         </div>
-        <div @click="isPlaylistOpen = !isPlaylistOpen" class="flex  h-full items-center gap-4">
+        <div @click="isCurrentlyPlayingOpen = !isCurrentlyPlayingOpen" class="flex  h-full items-center gap-4">
           <Icon class="cursor-pointer text-[--text-color]" name="ri:play-list-2-line" size="24" />
         </div>
         <Volume class="lg:w-40 md:hidden" />
@@ -72,7 +72,7 @@ const { audio, playState, playerModeState, likeState, playmode, playmodeIcon,
   currentTime,
   currentSongUrl, currentSongDetail } = storeToRefs(playerStore)
 const { volume } = storeToRefs(volumeStore)
-const { isPlaylistOpen } = storeToRefs(slideoverStore)
+const { isCurrentlyPlayingOpen } = storeToRefs(slideoverStore)
 
 watch(volume, (newValue) => {
   audio.value!.volume = newValue

@@ -11,7 +11,9 @@
       <div>搜索</div>
     </div>
     <template v-for="pane in panes" :key="pane.key">
-      <slot :name="pane.key" v-if="pane.key == active" v-bind="pane"></slot>
+      <KeepAlive>
+        <slot :name="pane.key" v-if="pane.key == active" v-bind="pane"></slot>
+      </KeepAlive>
     </template>
   </div>
 </template>
