@@ -14,12 +14,12 @@
         </template>
       </CommentsItem>
     </div>
-    <div v-if="moreHot" class="flex w-full justify-center">
-      <div
+    <div v-if="moreHot" @click="playerModeState = false" class="flex w-full justify-center">
+      <NuxtLink :to="`/hotcomment/${CommentType[type]}/${id}`"
         class="flex gap-1 cursor-pointer items-center px-4 py-2 text-sm  rounded-full border dark:border-[rgb(63,63,63)] border-[rgb(242,242,242)]">
         <div>更多精彩评论</div>
         <Icon name="ri:arrow-right-s-line" size="20" />
-      </div>
+      </NuxtLink>
     </div>
     <div v-if="comments?.length">
       <p class="text-base font-bold">最新评论（{{ total }}）</p>
@@ -42,24 +42,26 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { Comment } from '~/composables/NeteaseCloudMusic.ts'
+import { type Comment, CommentType } from '~/composables/NeteaseCloudMusic.ts'
 
 const props = withDefaults(defineProps<{
   type?: CommentType,
   id?: number
 }>(), {
-  type: CommentType.music,
+  type: CommentType.song,
 })
 
 const total = ref<number>()
 const hotComments = shallowRef<Array<Comment>>()
 const comments = shallowRef<Array<Comment>>()
 const moreHot = ref<boolean>()
+const playerStore = usePlayerStore()
+const { playerModeState } = storeToRefs(playerStore)
 
 watch(() => props.id, async (newVal) => {
   if (newVal) {
     switch (props.type) {
-      case CommentType.music: {
+      case CommentType.song: {
         const musicComment = await comment_music({
           id: newVal
         })

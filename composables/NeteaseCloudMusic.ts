@@ -478,12 +478,34 @@ export function lyric(
 }
 
 export enum CommentType {
-  music = 0,
-  album = 1,
+  song = 0,
+  mv = 1,
   playlist = 2,
-  mv = 3,
+  album = 3,
   dj = 4,
   video = 5,
+  event = 6,
+}
+export type CommentTypeKeys = keyof typeof CommentType;
+
+export function comment_hot(
+  params: {
+    id: string | number;
+    type: CommentType;
+    before?: string | number;
+  } & MultiPageConfig &
+    RequestBaseConfig
+): Promise<
+  Response<{
+    hotComments: Array<Comment>;
+    hasMore: boolean;
+    topComments: [];
+    total: number;
+  }>
+> {
+  return fetchNeteaseClouldMusic('/comment/hot', {
+    params,
+  });
 }
 
 export function comment_music(
