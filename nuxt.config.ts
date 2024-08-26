@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'dayjs-nuxt',
     '@nuxt/image',
+    '@nuxtjs/sitemap',
   ],
   typescript: {
     tsConfig: {
