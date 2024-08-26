@@ -47,20 +47,14 @@ export const usePlayerStore = defineStore('player', () => {
   // 心动歌单
   const intelligencePlaylist = ref<Array<number>>([]);
 
-  //下一首播放的歌曲
-  const nextSongId = ref<number>();
-  const nextSongUrl = shallowRef();
-  const nextSongDetail = shallowRef<SongDetail>();
-
-  //上一首播放的歌曲
-  const prevSongId = ref<number>();
-  const prevSongUrl = shallowRef();
-  const prevSongDetail = shallowRef<SongDetail>();
-
   // 歌词
   const currentLyric = shallowRef<Array<{ time: number; content: string }>>();
   const nextLyric = shallowRef<Array<{ time: number; content: string }>>();
   const prevLyric = shallowRef<Array<{ time: number; content: string }>>();
+
+  // 相似歌单 歌曲
+  const simiPlaylists = shallowRef<Playlist[]>();
+  const simiSongs = shallowRef<SiMiSongs>();
 
   /**
    * get the song information
@@ -123,13 +117,7 @@ export const usePlayerStore = defineStore('player', () => {
     } = { autoplay: true }
   ) {
     // 第一次加载时并没有获取上一首或者下一首歌曲信息
-    if (m === 'next' && nextSongId.value) {
-      currentSongId.value = nextSongId.value;
-    } else if (m === 'prev' && prevSongId.value) {
-      currentSongId.value = prevSongId.value;
-    } else {
-      currentSongId.value = getNextSongId(m);
-    }
+    currentSongId.value = getNextSongId(m);
 
     if (options.autoplay) {
       if (playState.value) {
@@ -211,44 +199,17 @@ export const usePlayerStore = defineStore('player', () => {
   });
 
   watch(currentSongId, async (newVal) => {
-    if (!newVal) {
-      return;
-    }
-    if (newVal === nextSongId.value) {
-      currentSongUrl.value = nextSongUrl.value;
-      currentSongDetail.value = nextSongDetail.value;
-      currentLyric.value = nextLyric.value;
-    } else if (newVal === prevSongId.value) {
-      currentSongUrl.value = prevSongUrl.value;
-      currentSongDetail.value = prevSongDetail.value;
-      currentLyric.value = prevLyric.value;
-    } else {
+    if (newVal) {
       const { songUrl, songDetail, lrc } = await getSong(newVal);
       currentSongUrl.value = songUrl;
       currentSongDetail.value = songDetail;
       currentLyric.value = parseLyric(lrc.lyric);
+
+      const res = await simi_playlist({ id: newVal });
+      simiPlaylists.value = res.playlists;
+      const res2 = await simi_song({ id: newVal });
+      simiSongs.value = res2.songs;
     }
-
-    // 预加载下一首要播放的歌曲
-    nextSongId.value = getNextSongId('next');
-    const {
-      songUrl: nextSongUrlData,
-      songDetail: nextSongDetailData,
-      lrc: nextLrc,
-    } = await getSong(nextSongId.value);
-    nextSongDetail.value = nextSongDetailData;
-    nextSongUrl.value = nextSongUrlData;
-    nextLyric.value = parseLyric(nextLrc.lyric);
-
-    prevSongId.value = getNextSongId('prev');
-    const {
-      songUrl: prevSongUrlData,
-      songDetail: prevSongDetailData,
-      lrc: prevLrc,
-    } = await getSong(prevSongId.value);
-    prevSongDetail.value = prevSongDetailData;
-    prevSongUrl.value = prevSongUrlData;
-    prevLyric.value = parseLyric(prevLrc.lyric);
   });
 
   //首次渲染
@@ -267,18 +228,14 @@ export const usePlayerStore = defineStore('player', () => {
     currentSongUrl,
     currentSongDetail,
     currentTime,
-    nextSongId,
-    nextSongUrl,
-    nextSongDetail,
-    prevSongId,
-    prevSongUrl,
-    prevSongDetail,
     currentLyric,
     nextLyric,
     prevLyric,
     playlist,
     randomPlaylist,
     intelligencePlaylist,
+    simiPlaylists,
+    simiSongs,
     playStateToggle,
     playerModeStateToggle,
     likeStateToggle,

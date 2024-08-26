@@ -13,20 +13,26 @@ import { CommentType, type CommentTypeKeys } from '~/composables/NeteaseCloudMus
 const route = useRoute()
 const { type, id } = route.params
 
-const { data } = useAsyncData('hotComment', async () => {
+const { data } = await useAsyncData('hotComment', async () => {
   switch (CommentType[type as CommentTypeKeys]) {
     case CommentType.song:
-      return await comment_hot({
+      return comment_hot({
         type: CommentType.song,
         id: Number(id)
       })
     case CommentType.playlist:
-      return await comment_hot({
+      return comment_hot({
         type: CommentType.playlist,
         id: Number(id)
       })
     default:
       throw new Error('Invalid comment type')
   }
+})
+
+useSeoMeta({
+  title: '精彩评论',
+  ogDescription: '精彩评论',
+  ogTitle: '精彩评论',
 })
 </script>

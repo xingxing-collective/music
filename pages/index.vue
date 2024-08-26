@@ -27,7 +27,7 @@
           class=" hidden lg:block md:block" :perspective="0" :autoplay="true" :inverseScaling="inverseScaling"
           :width="width" :height="height" :border="0" :loop="true" :space="space" :display="3">
           <Slide v-for="(banner, i) in banners?.filter(x => !Boolean(x.adSource))" :key="banner.targetId" :index="i">
-            <NuxtImg  class="object-fill w-full h-full" :src="banner.imageUrl.replace('http://', 'https://')"
+            <NuxtImg class="object-fill w-full h-full" :src="banner.imageUrl.replace('http://', 'https://')"
               :alt="banner.typeTitle" />
           </Slide>
         </Carousel3d>
@@ -219,13 +219,12 @@ async function initialize() {
 
 const { createResizeObserver } = useObserver()
 
-useHead({
+useSeoMeta({
   title: '网易云音乐 - 发现音乐',
-  meta: [
-    { name: 'keywords', content: '网易云音乐, 音乐, 排行榜, 歌单, 新歌, 私人FM' },
-    { name: 'description', content: '网易云音乐是一站式音乐播放器, 面向全球用户提供高速、无限的在线音乐体验。' },
-  ]
+  keywords: '网易云音乐, 音乐, 排行榜, 歌单, 新歌, 私人FM',
+  description: '网易云音乐是一站式音乐播放器, 面向全球用户提供高速、无限的在线音乐体验。'
 })
+
 onMounted(async () => {
   await initialize()
   createResizeObserver(container.value!, async ([entry]) => {
