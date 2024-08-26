@@ -132,11 +132,9 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import type { Playlist, SiMiSongs } from '~/composables/NeteaseCloudMusic.ts'
-
 const playerStore = usePlayerStore()
 const { playerModeStateToggle, likeStateToggle, control, playStateToggle, playSong } = playerStore
-const { playerModeState, playState, currentSongDetail, currentLyric, currentSongId, likeState, playmode, playmodeIcon, currentTime, audio, currentSongUrl } = storeToRefs(playerStore)
+const { playerModeState, playState, currentSongDetail, currentLyric, currentSongId, likeState, playmode, playmodeIcon, currentTime, audio, currentSongUrl,simiPlaylists,simiSongs } = storeToRefs(playerStore)
 
 const volumeStore = useVolumeStore()
 const { volumeToggle } = volumeStore
@@ -166,18 +164,6 @@ watch(currentActiveLyricIndex, (newIndex, oldIndex) => {
     nextTick(() => {
       scrollerContainer.value?.getScroller().scrollToElement(lyricContainer.value[newIndex], 300, 0, true)
     })
-  }
-})
-
-const simiPlaylists = shallowRef<Playlist[]>()
-const simiSongs = shallowRef<SiMiSongs>()
-
-watch(currentSongId, async (newVal) => {
-  if (newVal) {
-    const res = await simi_playlist({ id: newVal })
-    simiPlaylists.value = res.playlists
-    const res2 = await simi_song({ id: newVal })
-    simiSongs.value = res2.songs
   }
 })
 

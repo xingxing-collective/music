@@ -8,7 +8,8 @@
         <div class="flex flex-col gap-2 flex-1">
           <div class="text-black dark:text-gray-200">{{ playlistDetail?.name }}</div>
           <div class="flex gap-2 items-center">
-            <NuxtImg :placeholder="(playlistDetail?.creator.avatarUrl) ? false : $config.public.image.placeholder" :src="playlistDetail?.creator.avatarUrl" :alt="playlistDetail?.creator.nickname"
+            <NuxtImg :placeholder="(playlistDetail?.creator.avatarUrl) ? false : $config.public.image.placeholder"
+              :src="playlistDetail?.creator.avatarUrl" :alt="playlistDetail?.creator.nickname"
               class="w-8 rounded-[50%] cursor-pointer" />
             <span class="text-sm font-bold text-[rgb(81,126,175)] cursor-pointer">{{ playlistDetail?.creator.nickname
               }}</span>
@@ -137,21 +138,15 @@ async function initialize() {
     id: route.params.id as string
   })
   playlistDetail.value = res.playlist
-  useHead({
-    title: playlistDetail.value?.name,
-    meta: [
-      { name: 'description', content: playlistDetail.value?.description },
-      { property: 'og:title', content: playlistDetail.value?.name },
-      { property: 'og:description', content: playlistDetail.value?.description },
-      { property: 'og:image', content: playlistDetail.value?.coverImgUrl }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/png', href: '/favicon.ico' }
-    ]
-  })
 }
 
 onMounted(async () => {
   await initialize()
+  useSeoMeta({
+    title: playlistDetail.value?.name,
+    ogDescription: playlistDetail.value?.description,
+    ogTitle: playlistDetail.value?.name,
+    ogImage: playlistDetail.value?.coverImgUrl,
+  })
 })
 </script>
