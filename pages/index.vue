@@ -37,7 +37,7 @@
         </div>
       </ClientOnly>
     </div>
-    <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-4">
       <div>
         <div class="pt-4 flex items-center">
           <div class="flex cursor-pointer">
