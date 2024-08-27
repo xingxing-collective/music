@@ -30,7 +30,7 @@
     <MiniPlayer />
     <Player />
     <CurrentlyPlaying />
-    <audio :loop="playmode === PlayModeType.Single" ref="audio" autoplay
+    <audio :loop="playmode === PlayModeType.Single" ref="audio" @loadedmetadata="playState ? audio?.play() : undefined"
       :src="currentSongUrl?.url.replace('http://', 'https://')" @ended="control('next')" @timeupdate="timeupdate" />
   </ULayout>
 </template>
@@ -40,7 +40,7 @@ import { PlayModeType } from '~/types/player'
 const playerStore = usePlayerStore()
 const { control } = playerStore
 const { audio, playmode,
-  currentTime,
+  currentTime, playState,
   currentSongUrl } = storeToRefs(playerStore)
 
 function timeupdate(e: Event) {
