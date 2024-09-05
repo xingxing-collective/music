@@ -16,7 +16,8 @@
             <div @dblclick="playSong(song.id)"
               class="grid grid-cols-12 select-none gap-2 hover:bg-neutral-700 hover:cursor-pointer odd:bg-neutral-800 text-sm py-1.5 px-2"
               v-for="song in currentPlaylist">
-              <div class="col-span-6 w-full">
+              <div class="col-span-6 w-full flex items-center gap-2">
+                <Icon v-if="song.id === currentSongId" name="material-symbols:play-arrow" class="text-red-600" />
                 <p class=" whitespace-nowrap text-ellipsis overflow-hidden">{{ song.name
                   }}</p>
               </div>

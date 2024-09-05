@@ -163,13 +163,13 @@ export const usePlayerStore = defineStore('player', () => {
     } else {
       if (playmode.value === PlayModeType.Random) {
         randomPlaylist.value.splice(
-          randomPlaylist.value.indexOf(currentSongId.value!),
+          randomPlaylist.value.indexOf(currentSongId.value!) + 1,
           0,
           songId
         );
       } else {
         playlist.value.splice(
-          playlist.value.indexOf(currentSongId.value!),
+          playlist.value.indexOf(currentSongId.value!) + 1,
           0,
           songId
         );

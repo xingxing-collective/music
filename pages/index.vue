@@ -4,7 +4,7 @@
       <div class="grid grid-cols-12 w-full h-full">
         <div class=" hidden col-span-8 md:flex lg:flex items-center justify-end gap-6 ">
           <NuxtLink v-for="link in headLink" :to="link?.to"
-            class="w-24 flex flex-col justify-center  h-full items-center">
+            class="w-24 flex flex-col justify-center hover:cursor-pointer  h-full items-center">
             <div class="w-[80%] text-center font-bold text-base "
               :style="{ color: $route.path === link?.to ? 'red' : 'inherit' }">{{ link.name }}</div>
             <div class=" font-black text-lg relative top-4 border-b-[2px] border-b-red-600 w-[70%]"
@@ -164,7 +164,7 @@ const headLink = computed<Array<{ key: string, name: string, to?: string }>>(() 
   }, {
     key: 'playlist',
     name: '歌单',
-    //to: '/playlist',
+    to: '/playlist',
   }, {
     key: 'djprogram',
     name: '电台',
