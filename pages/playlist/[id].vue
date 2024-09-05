@@ -15,7 +15,7 @@
               }}</span>
             <span class="text-sm">{{ $dayjs(playlistDetail?.createTime).format('YYYY-MM-DD') }} 创建</span>
           </div>
-          <div class="flex w-full py-1 gap-4 flex-wrap">
+          <div class="flex w-full py-1 lg:gap-4 md:gap-2 md:text-sm">
             <div class="w-40 grid grid-cols-4  text-white items-center justify-center">
               <button @click="playAll"
                 class="flex border-r-slate-100 border-r-[0.5px] col-span-3 bg-red-600 rounded-l-full h-full items-center cursor-pointer justify-center hover:bg-red-500">
