@@ -3,13 +3,11 @@
     <div class="h-[--header-height]"></div>
     <div class="flex px-4">
       <div class="flex gap-4 px-4 w-full">
-        <NuxtImg :placeholder="(playlistDetail?.coverImgUrl) ? false : $config.public.image.placeholder"
-          :alt="playlistDetail?.name" :src="playlistDetail?.coverImgUrl" class="w-48 h-48 rounded-md" />
+        <NuxtImg :alt="playlistDetail?.name" :src="playlistDetail?.coverImgUrl" class="w-48 h-48 rounded-md" />
         <div class="flex flex-col gap-2 flex-1">
           <div class="text-black dark:text-gray-200">{{ playlistDetail?.name }}</div>
           <div class="flex gap-2 items-center">
-            <NuxtImg :placeholder="(playlistDetail?.creator.avatarUrl) ? false : $config.public.image.placeholder"
-              :src="playlistDetail?.creator.avatarUrl" :alt="playlistDetail?.creator.nickname"
+            <NuxtImg :src="playlistDetail?.creator.avatarUrl" :alt="playlistDetail?.creator.nickname"
               class="w-8 rounded-[50%] cursor-pointer" />
             <span class="text-sm font-bold text-[rgb(81,126,175)] cursor-pointer">{{ playlistDetail?.creator.nickname
               }}</span>
@@ -81,7 +79,7 @@
             <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.name }}</span>
           </div>
           <div class="col-span-6 h-full flex pl-1 items-center w-full"><span
-              class="overflow-hidden whitespace-nowrap text-ellipsis">{{ track.ar.map(x => x.name).join('/')
+              class="overflow-hidden whitespace-nowrap text-ellipsis">{{track.ar.map(x => x.name).join('/')
               }}</span>
           </div>
           <div class="col-span-5 h-full flex pl-1 items-center">

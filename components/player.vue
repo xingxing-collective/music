@@ -15,7 +15,7 @@
             <div
               class=" w-72 md:w-[20rem] lg:w-[22rem] flex justify-center items-center rounded-[50%] bg-[rgb(42,42,42)] aspect-square relative bottom-[5.25rem]">
               <div :class="$style.outer" :style="{ animationPlayState: !playState ? 'paused' : 'inherit' }">
-                <NuxtImg :placeholder="(currentSongDetail?.al.picUrl) ? false : $config.public.image.placeholder" class="rounded-[50%] w-[75%] h-[75%]" :src="`${currentSongDetail?.al.picUrl}?param=400y400`"
+                <NuxtImg class="rounded-[50%] w-[75%] h-[75%]" :src="`${currentSongDetail?.al.picUrl}?param=400y400`"
                   lazy="loaded" />
               </div>
             </div>
@@ -57,7 +57,7 @@
             </div>
             <div class="flex w-[70%] justify-center">
               <div class="text-sm">歌手：</div>
-              <div class="text-sm text-[rgb(81,126,175)]">{{ currentSongDetail?.ar.map(x => x.name).join('/') }}</div>
+              <div class="text-sm text-[rgb(81,126,175)]">{{currentSongDetail?.ar.map(x => x.name).join('/')}}</div>
             </div>
             <div class="w-[70%] md:h-[32rem] lg:h-96">
               <Scroller ref="scrollerContainer" :data="currentLyric" :class="[$style.scroller]"
@@ -65,7 +65,7 @@
                 <div>
                   <div
                     :class="[currentActiveLyricIndex === index ? 'text-base dark:text-[rgb(220,221,228)] font-bold' : 'text-sm', 'mb-4 text-center']"
-                    ref="lyricContainer" :key="index" v-for="(l, index) in  currentLyric ">
+                    ref="lyricContainer" :key="index" v-for="(l, index) in currentLyric">
                     {{ l.content }}
                   </div>
                 </div>
@@ -86,7 +86,7 @@
                   <template #title>
                     <div class="flex pl-3 flex-col justify-center gap-1 w-full">
                       <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm font-medium">{{
-      simiPlaylist.name }}
+                        simiPlaylist.name }}
                       </p>
                       <div class=" flex gap-1">
                         <Icon name="ic:baseline-play-arrow" size="16" />
@@ -110,7 +110,7 @@
                       </p>
                       <div class=" flex gap-1">
                         <span class="whitespace-nowrap text-ellipsis overflow-hidden">{{
-      simiSong.artists.map(x => x.name).join('/') }}</span>
+                          simiSong.artists.map(x => x.name).join('/') }}</span>
                       </div>
                     </div>
                   </template>
@@ -134,7 +134,7 @@
 <script setup lang="ts">
 const playerStore = usePlayerStore()
 const { playerModeStateToggle, likeStateToggle, control, playStateToggle, playSong } = playerStore
-const { playerModeState, playState, currentSongDetail, currentLyric, currentSongId, likeState, playmode, playmodeIcon, currentTime, audio, currentSongUrl,simiPlaylists,simiSongs } = storeToRefs(playerStore)
+const { playerModeState, playState, currentSongDetail, currentLyric, currentSongId, likeState, playmode, playmodeIcon, currentTime, audio, currentSongUrl, simiPlaylists, simiSongs } = storeToRefs(playerStore)
 
 const volumeStore = useVolumeStore()
 const { volumeToggle } = volumeStore
