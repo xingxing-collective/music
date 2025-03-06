@@ -15,7 +15,7 @@
       </CommentsItem>
     </div>
     <div v-if="moreHot" @click="playerModeState = false" class="flex w-full justify-center">
-      <NuxtLink :to="`/hotcomment/${CommentType[type]}/${id}`"
+      <NuxtLink :to="`/hot-comment/${CommentType[type]}/${id}`"
         class="flex gap-1 cursor-pointer items-center px-4 py-2 text-sm  rounded-full border dark:border-[rgb(63,63,63)] border-[rgb(242,242,242)]">
         <div>更多精彩评论</div>
         <Icon name="ri:arrow-right-s-line" size="20" />
