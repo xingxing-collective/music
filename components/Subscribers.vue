@@ -4,8 +4,7 @@
       <div v-for="subscriber in data?.subscribers" :key="subscriber.userId">
         <div class="col-span-1 w-full grid grid-cols-12 py-3 gap-4">
           <div class="col-span-3">
-            <NuxtImg :placeholder="subscriber.avatarUrl ? false : $config.public.image.placeholder"
-              :src="subscriber.avatarUrl" class="rounded-[50%]" :alt="subscriber.nickname" />
+            <NuxtImg :src="subscriber.avatarUrl" class="rounded-[50%]" :alt="subscriber.nickname" />
           </div>
           <div class="col-span-9 flex flex-col gap-1.5 justify-center">
             <div class="hover:text-gray-200 cursor-pointer"><span>{{ subscriber.nickname }}</span></div>
