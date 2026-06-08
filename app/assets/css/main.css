@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #4a4a4a;
+}
+
+.dark:root {
+  --color-background: #151515;
+  --color-foreground: #b1b1b1;
+}
+
+:root {
+  --scrollbar-color: 208 208 208;
+}
+
+.dark:root {
+  --scrollbar-color: 58 58 58;
+}
+
+body {
+  @apply antialiased font-sans text-foreground bg-background;
+}

@@ -1,7 +1,19 @@
+import tailwindcss from '@tailwindcss/vite';
+
 const isDev = process.env.NODE_ENV === 'development';
 
+const routeRules = isDev
+  ? {}
+  : {
+      cache: { headersOnly: true, maxAge: 120, staleMaxAge: 60, swr: true },
+    };
+
 export default defineNuxtConfig({
-  srcDir: '.',
+  colorMode: {
+    classSuffix: '',
+    preference: 'dark',
+  },
+  compatibilityDate: '2025-07-15',
   components: {
     dirs: [
       {
@@ -11,24 +23,27 @@ export default defineNuxtConfig({
       '~/components',
     ],
   },
+  css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
   devtools: { enabled: true },
-  routeRules: {
-    '/**': isDev
-      ? {}
-      : {
-          cache: { swr: true, maxAge: 120, staleMaxAge: 60, headersOnly: true },
-        },
+  future: {
+    compatibilityVersion: 4,
+  },
+  image: {
+    domains: ['p1.music.126.net', 'p2.music.126.net', 'p3.music.126.net', 'p4.music.126.net'],
   },
   modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/color-mode',
     '@nuxt/icon',
-    '@vueuse/nuxt',
-    '@pinia/nuxt',
-    'dayjs-nuxt',
     '@nuxt/image',
+    '@nuxtjs/color-mode',
     '@nuxtjs/sitemap',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    'dayjs-nuxt',
   ],
+  routeRules: {
+    '/**': routeRules,
+  },
+  srcDir: 'app',
   typescript: {
     tsConfig: {
       compilerOptions: {
@@ -36,13 +51,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
-  colorMode: {
-    preference: 'dark',
-    classSuffix: '',
+  vite: {
+    plugins: [tailwindcss()],
   },
-  image: {
-    domains: ['p1.music.126.net', 'p2.music.126.net', 'p3.music.126.net', 'p4.music.126.net'],
-  },
-  compatibilityDate: '2025-07-15',
 });
