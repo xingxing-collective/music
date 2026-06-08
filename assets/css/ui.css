@@ -9,7 +9,6 @@
   transform: translateY(100%);
 }
 
-
 .slideover-enter-active,
 .slideover-leave-active {
   transition: all 0.5s;

@@ -1,6 +1,7 @@
 const isDev = process.env.NODE_ENV === 'development';
 
 export default defineNuxtConfig({
+  srcDir: '.',
   components: {
     dirs: [
       {
@@ -41,12 +42,7 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
   image: {
-    domains: [
-      'p1.music.126.net',
-      'p2.music.126.net',
-      'p3.music.126.net',
-      'p4.music.126.net',
-    ],
+    domains: ['p1.music.126.net', 'p2.music.126.net', 'p3.music.126.net', 'p4.music.126.net'],
   },
-  compatibilityDate: '2024-08-02',
+  compatibilityDate: '2025-07-15',
 });

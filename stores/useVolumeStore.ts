@@ -4,8 +4,7 @@ export const useVolumeStore = defineStore('volume', () => {
   const [volumeState, volumeToggle] = useToggle(true);
 
   function $volumeReset() {
-    volume.value =
-      volumeState.value && lastVolume.value !== 0 ? lastVolume.value : 0.5;
+    volume.value = volumeState.value && lastVolume.value !== 0 ? lastVolume.value : 0.5;
   }
 
   watch(volume, (newVal) => {

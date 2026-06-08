@@ -1,5 +1,3 @@
 <template>
-  <div>
-    我的
-  </div>
+  <div>我的</div>
 </template>

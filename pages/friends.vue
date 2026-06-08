@@ -1,5 +1,3 @@
 <template>
-  <div>
-    Friend
-  </div>
+  <div>Friend</div>
 </template>

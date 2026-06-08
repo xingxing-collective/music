@@ -1,7 +1,4 @@
-import {
-  type SongDetail,
-  SoundQualityType,
-} from '~/composables/NeteaseCloudMusic.ts';
+import { type SongDetail, SoundQualityType } from '~/composables/NeteaseCloudMusic.ts';
 import { PlayModeType } from '~/types/player';
 import { shuffleArray } from '~/utils';
 
@@ -39,8 +36,8 @@ export const usePlayerStore = defineStore('player', () => {
 
   // 原始歌单
   const playlist = ref<Array<number>>([
-    2_018_096_932, 1_330_348_068, 1_817_235_475, 1_393_138_949, 2_069_006_728,
-    1_445_556_953, 1_456_890_009, 1_841_002_409,
+    2_018_096_932, 1_330_348_068, 1_817_235_475, 1_393_138_949, 2_069_006_728, 1_445_556_953,
+    1_456_890_009, 1_841_002_409,
   ]);
   // 随机歌单
   const randomPlaylist = ref<Array<number>>([]);
@@ -88,19 +85,15 @@ export const usePlayerStore = defineStore('player', () => {
   function getNextSongId(m: 'next' | 'prev') {
     let nextIndex = 0;
     const currentPlaylist =
-      playmode.value === PlayModeType.Random
-        ? [...randomPlaylist.value]
-        : [...playlist.value];
+      playmode.value === PlayModeType.Random ? [...randomPlaylist.value] : [...playlist.value];
     if (currentPlaylist.length === 0) {
       throw new Error('暂无歌曲');
     }
     const index = currentPlaylist.indexOf(currentSongId.value!);
     if (m === 'next') {
-      nextIndex =
-        index !== -1 && index === currentPlaylist.length - 1 ? 0 : index + 1;
+      nextIndex = index !== -1 && index === currentPlaylist.length - 1 ? 0 : index + 1;
     } else {
-      nextIndex =
-        index !== -1 && index === 0 ? currentPlaylist.length - 1 : index - 1;
+      nextIndex = index !== -1 && index === 0 ? currentPlaylist.length - 1 : index - 1;
     }
     return currentPlaylist[nextIndex];
   }
@@ -168,11 +161,7 @@ export const usePlayerStore = defineStore('player', () => {
           songId
         );
       } else {
-        playlist.value.splice(
-          playlist.value.indexOf(currentSongId.value!) + 1,
-          0,
-          songId
-        );
+        playlist.value.splice(playlist.value.indexOf(currentSongId.value!) + 1, 0, songId);
       }
       currentSongId.value = songId;
     }

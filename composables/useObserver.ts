@@ -12,10 +12,7 @@ export const useObserver = () => {
     }, options);
     observer.value.observe(container);
   }
-  function createResizeObserver(
-    container: Element,
-    callback: ResizeObserverCallback
-  ) {
+  function createResizeObserver(container: Element, callback: ResizeObserverCallback) {
     resizeObserver.value = new ResizeObserver(callback);
     resizeObserver.value.observe(container);
   }

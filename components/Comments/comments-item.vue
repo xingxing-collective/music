@@ -2,15 +2,20 @@
   <div class="flex py-4 w-full">
     <div class="flex gap-4 w-full">
       <slot name="avatar">
-        <NuxtImg :src="`${comment.user.avatarUrl}?param=40y40`"
-          class="rounded-[50%] w-10 aspect-square h-10 object-cover" :alt="`${comment.user.avatarUrl}?param=40y40`" />
+        <NuxtImg
+          :src="`${comment.user.avatarUrl}?param=40y40`"
+          class="rounded-[50%] w-10 aspect-square h-10 object-cover"
+          :alt="`${comment.user.avatarUrl}?param=40y40`"
+        />
       </slot>
       <div class="text-xs font-bold flex flex-col gap-2 justify-between w-full">
         <slot>
-          <div class=" inline-flex">
+          <div class="inline-flex">
             <p>
               <span class="inline-flex gap-1">
-                <span class="text-[rgb(81,126,175)] whitespace-nowrap ">{{ comment.user.nickname }}</span>
+                <span class="text-[rgb(81,126,175)] whitespace-nowrap">{{
+                  comment.user.nickname
+                }}</span>
                 <NuxtImg v-if="vipBadge" class="h-4 object-fill" :src="vipBadge" :alt="vipBadge" />
                 <span class="text-[rgb(81,126,175)]">:</span>
               </span>
@@ -26,17 +31,18 @@
           <Icon name="ri:thumb-up-line" class="cursor-pointer" size="16" />
           <div>{{ comment.likedCount }}</div>
         </div>
-        <slot name="replied">
-        </slot>
+        <slot name="replied"> </slot>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  comment: Record<string, any>
-}>()
+  comment: Record<string, any>;
+}>();
 const vipBadge = computed(() => {
-  return props.comment.user?.vipRights?.redplus ? props.comment.user?.vipRights?.redplus?.iconUrl : props.comment.user?.vipRights?.associator?.iconUrl
-})
+  return props.comment.user?.vipRights?.redplus
+    ? props.comment.user?.vipRights?.redplus?.iconUrl
+    : props.comment.user?.vipRights?.associator?.iconUrl;
+});
 </script>

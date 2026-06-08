@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="ui.wrapper"
-    v-bind="attrs"
-  >
+  <div :class="ui.wrapper" v-bind="attrs">
     <slot />
   </div>
 </template>
@@ -29,11 +26,5 @@ const props = defineProps({
   },
 });
 
-const { ui, attrs } = useUI(
-  'music.page',
-  toRef(props, 'ui'),
-  config,
-  toRef(props, 'class'),
-  true
-);
+const { ui, attrs } = useUI('music.page', toRef(props, 'ui'), config, toRef(props, 'class'), true);
 </script>

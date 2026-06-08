@@ -30,11 +30,7 @@ export default defineNuxtPlugin(() => {
   };
 
   // SPA mode
-  if (
-    import.meta.client &&
-    nuxtApp.isHydrating &&
-    !nuxtApp.payload.serverRendered
-  ) {
+  if (import.meta.client && nuxtApp.isHydrating && !nuxtApp.payload.serverRendered) {
     const style = document.createElement('style');
 
     style.innerHTML = root.value;
@@ -43,8 +39,7 @@ export default defineNuxtPlugin(() => {
 
     headData.script = [
       {
-        innerHTML:
-          "document.head.removeChild(document.querySelector('[data-ui-variables]'))",
+        innerHTML: "document.head.removeChild(document.querySelector('[data-ui-variables]'))",
       },
     ];
   }

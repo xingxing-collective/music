@@ -15,10 +15,7 @@ type FetchParameters = Parameters<typeof $fetch>;
 export type NitroFetchRequest = FetchParameters[0];
 export type NitroFetchOptions = FetchParameters[1];
 
-async function _fetchNeteaseClouldMusic(
-  request: NitroFetchRequest,
-  opts: NitroFetchOptions = {}
-) {
+async function _fetchNeteaseClouldMusic(request: NitroFetchRequest, opts: NitroFetchOptions = {}) {
   const defaultOptions: NitroFetchOptions = {
     baseURL: API_URL,
     credentials: 'include',
@@ -361,9 +358,7 @@ export function personalized(
   });
 }
 
-export function personalized_djprogram(
-  params: RequestBaseConfig
-): Promise<Response> {
+export function personalized_djprogram(params: RequestBaseConfig): Promise<Response> {
   return fetchNeteaseClouldMusic('/personalized/djprogram', {
     params,
   });
@@ -413,9 +408,7 @@ export function recommend_resource(params: RequestBaseConfig = {}): Promise<{
   });
 }
 
-export function recommend_songs(
-  params: RequestBaseConfig = {}
-): Promise<Response> {
+export function recommend_songs(params: RequestBaseConfig = {}): Promise<Response> {
   return fetchNeteaseClouldMusic('/recommend/songs', {
     params,
   });
@@ -445,9 +438,7 @@ export function songUrlV1(
   });
 }
 
-export function song_detail(
-  params: { ids: string } & RequestBaseConfig
-): Promise<
+export function song_detail(params: { ids: string } & RequestBaseConfig): Promise<
   Response<{
     songs: SongDetail[];
     privileges: unknown[];
@@ -459,9 +450,7 @@ export function song_detail(
   });
 }
 
-export function lyric(
-  params: { id: string | number } & RequestBaseConfig
-): Promise<
+export function lyric(params: { id: string | number } & RequestBaseConfig): Promise<
   Response<{
     lrc: Lrc;
     sgc: boolean;

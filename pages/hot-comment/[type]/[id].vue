@@ -9,30 +9,30 @@
   </div>
 </template>
 <script setup lang="ts">
-import { CommentType, type CommentTypeKeys } from '~/composables/NeteaseCloudMusic.ts'
-const route = useRoute()
-const { type, id } = route.params
+import { CommentType, type CommentTypeKeys } from '~/composables/NeteaseCloudMusic.ts';
+const route = useRoute();
+const { type, id } = route.params;
 
 const { data } = await useAsyncData('hotComment', async () => {
   switch (CommentType[type as CommentTypeKeys]) {
     case CommentType.song:
       return comment_hot({
         type: CommentType.song,
-        id: Number(id)
-      })
+        id: Number(id),
+      });
     case CommentType.playlist:
       return comment_hot({
         type: CommentType.playlist,
-        id: Number(id)
-      })
+        id: Number(id),
+      });
     default:
-      throw new Error('Invalid comment type')
+      throw new Error('Invalid comment type');
   }
-})
+});
 
 useSeoMeta({
   title: '精彩评论',
   ogDescription: '精彩评论',
   ogTitle: '精彩评论',
-})
+});
 </script>

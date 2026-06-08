@@ -7,8 +7,12 @@
             <NuxtImg :src="subscriber.avatarUrl" class="rounded-[50%]" :alt="subscriber.nickname" />
           </div>
           <div class="col-span-9 flex flex-col gap-1.5 justify-center">
-            <div class="hover:text-gray-200 cursor-pointer"><span>{{ subscriber.nickname }}</span></div>
-            <div class="text-xs text-neutral-500"><span>{{ subscriber.signature }}</span></div>
+            <div class="hover:text-gray-200 cursor-pointer">
+              <span>{{ subscriber.nickname }}</span>
+            </div>
+            <div class="text-xs text-neutral-500">
+              <span>{{ subscriber.signature }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -17,13 +21,16 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  id?: number
-}>()
+  id?: number;
+}>();
 
-const { data } = useAsyncData('subscribers', async () => {
-  return await playlist_subscribers({ id: props.id })
-}, {
-  watch: [() => props.id]
-})
-
+const { data } = useAsyncData(
+  'subscribers',
+  async () => {
+    return await playlist_subscribers({ id: props.id });
+  },
+  {
+    watch: [() => props.id],
+  }
+);
 </script>

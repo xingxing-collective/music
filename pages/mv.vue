@@ -1,5 +1,3 @@
 <template>
-  <div>
-    MV
-  </div>
+  <div>MV</div>
 </template>

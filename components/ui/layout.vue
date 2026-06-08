@@ -5,13 +5,13 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import type { PropType } from 'vue';
 const config = {
   wrapper: 'fixed inset-0 flex overflow-hidden',
-}
+};
 defineOptions({
   inheritAttrs: false,
-})
+});
 
 const props = defineProps({
   class: {
@@ -22,7 +22,7 @@ const props = defineProps({
     type: Object as PropType<Partial<typeof config>>,
     default: () => ({}),
   },
-})
+});
 
 const { ui, attrs } = useUI(
   'music.layout',

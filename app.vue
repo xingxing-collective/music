@@ -7,5 +7,5 @@
   </div>
 </template>
 <script setup lang="ts">
-import './styles/overrides.css'
+import './styles/overrides.css';
 </script>

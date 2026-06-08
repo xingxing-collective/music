@@ -1,11 +1,3 @@
 {
-  "words": [
-    "nuxt",
-    "tailwindcss",
-    "biomejs",
-    "unjs",
-    "pinia",
-    "nuxtjs",
-    "vueuse"
-  ]
+  "words": ["nuxt", "tailwindcss", "biomejs", "unjs", "pinia", "nuxtjs", "vueuse"]
 }

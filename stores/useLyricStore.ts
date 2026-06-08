@@ -7,8 +7,7 @@ export const useLyricStore = defineStore('lyric', () => {
       currentLyric.value?.findIndex((l, index) => {
         const nextLyric = currentLyric.value?.at(index + 1);
         return (
-          currentTime.value >= l.time &&
-          (nextLyric ? currentTime.value < nextLyric.time : true)
+          currentTime.value >= l.time && (nextLyric ? currentTime.value < nextLyric.time : true)
         );
       }) || -1
     );
