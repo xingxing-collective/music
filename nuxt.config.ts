@@ -1,13 +1,5 @@
 import tailwindcss from '@tailwindcss/vite';
 
-const isDev = process.env.NODE_ENV === 'development';
-
-const routeRules = isDev
-  ? {}
-  : {
-      cache: { headersOnly: true, maxAge: 120, staleMaxAge: 60, swr: true },
-    };
-
 export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
@@ -16,18 +8,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   components: {
     dirs: [
-      {
-        path: '~/components/ui',
-        prefix: 'U',
-      },
+      { path: '~/components/ui', prefix: 'U' },
       '~/components',
     ],
   },
-  css: ['~/assets/css/main.css', '~/assets/css/ui.css'],
+  css: ['~/assets/css/main.css'],
   devtools: { enabled: true },
-  future: {
-    compatibilityVersion: 4,
-  },
   image: {
     domains: ['p1.music.126.net', 'p2.music.126.net', 'p3.music.126.net', 'p4.music.126.net'],
   },
@@ -40,8 +26,10 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'dayjs-nuxt',
   ],
-  routeRules: {
-    '/**': routeRules,
+  $production: {
+    routeRules: {
+      '/**': { cache: { headersOnly: true, maxAge: 120, staleMaxAge: 60, swr: true } },
+    },
   },
   srcDir: 'app',
   typescript: {

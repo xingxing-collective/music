@@ -221,14 +221,31 @@ import { Carousel3d, Slide } from 'vue3-carousel-3d';
 import type { MV, NewSong } from '~/composables/NeteaseCloudMusic.ts';
 
 const playerStore = usePlayerStore();
-const { playSong, replacePlaylist } = playerStore;
+const { playSong, setQueue } = playerStore;
 
-//轮播图
-const { banners } = await banner({ type: 0 });
-const recommendResource = shallowRef<Record<string, any>[]>();
-const personalizedPrivatecontent = shallowRef<Record<string, any>[]>();
-const personalizedNewsong = shallowRef<NewSong[]>();
-const personalizedMv = shallowRef<MV[]>();
+// Fetch all page data in parallel for SSR support
+const [
+  bannerRes,
+  personalizedRes,
+  privatecontentRes,
+  personalizedNewSongRes,
+  personalizedMvRes,
+] = await Promise.all([
+  banner({ type: 0 }),
+  // Production requires login  正式环境需要登录，先调用推荐歌单
+  // recommend_resource()
+  personalized({ limit: 9 }),
+  // 独家放送
+  personalized_privatecontent(),
+  personalized_newsong(),
+  personalized_mv(),
+]);
+
+const banners = bannerRes.banners;
+const recommendResource = shallowRef<Record<string, any>[]>(personalizedRes.result);
+const personalizedPrivatecontent = shallowRef<Record<string, any>[]>(privatecontentRes.result);
+const personalizedNewsong = shallowRef<NewSong[]>(personalizedNewSongRes.result as NewSong[]);
+const personalizedMv = shallowRef<MV[]>(personalizedMvRes.result as MV[]);
 
 const headLink = computed<{ key: string; name: string; to?: string }[]>(() => [
   {
@@ -274,28 +291,9 @@ async function playPlaylist(playlistId: number) {
     id: playlistId,
   });
   if (playlist?.trackIds.length) {
-    replacePlaylist(playlist.trackIds.map((x) => x.id));
+    setQueue(playlist.trackIds.map((x) => x.id));
   }
 }
-
-async function initialize() {
-  const [personalizedRes, privatecontentRes, personalizedNewSongRes, personalizedMvRes] =
-    await Promise.all([
-      // Production requires login  正式环境需要登录，先调用推荐歌单
-      //RecommendResource()
-      personalized({ limit: 9 }),
-      // 独家放送
-      personalized_privatecontent(),
-      personalized_newsong(),
-      personalized_mv(),
-    ]);
-  recommendResource.value = personalizedRes.result;
-  personalizedPrivatecontent.value = privatecontentRes.result;
-  personalizedNewsong.value = personalizedNewSongRes.result;
-  personalizedMv.value = personalizedMvRes.result;
-}
-
-const { createResizeObserver } = useObserver();
 
 useSeoMeta({
   description: '网易云音乐是一站式音乐播放器, 面向全球用户提供高速、无限的在线音乐体验。',
@@ -303,14 +301,11 @@ useSeoMeta({
   title: '网易云音乐 - 发现音乐',
 });
 
-onMounted(async () => {
-  await initialize();
-  createResizeObserver(container.value!, async ([entry]) => {
-    const [size] = entry?.borderBoxSize || [];
-    width.value = ((size?.inlineSize ?? 0) / 10) * 6;
-    height.value = width.value / 3;
-    inverseScaling.value = height.value ? (width.value / height.value) * 1.5 : 150;
-    space.value = width.value / 2;
-  });
+useResizeObserver(container, ([entry]) => {
+  const [size] = entry?.borderBoxSize || [];
+  width.value = ((size?.inlineSize ?? 0) / 10) * 6;
+  height.value = width.value / 3;
+  inverseScaling.value = height.value ? (width.value / height.value) * 1.5 : 150;
+  space.value = width.value / 2;
 });
 </script>

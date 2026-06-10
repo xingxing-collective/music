@@ -10,7 +10,7 @@
             <div class="cursor-pointer select-none">
               <span class="font-bold text-base">收藏全部</span>
             </div>
-            <div class="cursor-pointer select-none" @click="clearPlaylist">
+            <div class="cursor-pointer select-none" @click="clearQueue">
               <span class="text-[rgb(81,126,175)] font-bold text-base">清空列表</span>
             </div>
           </div>
@@ -47,19 +47,14 @@
 <script setup lang="ts">
 import { PlayModeType } from '~/types';
 
-const slideoverStore = useSlideoverStore();
 const playerStore = usePlayerStore();
-const { isCurrentlyPlayingOpen } = storeToRefs(slideoverStore);
-const { clearPlaylist } = playerStore;
-const { playlist, playmode, playState, randomPlaylist, currentSongId } = storeToRefs(playerStore);
+const { isCurrentlyPlayingOpen, currentSongId } = storeToRefs(playerStore);
+const { clearQueue } = playerStore;
+const { queue, playMode, isPlaying, shuffledQueue } = storeToRefs(playerStore);
 
 const currentPlaylist = computedAsync(async () => {
-  const ids = (playmode.value === PlayModeType.Random ? randomPlaylist.value : playlist.value).join(
-    ','
-  );
-  if (!ids) {
-    return [];
-  }
+  const ids = (playMode.value === PlayModeType.Random ? shuffledQueue.value : queue.value).join(',');
+  if (!ids) return [];
   const { songs } = await song_detail({ ids });
   return songs;
 });
@@ -70,7 +65,7 @@ const currentPlaylist = computedAsync(async () => {
  */
 function playSong(id: number) {
   currentSongId.value = id;
-  playState.value = true;
+  isPlaying.value = true;
 }
 
 function handleEsc(event: KeyboardEvent) {

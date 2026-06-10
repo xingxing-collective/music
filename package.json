@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": " nuxt dev",
+    "dev": "TMPDIR=/tmp nuxt dev",
     "build": "nuxt build",
     "preview": "nuxt preview",
     "prepare": "nuxt prepare",

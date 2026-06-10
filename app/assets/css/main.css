@@ -7,19 +7,45 @@
   --color-foreground: #4a4a4a;
 }
 
-.dark:root {
-  --color-background: #151515;
-  --color-foreground: #b1b1b1;
-}
-
 :root {
+  --header-height: 4rem;
+  --player-height: 4rem;
   --scrollbar-color: 208 208 208;
 }
 
-.dark:root {
+.dark {
+  --color-background: #151515;
+  --color-foreground: #b1b1b1;
   --scrollbar-color: 58 58 58;
 }
 
 body {
   @apply antialiased font-sans text-foreground bg-background;
+}
+
+/* Better Scroll */
+.bscroll-indicator {
+  border: none !important;
+  background: rgb(var(--scrollbar-color)) !important;
+}
+
+/* Transitions */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.5s;
+  transform: none;
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(100%);
+}
+
+.slideover-enter-active,
+.slideover-leave-active {
+  transition: all 0.5s;
+  transform: none;
+}
+.slideover-enter-from,
+.slideover-leave-to {
+  transform: translateX(100%);
 }
