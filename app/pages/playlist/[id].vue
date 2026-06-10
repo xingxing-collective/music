@@ -52,15 +52,12 @@
           </div>
           <div class="text-sm">
             <span class="text-gray-200">标签:</span>
-            <span
-              v-html="
-                playlistDetail?.tags
-                  .map(
-                    (x) => `<span class='px-2 text-[rgb(81,126,175)] cursor-pointer' >${x}</span>`
-                  )
-                  .join('/')
-              "
-            ></span>
+            <template v-if="playlistDetail?.tags">
+              <template v-for="(tag, i) in playlistDetail.tags" :key="tag">
+                <span class="px-2 text-[rgb(81,126,175)] cursor-pointer">{{ tag }}</span>
+                <span v-if="i < playlistDetail.tags.length - 1">/</span>
+              </template>
+            </template>
           </div>
           <div class="text-sm flex gap-6">
             <p>
@@ -145,9 +142,15 @@
 import type { Playlist } from '~/composables/NeteaseCloudMusic.ts';
 
 const playerStore = usePlayerStore();
-const { replacePlaylist, addSongs, playSong } = playerStore;
+const { setQueue, addToQueue, playSong } = playerStore;
 const route = useRoute();
-const playlistDetail = shallowRef<Playlist>();
+
+const { data: playlistData } = await useAsyncData(
+  `playlist-${route.params.id}`,
+  () => playlist_detail({ id: route.params.id as string })
+);
+
+const playlistDetail = computed(() => playlistData.value?.playlist as Playlist | undefined);
 
 const panes = computed(() => [
   {
@@ -167,30 +170,20 @@ const active = ref('songs');
 
 function addAllSongs() {
   if (playlistDetail.value?.trackIds) {
-    addSongs(playlistDetail.value.trackIds.map((x) => x.id));
+    addToQueue(playlistDetail.value.trackIds.map((x) => x.id));
   }
 }
 
 async function playAll() {
   if (playlistDetail.value?.trackIds) {
-    replacePlaylist(playlistDetail.value.trackIds.map((x) => x.id));
+    setQueue(playlistDetail.value.trackIds.map((x) => x.id));
   }
 }
 
-async function initialize() {
-  const res = await playlist_detail({
-    id: route.params.id as string,
-  });
-  playlistDetail.value = res.playlist;
-}
-
-onMounted(async () => {
-  await initialize();
-  useSeoMeta({
-    ogDescription: playlistDetail.value?.description,
-    ogImage: playlistDetail.value?.coverImgUrl,
-    ogTitle: playlistDetail.value?.name,
-    title: playlistDetail.value?.name,
-  });
+useSeoMeta({
+  ogDescription: () => playlistDetail.value?.description,
+  ogImage: () => playlistDetail.value?.coverImgUrl,
+  ogTitle: () => playlistDetail.value?.name,
+  title: () => playlistDetail.value?.name,
 });
 </script>

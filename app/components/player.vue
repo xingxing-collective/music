@@ -1,7 +1,7 @@
 <template>
   <Transition name="slide-fade">
     <div
-      v-if="playerModeState"
+      v-if="isFullPlayer"
       class="flex inset-0 fixed w-full bg-background overflow-hidden overflow-y-auto lg:z-10 md:z-50 lg:bottom-[--player-height] md:bottom-0"
     >
       <div class="max-w-full m-auto w-full h-full">
@@ -10,7 +10,7 @@
             class="hidden md:block lg:hidden text-gray-300 cursor-pointer"
             name="ri:arrow-down-s-line"
             size="36"
-            @click="playerModeStateToggle()"
+            @click="toggleFullPlayer()"
           />
         </div>
         <div class="md:flex w-full md:gap-8 lg:px-24">
@@ -18,7 +18,7 @@
             <NuxtImg class="w-8 z-20" src="/images/player/play-bar-support.png" />
             <NuxtImg
               class="w-24 relative left-12 bottom-3 origin-[0_0] z-10 transition-all"
-              :style="{ transform: !playState ? 'rotate(-30deg)' : 'inherit' }"
+              :style="{ transform: !isPlaying ? 'rotate(-30deg)' : 'inherit' }"
               src="/images/player/play-bar.png"
             />
             <div
@@ -26,7 +26,7 @@
             >
               <div
                 :class="$style.outer"
-                :style="{ animationPlayState: !playState ? 'paused' : 'inherit' }"
+                :style="{ animationPlayState: !isPlaying ? 'paused' : 'inherit' }"
               >
                 <NuxtImg
                   class="rounded-[50%] w-[75%] h-[75%]"
@@ -39,9 +39,9 @@
               <div class="grid grid-cols-5 justify-between items-center">
                 <Icon
                   class="cursor-pointer w-full text-[--text-color]"
-                  :name="likeState ? 'ic:round-favorite' : 'ic:round-favorite-border'"
-                  :style="{ color: likeState ? 'red' : '' }"
-                  @click="likeStateToggle()"
+                  :name="isLiked ? 'ic:round-favorite' : 'ic:round-favorite-border'"
+                  :style="{ color: isLiked ? 'red' : '' }"
+                  @click="toggleLike()"
                   size="24"
                 />
                 <Icon
@@ -72,31 +72,31 @@
               <div class="grid grid-cols-5 justify-between items-center">
                 <Icon
                   class="col-span-1 w-full cursor-pointer text-[--text-color]"
-                  :name="playmodeIcon"
+                  :name="playModeIcon"
                   size="24"
-                  @click="() => (playmode < 2 ? playmode++ : (playmode = 0))"
+                  @click="() => (playMode < 2 ? playMode++ : (playMode = 0))"
                 />
                 <Icon
                   class="col-span-1 w-full cursor-pointer text-[--text-color]"
                   name="mage:previous"
                   size="24"
-                  @click="control('prev')"
+                  @click="skip('prev')"
                 />
                 <Icon
                   class="col-span-1 w-full cursor-pointer text-[--text-color]"
                   :name="
-                    playState
+                    isPlaying
                       ? 'material-symbols-light:pause-circle-outline-rounded'
                       : 'material-symbols-light:play-circle-outline-rounded'
                   "
                   size="60"
-                  @click="playStateToggle()"
+                  @click="togglePlay()"
                 />
                 <Icon
                   class="col-span-1 w-full cursor-pointer text-[--text-color]"
                   name="mage:next"
                   size="24"
-                  @click="control('next')"
+                  @click="skip('next')"
                 />
                 <Icon
                   class="col-span-1 w-full cursor-pointer text-[--text-color]"
@@ -230,32 +230,28 @@
 </template>
 <script setup lang="ts">
 const playerStore = usePlayerStore();
-const { playerModeStateToggle, likeStateToggle, control, playStateToggle, playSong } = playerStore;
+const { toggleFullPlayer, toggleLike, skip, togglePlay, playSong } = playerStore;
 const {
-  playerModeState,
-  playState,
+  isFullPlayer,
+  isPlaying,
   currentSongDetail,
   currentLyric,
   currentSongId,
-  likeState,
-  playmode,
-  playmodeIcon,
+  isLiked,
+  playMode,
+  playModeIcon,
   currentTime,
   audio,
   currentSongUrl,
   simiPlaylists,
   simiSongs,
+  currentActiveLyricIndex,
+  isCurrentlyPlayingOpen,
 } = storeToRefs(playerStore);
 
 const volumeStore = useVolumeStore();
 const { volumeToggle } = volumeStore;
 const { volumeState } = storeToRefs(volumeStore);
-
-const lyricStore = useLyricStore();
-const { currentActiveLyricIndex } = storeToRefs(lyricStore);
-
-const slideoverStore = useSlideoverStore();
-const { isCurrentlyPlayingOpen } = storeToRefs(slideoverStore);
 
 const scrollerContainer = ref();
 const lyricContainer = ref();
@@ -269,7 +265,7 @@ function onPercentChange(newPercent: number) {
 }
 
 watch(currentActiveLyricIndex, (newIndex, oldIndex) => {
-  if (newIndex !== oldIndex && newIndex !== -1 && playerModeState.value) {
+  if (newIndex !== oldIndex && newIndex !== -1 && isFullPlayer.value) {
     nextTick(() => {
       scrollerContainer.value
         ?.getScroller()

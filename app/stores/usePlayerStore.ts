@@ -5,236 +5,159 @@ import { shuffleArray } from '~/utils';
 export const usePlayerStore = defineStore('player', () => {
   const audio = ref<HTMLAudioElement>();
 
-  //Mini player or player
-  const [playerModeState, playerModeStateToggle] = useToggle();
-  // Pause or play
-  const [playState, playStateToggle] = useToggle();
-  // Like or dislike
-  const [likeState, likeStateToggle] = useToggle();
+  // UI: full player overlay vs mini player
+  const [isFullPlayer, toggleFullPlayer] = useToggle();
+  // UI: currently-playing sidebar
+  const isCurrentlyPlayingOpen = ref(false);
+
+  // Playback state
+  const [isPlaying, togglePlay] = useToggle();
+  const [isLiked, toggleLike] = useToggle();
 
   // Play mode
-  const playmode = ref<PlayModeType>(PlayModeType.Order);
-  const playmodeIcon = computed(() => {
-    switch (playmode.value) {
-      case PlayModeType.Order: {
-        return 'ic:outline-repeat';
-      }
-      case PlayModeType.Random: {
-        return 'ic:outline-shuffle';
-      }
-      case PlayModeType.Single: {
-        return 'ic:outline-repeat-one';
-      }
+  const playMode = ref<PlayModeType>(PlayModeType.Order);
+  const playModeIcon = computed(() => {
+    switch (playMode.value) {
+      case PlayModeType.Order: return 'ic:outline-repeat';
+      case PlayModeType.Random: return 'ic:outline-shuffle';
+      case PlayModeType.Single: return 'ic:outline-repeat-one';
     }
   });
 
-  //当前播放歌曲
+  // Current song
   const currentSongId = ref<number>();
   const currentSongUrl = shallowRef();
   const currentSongDetail = shallowRef<SongDetail>();
   const currentTime = ref(0);
 
-  // 原始歌单
-  const playlist = ref<number[]>([
-    2_018_096_932, 1_330_348_068, 1_817_235_475, 1_393_138_949, 2_069_006_728, 1_445_556_953,
-    1_456_890_009, 1_841_002_409,
+  // Queue
+  const queue = ref<number[]>([
+    2_018_096_932, 1_330_348_068, 1_817_235_475, 1_393_138_949,
+    2_069_006_728, 1_445_556_953, 1_456_890_009, 1_841_002_409,
   ]);
-  // 随机歌单
-  const randomPlaylist = ref<number[]>([]);
-  // 心动歌单
-  const intelligencePlaylist = ref<number[]>([]);
+  const shuffledQueue = ref<number[]>([]);
 
-  // 歌词
+  // Lyrics
   const currentLyric = shallowRef<{ time: number; content: string }[]>();
-  const nextLyric = shallowRef<{ time: number; content: string }[]>();
-  const prevLyric = shallowRef<{ time: number; content: string }[]>();
+  const currentActiveLyricIndex = computed(
+    () =>
+      currentLyric.value?.findIndex((l, index) => {
+        const next = currentLyric.value?.at(index + 1);
+        return currentTime.value >= l.time && (next ? currentTime.value < next.time : true);
+      }) ?? -1
+  );
 
-  // 相似歌单 歌曲
+  // Similar content
   const simiPlaylists = shallowRef<Playlist[]>();
   const simiSongs = shallowRef<SiMiSongs>();
 
-  /**
-   * Get the song information
-   * @param id song id
-   */
-  async function getSong(id: number) {
+  async function fetchSong(id: number) {
     const [url, detail, lrc] = await Promise.all([
-      songUrlV1({
-        id,
-        level: SoundQualityType.exhigh,
-        realIP: '116.25.146.177',
-      }),
-      song_detail({
-        ids: id.toString(),
-        realIP: '116.25.146.177',
-      }),
+      songUrlV1({ id, level: SoundQualityType.exhigh, realIP: '116.25.146.177' }),
+      song_detail({ ids: id.toString(), realIP: '116.25.146.177' }),
       lyric({ id }),
     ]);
-    return {
-      lrc: lrc.lrc,
-      songDetail: detail.songs[0],
-      songUrl: url.data[0],
-    };
+    return { lrc: lrc.lrc, songDetail: detail.songs[0], songUrl: url.data[0] };
   }
 
-  /**
-   * 获取下一首或者上一首歌曲
-   * @param m 上一首或者下一首
-   * @returns song id
-   */
-  function getNextSongId(m: 'next' | 'prev') {
-    let nextIndex = 0;
-    const currentPlaylist =
-      playmode.value === PlayModeType.Random ? [...randomPlaylist.value] : [...playlist.value];
-    if (currentPlaylist.length === 0) {
-      throw new Error('暂无歌曲');
-    }
-    const index = currentPlaylist.indexOf(currentSongId.value!);
-    if (m === 'next') {
-      nextIndex = index !== -1 && index === currentPlaylist.length - 1 ? 0 : index + 1;
-    } else {
-      nextIndex = index !== -1 && index === 0 ? currentPlaylist.length - 1 : index - 1;
-    }
-    return currentPlaylist[nextIndex];
+  function adjacentSongId(dir: 'next' | 'prev') {
+    const list = playMode.value === PlayModeType.Random
+      ? [...shuffledQueue.value]
+      : [...queue.value];
+    if (!list.length) throw new Error('队列为空');
+    const idx = list.indexOf(currentSongId.value!);
+    if (dir === 'next') return list[idx !== -1 && idx === list.length - 1 ? 0 : idx + 1]!;
+    return list[idx !== -1 && idx === 0 ? list.length - 1 : idx - 1]!;
   }
 
-  /**
-   * 切换歌曲
-   * @param m  上一首或者下一首
-   * @param options
-   */
-  async function control(
-    m: 'next' | 'prev',
-    options: {
-      autoplay?: boolean;
-    } = { autoplay: true }
-  ) {
-    // 第一次加载时并没有获取上一首或者下一首歌曲信息
-    currentSongId.value = getNextSongId(m);
-
+  async function skip(dir: 'next' | 'prev', options: { autoplay?: boolean } = { autoplay: true }) {
+    currentSongId.value = adjacentSongId(dir);
     if (options.autoplay) {
-      if (playState.value) {
-        await audio.value?.play();
-      } else {
-        playState.value = true;
-      }
+      isPlaying.value ? await audio.value?.play() : (isPlaying.value = true);
     }
   }
 
-  /**
-   *
-   * @param songIds
-   */
-  function addSongs(songIds: number[]) {
-    playlist.value.push(...songIds);
-  }
-  /**
-   *
-   * @param songIds
-   */
-  async function replacePlaylist(songIds: number[]) {
-    playlist.value = songIds;
-    [currentSongId.value] = playlist.value;
-    playState.value = true;
+  function addToQueue(songIds: number[]) {
+    queue.value.push(...songIds);
   }
 
-  function clearPlaylist() {
-    playlist.value = [];
-    randomPlaylist.value = [];
+  async function setQueue(songIds: number[]) {
+    queue.value = songIds;
+    [currentSongId.value] = queue.value;
+    isPlaying.value = true;
   }
 
-  async function removeSong(songId: number) {}
+  function clearQueue() {
+    queue.value = [];
+    shuffledQueue.value = [];
+  }
 
-  /**
-   * 播放歌曲
-   * @param songId 播放的歌曲Id
-   */
   async function playSong(songId: number) {
-    playState.value = true;
+    isPlaying.value = true;
     if (songId === currentSongId.value) {
       await audio.value?.play();
     } else {
-      if (playmode.value === PlayModeType.Random) {
-        randomPlaylist.value.splice(
-          randomPlaylist.value.indexOf(currentSongId.value!) + 1,
-          0,
-          songId
-        );
-      } else {
-        playlist.value.splice(playlist.value.indexOf(currentSongId.value!) + 1, 0, songId);
-      }
+      const list = playMode.value === PlayModeType.Random ? shuffledQueue.value : queue.value;
+      list.splice(list.indexOf(currentSongId.value!) + 1, 0, songId);
       currentSongId.value = songId;
     }
   }
 
-  watch(
-    playmode,
-    () => {
-      if (playmode.value === PlayModeType.Random) {
-        randomPlaylist.value = shuffleArray([...playlist.value]);
-      }
-    },
-    {
-      immediate: true,
+  watch(playMode, () => {
+    if (playMode.value === PlayModeType.Random) {
+      shuffledQueue.value = shuffleArray([...queue.value]);
     }
-  );
+  }, { immediate: true });
 
-  watch(playState, async (newVal) => {
-    if (newVal) {
-      await audio.value?.play();
-    } else {
-      audio.value?.pause();
-    }
+  watch(isPlaying, async (val) => {
+    val ? await audio.value?.play() : audio.value?.pause();
   });
 
-  watch(currentSongId, async (newVal) => {
-    if (newVal) {
-      const { songUrl, songDetail, lrc } = await getSong(newVal);
-      currentSongUrl.value = songUrl;
-      currentSongDetail.value = songDetail;
-      currentLyric.value = parseLyric(lrc.lyric);
+  watch(currentSongId, async (id) => {
+    if (!id) return;
+    const { songUrl, songDetail, lrc } = await fetchSong(id);
+    currentSongUrl.value = songUrl;
+    currentSongDetail.value = songDetail;
+    currentLyric.value = parseLyric(lrc.lyric);
 
-      const res = await simi_playlist({ id: newVal });
-      simiPlaylists.value = res.playlists;
-      const res2 = await simi_song({ id: newVal });
-      simiSongs.value = res2.songs;
-    }
+    const [simiRes, simiSongRes] = await Promise.all([
+      simi_playlist({ id }),
+      simi_song({ id }),
+    ]);
+    simiPlaylists.value = simiRes.playlists;
+    simiSongs.value = simiSongRes.songs;
   });
 
-  //首次渲染
   onMounted(async () => {
-    await control('next', { autoplay: false });
+    await skip('next', { autoplay: false });
   });
 
   return {
-    addSongs,
+    addToQueue,
     audio,
-    clearPlaylist,
-    control,
+    clearQueue,
+    currentActiveLyricIndex,
     currentLyric,
     currentSongDetail,
     currentSongId,
     currentSongUrl,
     currentTime,
-    getNextSongId,
-    getSong,
-    intelligencePlaylist,
-    likeState,
-    likeStateToggle,
-    nextLyric,
+    isCurrentlyPlayingOpen,
+    isFullPlayer,
+    isLiked,
+    isPlaying,
+    playMode,
+    playModeIcon,
     playSong,
-    playState,
-    playStateToggle,
-    playerModeState,
-    playerModeStateToggle,
-    playlist,
-    playmode,
-    playmodeIcon,
-    prevLyric,
-    randomPlaylist,
-    replacePlaylist,
+    queue,
+    setQueue,
+    shuffledQueue,
     simiPlaylists,
     simiSongs,
+    skip,
+    toggleFullPlayer,
+    toggleLike,
+    togglePlay,
   };
 });
 

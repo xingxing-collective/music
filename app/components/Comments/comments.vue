@@ -17,7 +17,7 @@
         </template>
       </CommentsItem>
     </div>
-    <div v-if="moreHot" @click="playerModeState = false" class="flex w-full justify-center">
+    <div v-if="moreHot" @click="isFullPlayer = false" class="flex w-full justify-center">
       <NuxtLink
         :to="`/hot-comment/${CommentType[type]}/${id}`"
         class="flex gap-1 cursor-pointer items-center px-4 py-2 text-sm rounded-full border dark:border-[rgb(63,63,63)] border-[rgb(242,242,242)]"
@@ -69,7 +69,7 @@ const hotComments = shallowRef<Comment[]>();
 const comments = shallowRef<Comment[]>();
 const moreHot = ref<boolean>();
 const playerStore = usePlayerStore();
-const { playerModeState } = storeToRefs(playerStore);
+const { isFullPlayer } = storeToRefs(playerStore);
 
 watch(
   () => props.id,

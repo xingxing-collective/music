@@ -9,7 +9,7 @@
         <template v-if="currentSongUrl && currentSongDetail">
           <div
             class="relative rounded-md overflow-hidden cursor-pointer w-14"
-            @click="playerModeStateToggle()"
+            @click="toggleFullPlayer()"
           >
             <div class="absolute left-0 right-0 top-0 bottom-0 bg-[rgba(0,0,0,.2)]"></div>
             <NuxtImg
@@ -22,12 +22,12 @@
             >
               <Icon
                 class="relative text-gray-100 top-[1px]"
-                :name="!playerModeState ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'"
+                :name="!isFullPlayer ? 'ri:arrow-up-s-line' : 'ri:arrow-down-s-line'"
                 size="22"
               />
               <Icon
                 class="relative bottom-[1px] text-gray-100"
-                :name="!playerModeState ? 'ri:arrow-down-s-line' : 'ri:arrow-up-s-line'"
+                :name="!isFullPlayer ? 'ri:arrow-down-s-line' : 'ri:arrow-up-s-line'"
                 size="22"
               />
             </div>
@@ -52,22 +52,22 @@
         <Icon
           name="ic:round-skip-previous"
           size="36"
-          @click="control('prev')"
+          @click="skip('prev')"
           class="text-red-600 cursor-pointer"
         />
         <div
           class="bg-red-600 rounded-[50%] h-12 w-12 flex items-center justify-center cursor-pointer"
-          @click="playStateToggle()"
+          @click="togglePlay()"
         >
           <Icon
-            :name="playState ? 'ic:baseline-pause' : 'ic:baseline-play-arrow'"
+            :name="isPlaying ? 'ic:baseline-pause' : 'ic:baseline-play-arrow'"
             size="28"
             class="text-white"
           />
         </div>
         <Icon
           name="ic:round-skip-next"
-          @click="control('next')"
+          @click="skip('next')"
           size="36"
           class="text-red-600 cursor-pointer"
         />
@@ -77,9 +77,9 @@
         <div class="flex h-full items-center gap-4">
           <Icon
             class="cursor-pointer text-[--text-color]"
-            :name="likeState ? 'ic:round-favorite' : 'ic:round-favorite-border'"
-            :style="{ color: likeState ? 'red' : '' }"
-            @click="likeStateToggle()"
+            :name="isLiked ? 'ic:round-favorite' : 'ic:round-favorite-border'"
+            :style="{ color: isLiked ? 'red' : '' }"
+            @click="toggleLike()"
             size="24"
           />
         </div>
@@ -93,9 +93,9 @@
         <div class="flex h-full items-center gap-4">
           <Icon
             class="cursor-pointer text-[--text-color]"
-            :name="playmodeIcon"
+            :name="playModeIcon"
             size="24"
-            @click="() => (playmode < 2 ? playmode++ : (playmode = 0))"
+            @click="() => (playMode < 2 ? playMode++ : (playMode = 0))"
           />
         </div>
         <div
@@ -115,21 +115,20 @@
 <script setup lang="ts">
 const playerStore = usePlayerStore();
 const volumeStore = useVolumeStore();
-const slideoverStore = useSlideoverStore();
-const { likeStateToggle, playStateToggle, playerModeStateToggle, control } = playerStore;
+const { toggleLike, togglePlay, toggleFullPlayer, skip } = playerStore;
 const {
   audio,
-  playState,
-  playerModeState,
-  likeState,
-  playmode,
-  playmodeIcon,
+  isPlaying,
+  isFullPlayer,
+  isLiked,
+  playMode,
+  playModeIcon,
   currentTime,
   currentSongUrl,
   currentSongDetail,
+  isCurrentlyPlayingOpen,
 } = storeToRefs(playerStore);
 const { volume } = storeToRefs(volumeStore);
-const { isCurrentlyPlayingOpen } = storeToRefs(slideoverStore);
 
 watch(volume, (newValue) => {
   audio.value!.volume = newValue;

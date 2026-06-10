@@ -34,6 +34,7 @@
         <div class="dark:text-gray-200 text-sm font-bold">{{ '私人漫游' }}</div>
       </NuxtLink>
     </UPanel>
+
     <UPage class="pb-[--player-height]">
       <UPanel grow>
         <UPanelContent>
@@ -45,11 +46,11 @@
     <Player />
     <CurrentlyPlaying />
     <audio
-      :loop="playmode === PlayModeType.Single"
+      :loop="playMode === PlayModeType.Single"
       ref="audio"
-      @loadedmetadata="playState ? audio?.play() : undefined"
+      @loadedmetadata="isPlaying ? audio?.play() : undefined"
       :src="currentSongUrl?.url.replace('http://', 'https://')"
-      @ended="control('next')"
+      @ended="skip('next')"
       @timeupdate="timeupdate"
     />
   </ULayout>
@@ -58,11 +59,11 @@
 import { PlayModeType } from '~/types/player';
 
 const playerStore = usePlayerStore();
-const { control } = playerStore;
-const { audio, playmode, currentTime, playState, currentSongUrl } = storeToRefs(playerStore);
+const { skip } = playerStore;
+const { audio, playMode, currentTime, isPlaying, currentSongUrl } = storeToRefs(playerStore);
 
 function timeupdate(e: Event) {
-  currentTime.value = (e.target as AudioContext).currentTime;
+  currentTime.value = (e.target as HTMLAudioElement).currentTime;
 }
 
 const route = useRoute();
